@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Recipes</string>
+    <string name="login">login</string>
+    <string name="password">password</string>
+    <string name="confirm_password">confirm password</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="recipes">Recipes</string>
+    <string name="name_of_recipe">Name of recipe</string>
+</resources>
