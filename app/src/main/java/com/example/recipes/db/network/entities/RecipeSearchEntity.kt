@@ -19,7 +19,7 @@ data class LinksEntity(
 
 @Serializable
 data class HitEntity(
-    @SerialName("_links") val linksEntity: LinksXEntity? = null,
+//    @SerialName("_links") val linksEntity: LinksXEntity? = null,
     @SerialName("recipe") val recipeEntity: RecipeEntity? = null
 )
 
@@ -29,10 +29,10 @@ data class Next(
     @SerialName("title") val title: String? = null
 )
 
-@Serializable
-data class LinksXEntity(
-    @SerialName("self") val self: Self? = null
-)
+//@Serializable
+//data class LinksXEntity(
+//    @SerialName("self") val self: Self? = null
+//)
 
 @Serializable
 data class RecipeEntity(
@@ -40,7 +40,7 @@ data class RecipeEntity(
     @SerialName("cautions") val cautions: List<String>? = null,
     @SerialName("cuisineType") val cuisineType: List<String>? = null,
     @SerialName("dietLabels") val dietLabels: List<String>? = null,
-    @SerialName("digest") val digest: List<DigestEntity>? = null,
+//    @SerialName("digest") val digest: List<DigestEntity>? = null,
     @SerialName("dishType") val dishType: List<String>? = null,
     @SerialName("healthLabels") val healthLabels: List<String>? = null,
     @SerialName("image") val image: String? = null,
@@ -51,32 +51,32 @@ data class RecipeEntity(
     @SerialName("mealType") val mealType: List<String>? = null,
     @SerialName("shareAs") val shareAs: String? = null,
     @SerialName("source") val source: String? = null,
-    @SerialName("totalDaily") val totalDaily: TotalDailyEntity? = null,
-    @SerialName("totalNutrients") val totalNutrients: TotalNutrientsEntity? = null,
-    @SerialName("totalTime") val totalTime: Int? = null,
+//    @SerialName("totalDaily") val totalDaily: TotalDailyEntity? = null,
+//    @SerialName("totalNutrients") val totalNutrients: TotalNutrientsEntity? = null,
+    @SerialName("totalTime") val totalTime: Double? = null,
     @SerialName("totalWeight") val totalWeight: Double? = null,
     @SerialName("uri") val uri: String? = null,
     @SerialName("url") val url: String? = null,
-    @SerialName("yield") val yield: Int? = null
+    @SerialName("yield") val yield: Double? = null
 )
 
-@Serializable
-data class Self(
-    @SerialName("href") val href: String? = null,
-    @SerialName("title") val title: String? = null
-)
+//@Serializable
+//data class Self(
+//    @SerialName("href") val href: String? = null,
+//    @SerialName("title") val title: String? = null
+//)
 
-@Serializable
-data class DigestEntity(
-    @SerialName("daily") val daily: Double? = null,
-    @SerialName("hasRDI") val hasRDI: Boolean? = null,
-    @SerialName("label") val label: String? = null,
-    @SerialName("schemaOrgTag") val schemaOrgTag: String? = null,
-    @SerialName("sub") val sub: List<SubEntity>? = null,
-    @SerialName("tag") val tag: String? = null,
-    @SerialName("total") val total: Double? = null,
-    @SerialName("unit") val unit: String? = null
-)
+//@Serializable
+//data class DigestEntity(
+//    @SerialName("daily") val daily: Double? = null,
+//    @SerialName("hasRDI") val hasRDI: Boolean? = null,
+//    @SerialName("label") val label: String? = null,
+//    @SerialName("schemaOrgTag") val schemaOrgTag: String? = null,
+//    @SerialName("sub") val sub: List<SubEntity>? = null,
+//    @SerialName("tag") val tag: String? = null,
+//    @SerialName("total") val total: Double? = null,
+//    @SerialName("unit") val unit: String? = null
+//)
 
 @Serializable
 data class ImagesEntity(
@@ -91,89 +91,89 @@ data class IngredientEntity(
     @SerialName("food") val food: String? = null,
     @SerialName("foodCategory") val foodCategory: String? = null,
     @SerialName("foodId") val foodId: String? = null,
-    @SerialName("image") val image: String? = null,
+    /*@SerialName("image") */val image: String? = null,
     @SerialName("measure") val measure: String? = null,
-    @SerialName("quantity") val quantity: Int? = null,
+    @SerialName("quantity") val quantity: Double? = null,
     @SerialName("text") val text: String? = null,
     @SerialName("weight") val weight: Double? = null
 )
 
-@Serializable
-data class TotalDailyEntity(
-    @SerialName("CA") val ca: Ca? = null,
-    @SerialName("CHOCDF") val chocdf: Chocdf? = null,
-    @SerialName("CHOLE") val chole: Chole? = null,
-    @SerialName("ENERC_KCAL") val enercKcal: Enerckcal? = null,
-    @SerialName("FASAT") val fasat: Fasat? = null,
-    @SerialName("FAT") val fat: Fat? = null,
-    @SerialName("FE") val fe: Fe? = null,
-    @SerialName("FIBTG") val fibtg: Fibtg? = null,
-    @SerialName("FOLDFE") val foldfe: Foldfe? = null,
-    @SerialName("K") val k: K? = null,
-    @SerialName("MG") val mg: MG? = null,
-    @SerialName("NA") val na: NA? = null,
-    @SerialName("NIA") val nia: Nia? = null,
-    @SerialName("P") val p: P? = null,
-    @SerialName("PROCNT") val procnt: Procnt? = null,
-    @SerialName("RIBF") val ribf: Ribf? = null,
-    @SerialName("THIA") val thia: Thia? = null,
-    @SerialName("TOCPHA") val tocpha: Tocpha? = null,
-    @SerialName("VITA_RAE") val vitaRae: Vitarae? = null,
-    @SerialName("VITB12") val vitb12: Vitb12? = null,
-    @SerialName("VITB6A") val vitb6a: Vitb6a? = null,
-    @SerialName("VITC") val vitc: VitC? = null,
-    @SerialName("VITD") val vitd: VitD? = null,
-    @SerialName("VITK1") val vitk1: Vitk1? = null,
-    @SerialName("ZN") val zn: ZN? = null
-)
+//@Serializable
+//data class TotalDailyEntity(
+//    @SerialName("CA") val ca: Ca? = null,
+//    @SerialName("CHOCDF") val chocdf: Chocdf? = null,
+//    @SerialName("CHOLE") val chole: Chole? = null,
+//    @SerialName("ENERC_KCAL") val enercKcal: Enerckcal? = null,
+//    @SerialName("FASAT") val fasat: Fasat? = null,
+//    @SerialName("FAT") val fat: Fat? = null,
+//    @SerialName("FE") val fe: Fe? = null,
+//    @SerialName("FIBTG") val fibtg: Fibtg? = null,
+//    @SerialName("FOLDFE") val foldfe: Foldfe? = null,
+//    @SerialName("K") val k: K? = null,
+//    @SerialName("MG") val mg: MG? = null,
+//    @SerialName("NA") val na: NA? = null,
+//    @SerialName("NIA") val nia: Nia? = null,
+//    @SerialName("P") val p: P? = null,
+//    @SerialName("PROCNT") val procnt: Procnt? = null,
+//    @SerialName("RIBF") val ribf: Ribf? = null,
+//    @SerialName("THIA") val thia: Thia? = null,
+//    @SerialName("TOCPHA") val tocpha: Tocpha? = null,
+//    @SerialName("VITA_RAE") val vitaRae: Vitarae? = null,
+//    @SerialName("VITB12") val vitb12: Vitb12? = null,
+//    @SerialName("VITB6A") val vitb6a: Vitb6a? = null,
+//    @SerialName("VITC") val vitc: VitC? = null,
+//    @SerialName("VITD") val vitd: VitD? = null,
+//    @SerialName("VITK1") val vitk1: Vitk1? = null,
+//    @SerialName("ZN") val zn: ZN? = null
+//)
 
-@Serializable
-data class TotalNutrientsEntity(
-    @SerialName("CA") val ca: CAX? = null,
-    @SerialName("CHOCDF") val chocdf: CHOCDFX? = null,
-    @SerialName("CHOLE") val chole: CHOLEX? = null,
-    @SerialName("ENERC_KCAL") val enercKcal: ENERCKCALX? = null,
-    @SerialName("FAMS") val fams: FAMS? = null,
-    @SerialName("FAPU") val fapu: FAPU? = null,
-    @SerialName("FASAT") val fasat: FASATX? = null,
-    @SerialName("FAT") val fat: FATX? = null,
-    @SerialName("FATRN") val fatrn: FATRN? = null,
-    @SerialName("FE") val fe: FEX? = null,
-    @SerialName("FIBTG") val fibtg: FIBTGX? = null,
-    @SerialName("FOLAC") val folac: FOLAC? = null,
-    @SerialName("FOLDFE") val foldfe: FOLDFEX? = null,
-    @SerialName("FOLFD") val folfd: FOLFD? = null,
-    @SerialName("K") val k: KX? = null,
-    @SerialName("MG") val mg: MGX? = null,
-    @SerialName("NA") val na: NAX? = null,
-    @SerialName("NIA") val nia: NIAX? = null,
-    @SerialName("P") val p: PX? = null,
-    @SerialName("PROCNT") val procnt: PROCNTX? = null,
-    @SerialName("RIBF") val ribf: RIBFX? = null,
-    @SerialName("SUGAR") val sugar: SUGAR? = null,
-    @SerialName("SUGAR.added") val sugarAdded: SUGARAdded? = null,
-    @SerialName("THIA") val thia: THIAX? = null,
-    @SerialName("TOCPHA") val tocpha: TOCPHAX? = null,
-    @SerialName("VITA_RAE") val vitaRae: VITARAEX? = null,
-    @SerialName("VITB12") val vitb12: VITB12X? = null,
-    @SerialName("VITB6A") val vitb6a: VITB6AX? = null,
-    @SerialName("VITC") val vitc: VITCX? = null,
-    @SerialName("VITD") val vitd: VITDX? = null,
-    @SerialName("VITK1") val vitk1: VITK1X? = null,
-    @SerialName("WATER") val water: WATER? = null,
-    @SerialName("ZN") val zn: ZNX? = null
-)
+//@Serializable
+//data class TotalNutrientsEntity(
+//    @SerialName("CA") val ca: CAX? = null,
+//    @SerialName("CHOCDF") val chocdf: CHOCDFX? = null,
+//    @SerialName("CHOLE") val chole: CHOLEX? = null,
+//    @SerialName("ENERC_KCAL") val enercKcal: ENERCKCALX? = null,
+//    @SerialName("FAMS") val fams: FAMS? = null,
+//    @SerialName("FAPU") val fapu: FAPU? = null,
+//    @SerialName("FASAT") val fasat: FASATX? = null,
+//    @SerialName("FAT") val fat: FATX? = null,
+//    @SerialName("FATRN") val fatrn: FATRN? = null,
+//    @SerialName("FE") val fe: FEX? = null,
+//    @SerialName("FIBTG") val fibtg: FIBTGX? = null,
+//    @SerialName("FOLAC") val folac: FOLAC? = null,
+//    @SerialName("FOLDFE") val foldfe: FOLDFEX? = null,
+//    @SerialName("FOLFD") val folfd: FOLFD? = null,
+//    @SerialName("K") val k: KX? = null,
+//    @SerialName("MG") val mg: MGX? = null,
+//    @SerialName("NA") val na: NAX? = null,
+//    @SerialName("NIA") val nia: NIAX? = null,
+//    @SerialName("P") val p: PX? = null,
+//    @SerialName("PROCNT") val procnt: PROCNTX? = null,
+//    @SerialName("RIBF") val ribf: RIBFX? = null,
+//    @SerialName("SUGAR") val sugar: SUGAR? = null,
+//    @SerialName("SUGAR.added") val sugarAdded: SUGARAdded? = null,
+//    @SerialName("THIA") val thia: THIAX? = null,
+//    @SerialName("TOCPHA") val tocpha: TOCPHAX? = null,
+//    @SerialName("VITA_RAE") val vitaRae: VITARAEX? = null,
+//    @SerialName("VITB12") val vitb12: VITB12X? = null,
+//    @SerialName("VITB6A") val vitb6a: VITB6AX? = null,
+//    @SerialName("VITC") val vitc: VITCX? = null,
+//    @SerialName("VITD") val vitd: VITDX? = null,
+//    @SerialName("VITK1") val vitk1: VITK1X? = null,
+//    @SerialName("WATER") val water: WATER? = null,
+//    @SerialName("ZN") val zn: ZNX? = null
+//)
 
-@Serializable
-data class SubEntity(
-    @SerialName("daily") val daily: Double? = null,
-    @SerialName("hasRDI") val hasRDI: Boolean? = null,
-    @SerialName("label") val label: String? = null,
-    @SerialName("schemaOrgTag") val schemaOrgTag: String? = null,
-    @SerialName("tag") val tag: String? = null,
-    @SerialName("total") val total: Double? = null,
-    @SerialName("unit") val unit: String? = null
-)
+//@Serializable
+//data class SubEntity(
+//    @SerialName("daily") val daily: Double? = null,
+//    @SerialName("hasRDI") val hasRDI: Boolean? = null,
+//    @SerialName("label") val label: String? = null,
+//    @SerialName("schemaOrgTag") val schemaOrgTag: String? = null,
+//    @SerialName("tag") val tag: String? = null,
+//    @SerialName("total") val total: Double? = null,
+//    @SerialName("unit") val unit: String? = null
+//)
 
 @Serializable
 data class LargeEntity(
@@ -200,6 +200,7 @@ data class ThumbnailEntity(
     val width: Int? = null
 )
 
+/*
 
 @Serializable
 data class Ca(
@@ -548,4 +549,4 @@ data class ZNX(
     val label: String,
     val quantity: Double,
     val unit: String
-)
+)*/

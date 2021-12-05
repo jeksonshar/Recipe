@@ -18,9 +18,9 @@ data class Recipe(
     val source: String,
 //    val totalDaily: TotalDailyEntity,
 //    val totalNutrients: TotalNutrientsEntity,
-    val totalTime: Int,
+    val totalTime: Double,
     val totalWeight: Double,
     val uri: String,
     val url: String,
-    val yield: Int
+    val yield: Double
 )

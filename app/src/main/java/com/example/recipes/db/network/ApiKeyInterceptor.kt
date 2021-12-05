@@ -10,6 +10,7 @@ class ApiKeyInterceptor : Interceptor {
         val originalHttpUrl = originalRequest.url
 
         val url = originalHttpUrl.newBuilder()
+            .addQueryParameter(TYPE, public)
             .addQueryParameter(API_ID_HEADER, apiID)
             .addQueryParameter(API_KEY_HEADER, apiKey)
             .build()
@@ -22,8 +23,10 @@ class ApiKeyInterceptor : Interceptor {
     companion object {
         const val API_ID_HEADER = "app_id"
         const val API_KEY_HEADER = "app_key"
+        const val TYPE = "type"
     }
 }
 
-const val apiID = "9bba3bee"
-const val apiKey = "6a39577cc5b4e51fe02189c818432474"
+internal const val apiID = "9bba3bee"
+internal const val apiKey = "6a39577cc5b4e51fe02189c818432474"
+const val public = "public"

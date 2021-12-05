@@ -1,5 +1,6 @@
 package com.example.recipes.db.network
 
+import com.example.recipes.ConverterModels
 import com.example.recipes.data.Recipe
 import com.example.recipes.db.network.entities.RecipeEntity
 import kotlinx.coroutines.Dispatchers
@@ -8,9 +9,9 @@ import kotlinx.coroutines.withContext
 suspend fun loadRecipesByQuery(query: String): List<Recipe> = withContext(Dispatchers.IO){
 
     val recipeEntity: ArrayList<RecipeEntity> = ArrayList()
-    RetrofitModule.recipesApi.searchRecipesByQuery(query).hits?.map {
-        recipeEntity.add(it.recipeEntity ?: RecipeEntity())
-    }
+//    RetrofitModule.recipesApi.searchRecipesByQuery(query).hits?.map {
+//        recipeEntity.add(it.recipeEntity ?: RecipeEntity())
+//    }
 
     return@withContext recipeEntity.map {
         Recipe(
@@ -30,11 +31,11 @@ suspend fun loadRecipesByQuery(query: String): List<Recipe> = withContext(Dispat
             mealType = it.mealType ?: emptyList(),
             shareAs = it.shareAs ?: "",
             source = it.source ?: "",
-            totalTime = it.totalTime ?: 0,
+            totalTime = it.totalTime ?: 0.toDouble(),
             totalWeight = it.totalWeight ?: 0.toDouble(),
             uri = it.uri ?: "",
             url = it.url ?: "",
-            yield = it.yield ?: 0
+            yield = it.yield ?: 0.toDouble()
         )
     }
 }

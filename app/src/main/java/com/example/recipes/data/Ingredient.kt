@@ -6,7 +6,7 @@ data class Ingredient(
     val foodId: String,
     val image: String,
     val measure: String,
-    val quantity: Int,
+    val quantity: Double,
     val text: String,
     val weight: Double
 )

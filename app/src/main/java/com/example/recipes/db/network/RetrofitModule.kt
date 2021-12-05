@@ -5,6 +5,7 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 
 object RetrofitModule {
@@ -19,6 +20,7 @@ object RetrofitModule {
         .baseUrl("https://api.edamam.com")
         .client(client)
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+//        .addConverterFactory(GsonConverterFactory.create())
         .build()
 
     val recipesApi: RecipesApi = retrofit.create()

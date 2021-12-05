@@ -11,7 +11,16 @@ class RecipesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipes)
 
-        supportFragmentManager.beginTransaction()
-            .add(R.id.fragmentRecipesContainer, RecipeListFragment()).commit()
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fragmentRecipesContainer, RecipeListFragment(), CURRENT_FRAGMENT_TAG)
+                .commit()
+        } else {
+            supportFragmentManager.findFragmentByTag(CURRENT_FRAGMENT_TAG)
+        }
+    }
+
+    companion object {
+        const val CURRENT_FRAGMENT_TAG = "CurrentFragment"
     }
 }

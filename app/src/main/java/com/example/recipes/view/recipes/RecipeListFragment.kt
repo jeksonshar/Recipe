@@ -16,14 +16,13 @@ class RecipeListFragment : Fragment() {
     private var _binding: FragmentRecipeListBinding? = null
     private val binding get() = _binding
     private var recycler: RecyclerView? = null
-    private lateinit var adapter: RecipeListAdapter
+    private var adapter: RecipeListAdapter = RecipeListAdapter(emptyList())
     private val viewModel: RecipeListViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        adapter = RecipeListAdapter(viewModel.loadRecipes())
-        Log.d("TAG", "viewModel = ${viewModel.loadRecipes()} ")
+        viewModel.initRequest()
     }
 
     override fun onCreateView(
@@ -42,6 +41,16 @@ class RecipeListFragment : Fragment() {
         recycler?.layoutManager = GridLayoutManager(view.context, 2)
         recycler?.adapter = adapter
 
+        viewModel.recipesRequest.observe(viewLifecycleOwner, {
+            val list = viewModel.entityToData(it)
+            Log.d("TAG", "list recipe: $list")
+            adapter.submitList(list)
+
+        })
+
+        viewModel.showApdateProgress.observe(viewLifecycleOwner, {
+            if (!it) binding?.progressBarWhileListEmpty?.visibility = View.GONE
+        })
     }
 
     override fun onDestroyView() {

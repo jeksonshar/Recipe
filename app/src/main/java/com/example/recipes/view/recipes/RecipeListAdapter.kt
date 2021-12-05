@@ -29,7 +29,6 @@ class RecipeListAdapter(
         val uriRecipe = recipes[position].uri
         return uriRecipe.substringAfter('_', uriRecipe).hashCode().toLong()
     }
-
 }
 
 class RecipeListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
