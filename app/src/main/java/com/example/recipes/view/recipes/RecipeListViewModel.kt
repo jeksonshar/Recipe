@@ -15,6 +15,7 @@ class RecipeListViewModel : ViewModel() {
 
     var recipesRequest = MutableLiveData<RecipeSearchEntity>()
     val showUpdateProgress = MutableLiveData<Boolean>()
+    val searchIsOpened = MutableLiveData<Int>()
 
     init {
         viewModelScope.launch {
@@ -48,5 +49,14 @@ class RecipeListViewModel : ViewModel() {
 
     fun entityToData(entity: RecipeSearchEntity): List<Recipe> {
         return ConverterModels.convertToRecipes(entity)
+    }
+
+    fun changeSearchIsOpenedValue(currentVisibility: Int) {
+        if (currentVisibility == 0) {
+            searchIsOpened.value = 8
+        } else {
+            searchIsOpened.value = 0
+        }
+
     }
 }

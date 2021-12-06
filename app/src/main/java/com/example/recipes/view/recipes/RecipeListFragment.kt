@@ -1,5 +1,6 @@
 package com.example.recipes.view.recipes
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -7,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -37,21 +39,29 @@ class RecipeListFragment : Fragment() {
         recycler?.layoutManager = GridLayoutManager(view.context, 2)
         recycler?.adapter = adapter
 
-        binding?.etSearch?.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+//        binding?.etSearch?.addTextChangedListener(object : TextWatcher {
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+//            }
+//
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//            }
+//
+//            override fun afterTextChanged(s: Editable?) {
+//                viewModel.lifeSearchByQuery(s)
+//            }
+//        })
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                viewModel.lifeSearchByQuery(s)
-            }
-        })
+        binding?.etSearch?.doAfterTextChanged {
+            viewModel.lifeSearchByQuery(it)
+        }
 
         binding?.etSearch?.setOnClickListener {
             val text = binding?.etSearch?.text
             viewModel.searchByTouch(text)
+        }
+
+        binding?.ivOpenSearchET?.setOnClickListener {
+            viewModel.changeSearchIsOpenedValue(binding?.etSearch?.visibility ?: 0)
         }
 
         viewModel.recipesRequest.observe(viewLifecycleOwner, {
@@ -63,6 +73,10 @@ class RecipeListFragment : Fragment() {
 
         viewModel.showUpdateProgress.observe(viewLifecycleOwner, {
             if (!it) binding?.progressBarWhileListEmpty?.visibility = View.GONE
+        })
+
+        viewModel.searchIsOpened.observe(viewLifecycleOwner, {
+            binding?.etSearch?.visibility = it
         })
     }
 

@@ -30,6 +30,20 @@
             android:text="@string/recipes"
             android:textSize="16sp"
             android:textColor="@color/black" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="end">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivOpenSearchET"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/ic_search_category_default"/>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.appcompat.widget.AppCompatEditText
@@ -44,7 +58,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleOfList"
-        app:layout_constraintBottom_toTopOf="@+id/coordinatorRecipeList"/>
+        app:layout_constraintBottom_toTopOf="@+id/coordinatorRecipeList"
+        android:visibility="gone"/>
 
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
