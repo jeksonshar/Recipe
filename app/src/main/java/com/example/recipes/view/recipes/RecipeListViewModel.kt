@@ -1,5 +1,6 @@
 package com.example.recipes.view.recipes
 
+import android.text.Editable
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,15 +14,35 @@ import kotlinx.coroutines.launch
 class RecipeListViewModel : ViewModel() {
 
     var recipesRequest = MutableLiveData<RecipeSearchEntity>()
-    val showApdateProgress = MutableLiveData<Boolean>()
+    val showUpdateProgress = MutableLiveData<Boolean>()
 
-    fun initRequest() {
+    init {
         viewModelScope.launch {
-            showApdateProgress.value = true
+            showUpdateProgress.value = true
             val request = RetrofitModule.recipesApi.getRecipesByQuery("chicken")
             Log.d("TAG", "request: $request")
             recipesRequest.value = request
-            showApdateProgress.value = false
+            showUpdateProgress.value = false
+        }
+    }
+
+    fun lifeSearchByQuery(query: Editable?) {
+        if (query != null && query.isNotEmpty()) {
+            if (query[query.length-1] == ' ' && query.length > 2) {
+                    makeRequest(query.toString())
+            }
+        }
+    }
+
+    fun searchByTouch(query: Editable?) {
+        if (query != null && query.length > 1) {
+            makeRequest(query.toString())
+        }
+    }
+
+    private fun makeRequest(query: String) {
+        viewModelScope.launch {
+            recipesRequest.value = RetrofitModule.recipesApi.getRecipesByQuery(query)
         }
     }
 

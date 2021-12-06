@@ -7,4 +7,5 @@
     <string name="sign_up">Sign Up</string>
     <string name="recipes">Recipes</string>
     <string name="name_of_recipe">Name of recipe</string>
+    <string name="type_your_query">Type your query</string>
 </resources>

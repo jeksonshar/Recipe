@@ -1,6 +1,8 @@
 package com.example.recipes.view.recipes
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,12 +21,6 @@ class RecipeListFragment : Fragment() {
     private var adapter: RecipeListAdapter = RecipeListAdapter(emptyList())
     private val viewModel: RecipeListViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        viewModel.initRequest()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,6 +37,23 @@ class RecipeListFragment : Fragment() {
         recycler?.layoutManager = GridLayoutManager(view.context, 2)
         recycler?.adapter = adapter
 
+        binding?.etSearch?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                viewModel.lifeSearchByQuery(s)
+            }
+        })
+
+        binding?.etSearch?.setOnClickListener {
+            val text = binding?.etSearch?.text
+            viewModel.searchByTouch(text)
+        }
+
         viewModel.recipesRequest.observe(viewLifecycleOwner, {
             val list = viewModel.entityToData(it)
             Log.d("TAG", "list recipe: $list")
@@ -48,7 +61,7 @@ class RecipeListFragment : Fragment() {
 
         })
 
-        viewModel.showApdateProgress.observe(viewLifecycleOwner, {
+        viewModel.showUpdateProgress.observe(viewLifecycleOwner, {
             if (!it) binding?.progressBarWhileListEmpty?.visibility = View.GONE
         })
     }
