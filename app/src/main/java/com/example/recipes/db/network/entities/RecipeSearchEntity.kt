@@ -19,7 +19,7 @@ data class LinksEntity(
 
 @Serializable
 data class HitEntity(
-//    @SerialName("_links") val linksEntity: LinksXEntity? = null,
+    @SerialName("_links") val linksEntity: LinksXEntity? = null,
     @SerialName("recipe") val recipeEntity: RecipeEntity? = null
 )
 
@@ -29,10 +29,10 @@ data class Next(
     @SerialName("title") val title: String? = null
 )
 
-//@Serializable
-//data class LinksXEntity(
-//    @SerialName("self") val self: Self? = null
-//)
+@Serializable
+data class LinksXEntity(
+    @SerialName("self") val self: Self? = null
+)
 
 @Serializable
 data class RecipeEntity(
@@ -60,11 +60,11 @@ data class RecipeEntity(
     @SerialName("yield") val yield: Double? = null
 )
 
-//@Serializable
-//data class Self(
-//    @SerialName("href") val href: String? = null,
-//    @SerialName("title") val title: String? = null
-//)
+@Serializable
+data class Self(
+    @SerialName("href") val href: String? = null,
+    @SerialName("title") val title: String? = null
+)
 
 //@Serializable
 //data class DigestEntity(

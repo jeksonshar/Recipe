@@ -29,6 +29,10 @@ class RecipeListAdapter(
         val uriRecipe = recipes[position].uri
         return uriRecipe.substringAfter('_', uriRecipe).hashCode().toLong()
     }
+/** почему при переопределении этого метода список выводится пустой? что не так переопределяю? */
+//    override fun getItemCount(): Int {
+//        return recipes.size
+//    }
 }
 
 class RecipeListViewHolder(view: View) : RecyclerView.ViewHolder(view) {

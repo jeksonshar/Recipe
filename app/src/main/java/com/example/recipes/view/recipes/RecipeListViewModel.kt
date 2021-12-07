@@ -16,21 +16,22 @@ class RecipeListViewModel : ViewModel() {
     var recipesRequest = MutableLiveData<RecipeSearchEntity>()
     val showUpdateProgress = MutableLiveData<Boolean>()
     val searchIsOpened = MutableLiveData<Int>()
+    val queryLiveData = MutableLiveData("chicken")
 
     init {
         viewModelScope.launch {
             showUpdateProgress.value = true
-            val request = RetrofitModule.recipesApi.getRecipesByQuery("chicken")
+            val request = RetrofitModule.RECIPES_API_SERVICE.getRecipesByQuery(queryLiveData.value ?: "")
             Log.d("TAG", "request: $request")
             recipesRequest.value = request
             showUpdateProgress.value = false
         }
     }
 
-    fun lifeSearchByQuery(query: Editable?) {
+    fun liveSearchByQuery(query: Editable?) {
         if (query != null && query.isNotEmpty()) {
-            if (query[query.length-1] == ' ' && query.length > 2) {
-                    makeRequest(query.toString())
+            if (query[query.length - 1] == ' ' && query.length > 2) {
+                makeRequest(query.toString())
             }
         }
     }
@@ -42,8 +43,18 @@ class RecipeListViewModel : ViewModel() {
     }
 
     private fun makeRequest(query: String) {
+        queryLiveData.value = query
         viewModelScope.launch {
-            recipesRequest.value = RetrofitModule.recipesApi.getRecipesByQuery(query)
+            recipesRequest.value = RetrofitModule.RECIPES_API_SERVICE.getRecipesByQuery(query)
+        }
+    }
+
+    fun makeNextRequest() {
+        val href = ConverterModels.getHrefNextRecipes((recipesRequest.value ?: RecipeSearchEntity()))
+        val contID = href.substringAfter("_cont=").substringBefore("&")
+        viewModelScope.launch {
+            recipesRequest.value = RetrofitModule.RECIPES_API_SERVICE
+                .getNextRecipesByQuery(queryLiveData.value ?: "", contID).body()
         }
     }
 

@@ -5,7 +5,6 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 
 object RetrofitModule {
@@ -23,6 +22,6 @@ object RetrofitModule {
 //        .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    val recipesApi: RecipesApi = retrofit.create()
+    val RECIPES_API_SERVICE: RecipesApiService = retrofit.create()
 
 }

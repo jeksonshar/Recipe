@@ -1,9 +1,8 @@
 package com.example.recipes.view.recipes
 
-import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
+//import android.text.Editable
+//import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -36,9 +35,13 @@ class RecipeListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         recycler = binding?.recyclerRecipe
-        recycler?.layoutManager = GridLayoutManager(view.context, 2)
+        val layout = GridLayoutManager(view.context, 2)
+        recycler?.layoutManager = layout
         recycler?.adapter = adapter
 
+/**
+ *      Альтеранативная doAfterTextChanged {..} реализация живого поиска, более тяжелая и более функцинальная
+*/
 //        binding?.etSearch?.addTextChangedListener(object : TextWatcher {
 //            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 //            }
@@ -47,12 +50,12 @@ class RecipeListFragment : Fragment() {
 //            }
 //
 //            override fun afterTextChanged(s: Editable?) {
-//                viewModel.lifeSearchByQuery(s)
+//                viewModel.liveSearchByQuery(s)
 //            }
 //        })
 
         binding?.etSearch?.doAfterTextChanged {
-            viewModel.lifeSearchByQuery(it)
+            viewModel.liveSearchByQuery(it)
         }
 
         binding?.etSearch?.setOnClickListener {

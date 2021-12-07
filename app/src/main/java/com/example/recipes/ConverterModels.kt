@@ -79,5 +79,9 @@ class ConverterModels {
                 )
             }
         }
+
+        fun getHrefNextRecipes(entity: RecipeSearchEntity): String {
+            return entity.links?.next?.href ?: ""
+        }
     }
 }
