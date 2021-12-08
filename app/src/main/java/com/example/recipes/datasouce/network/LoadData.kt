@@ -1,8 +1,8 @@
-package com.example.recipes.db.network
+package com.example.recipes.datasouce.network
 
 import com.example.recipes.ConverterModels
 import com.example.recipes.data.Recipe
-import com.example.recipes.db.network.entities.RecipeEntity
+import com.example.recipes.datasouce.network.entities.RecipeEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

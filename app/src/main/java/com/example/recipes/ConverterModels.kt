@@ -1,10 +1,10 @@
 package com.example.recipes
 
 import com.example.recipes.data.*
-import com.example.recipes.db.network.entities.ImagesEntity
-import com.example.recipes.db.network.entities.IngredientEntity
-import com.example.recipes.db.network.entities.RecipeEntity
-import com.example.recipes.db.network.entities.RecipeSearchEntity
+import com.example.recipes.datasouce.network.entities.ImagesEntity
+import com.example.recipes.datasouce.network.entities.IngredientEntity
+import com.example.recipes.datasouce.network.entities.RecipeEntity
+import com.example.recipes.datasouce.network.entities.RecipeSearchEntity
 
 class ConverterModels {
 

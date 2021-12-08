@@ -1,6 +1,6 @@
-package com.example.recipes.db.network
+package com.example.recipes.datasouce.network
 
-import com.example.recipes.db.network.entities.RecipeSearchEntity
+import com.example.recipes.datasouce.network.entities.RecipeSearchEntity
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -16,7 +16,7 @@ interface RecipesApiService {
     @GET("/api/recipes/v2")
     suspend fun getNextRecipesByQuery(
         @Query("q") query: String,
-        @Query("_cont") contId: String
+        @Query("_cont") contId: String? = null
     ): Response<RecipeSearchEntity>
 
     @GET("/api/recipes/v2/{id}")

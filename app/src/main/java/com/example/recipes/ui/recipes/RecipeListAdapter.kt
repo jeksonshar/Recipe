@@ -1,4 +1,4 @@
-package com.example.recipes.view.recipes
+package com.example.recipes.ui.recipes
 
 import android.view.LayoutInflater
 import android.view.View
@@ -15,14 +15,14 @@ import com.example.recipes.data.Recipe
 
 class RecipeListAdapter(
     private val recipes: List<Recipe>
-) : ListAdapter<Recipe, RecipeListViewHolder>(RecipesComparator()) {
+) : ListAdapter<Recipe, RecipePagingViewHolder>(RecipesComparator()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeListViewHolder {
-        return RecipeListViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipePagingViewHolder {
+        return RecipePagingViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.fragment_recipe_list_item, parent, false)
         )
     }
-    override fun onBindViewHolder(holder: RecipeListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecipePagingViewHolder, position: Int) {
         holder.onBind(getItem(position))
     }
     override fun getItemId(position: Int): Long {
@@ -30,9 +30,9 @@ class RecipeListAdapter(
         return uriRecipe.substringAfter('_', uriRecipe).hashCode().toLong()
     }
 /** почему при переопределении этого метода список выводится пустой? что не так переопределяю? */
-//    override fun getItemCount(): Int {
-//        return recipes.size
-//    }
+    override fun getItemCount(): Int {
+        return recipes.size
+    }
 }
 
 class RecipeListViewHolder(view: View) : RecyclerView.ViewHolder(view) {

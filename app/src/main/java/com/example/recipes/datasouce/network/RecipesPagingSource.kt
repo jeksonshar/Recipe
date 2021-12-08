@@ -1,10 +1,11 @@
-package com.example.recipes.db.network
+package com.example.recipes.datasouce.network
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.recipes.ConverterModels
 import com.example.recipes.data.Recipe
-import com.example.recipes.db.network.entities.RecipeSearchEntity
+import com.example.recipes.datasouce.network.entities.RecipeSearchEntity
 import retrofit2.HttpException
 
 class RecipesPagingSource(
@@ -24,18 +25,21 @@ class RecipesPagingSource(
             .substringAfter("_cont=")
             .substringBefore("&")
 
-        suspend fun firstResponse() = recipesApiService.getRecipesByQuery(query)
+        val href = params.key
+        val response = recipesApiService.getNextRecipesByQuery(query, href)
 
-        val nextHref = params.key ?: getHref(firstResponse())
-        val response = recipesApiService.getNextRecipesByQuery(query, nextHref)
-
-        return if (response.isSuccessful) {
+        return if (true) {   // true поставил для проверки
+            Log.d("TAG", "response recipesCount: ${ConverterModels.convertToRecipes(response.body() ?: RecipeSearchEntity()).size}")
+            Log.d("TAG", "response href: $href")
+            Log.d("TAG", "response nextHref: ${getHref(response.body() ?: RecipeSearchEntity())}")
+            Log.d("TAG", "-----------------------------")
             LoadResult.Page(
                 data = ConverterModels.convertToRecipes(response.body() ?: RecipeSearchEntity()),
-                prevKey = if (nextHref == getHref(firstResponse())) null else nextHref,
+                prevKey = href,
                 nextKey = getHref(response.body() ?: RecipeSearchEntity())
             )
         } else {
+            Log.d("TAG", "responseNOT: $response")
             LoadResult.Error(HttpException(response))
         }
     }

@@ -1,4 +1,4 @@
-package com.example.recipes.view.registration
+package com.example.recipes.ui.registration
 
 import androidx.lifecycle.ViewModel
 

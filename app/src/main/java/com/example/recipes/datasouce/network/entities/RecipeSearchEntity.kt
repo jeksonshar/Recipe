@@ -1,69 +1,70 @@
-package com.example.recipes.db.network.entities
+package com.example.recipes.datasouce.network.entities
 
+import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class RecipeSearchEntity(
-    @SerialName("_links") val links: LinksEntity? = null,
-    @SerialName("count") val count: Int? = null,
-    @SerialName("from") val from: Int? = null,
-    @SerialName("hits") val hits: List<HitEntity>? = null,
-    @SerialName("to") val to: Int? = null
+    @SerializedName("_links") val links: LinksEntity? = null,
+    @SerializedName("count") val count: Int? = null,
+    @SerializedName("from") val from: Int? = null,
+    @SerializedName("hits") val hits: List<HitEntity>? = null,
+    @SerializedName("to") val to: Int? = null
 )
 
 @Serializable
 data class LinksEntity(
-    @SerialName("next") val next: Next? = null
+    @SerializedName("next") val next: Next? = null
 )
 
 @Serializable
 data class HitEntity(
-    @SerialName("_links") val linksEntity: LinksXEntity? = null,
-    @SerialName("recipe") val recipeEntity: RecipeEntity? = null
+    @SerializedName("_links") val linksEntity: LinksXEntity? = null,
+    @SerializedName("recipe") val recipeEntity: RecipeEntity? = null
 )
 
 @Serializable
 data class Next(
-    @SerialName("href") val href: String? = null,
-    @SerialName("title") val title: String? = null
+    @SerializedName("href") val href: String? = null,
+    @SerializedName("title") val title: String? = null
 )
 
 @Serializable
 data class LinksXEntity(
-    @SerialName("self") val self: Self? = null
+    @SerializedName("self") val self: Self? = null
 )
 
 @Serializable
 data class RecipeEntity(
-    @SerialName("calories") val calories: Double? = null,
-    @SerialName("cautions") val cautions: List<String>? = null,
-    @SerialName("cuisineType") val cuisineType: List<String>? = null,
-    @SerialName("dietLabels") val dietLabels: List<String>? = null,
+    @SerializedName("calories") val calories: Double? = null,
+    @SerializedName("cautions") val cautions: List<String>? = null,
+    @SerializedName("cuisineType") val cuisineType: List<String>? = null,
+    @SerializedName("dietLabels") val dietLabels: List<String>? = null,
 //    @SerialName("digest") val digest: List<DigestEntity>? = null,
-    @SerialName("dishType") val dishType: List<String>? = null,
-    @SerialName("healthLabels") val healthLabels: List<String>? = null,
-    @SerialName("image") val image: String? = null,
-    @SerialName("images") val images: ImagesEntity? = null,
-    @SerialName("ingredientLines") val ingredientLines: List<String>? = null,
-    @SerialName("ingredients") val ingredients: List<IngredientEntity>? = null,
-    @SerialName("label") val label: String? = null,
-    @SerialName("mealType") val mealType: List<String>? = null,
-    @SerialName("shareAs") val shareAs: String? = null,
-    @SerialName("source") val source: String? = null,
+    @SerializedName("dishType") val dishType: List<String>? = null,
+    @SerializedName("healthLabels") val healthLabels: List<String>? = null,
+    @SerializedName("image") val image: String? = null,
+    @SerializedName("images") val images: ImagesEntity? = null,
+    @SerializedName("ingredientLines") val ingredientLines: List<String>? = null,
+    @SerializedName("ingredients") val ingredients: List<IngredientEntity>? = null,
+    @SerializedName("label") val label: String? = null,
+    @SerializedName("mealType") val mealType: List<String>? = null,
+    @SerializedName("shareAs") val shareAs: String? = null,
+    @SerializedName("source") val source: String? = null,
 //    @SerialName("totalDaily") val totalDaily: TotalDailyEntity? = null,
 //    @SerialName("totalNutrients") val totalNutrients: TotalNutrientsEntity? = null,
-    @SerialName("totalTime") val totalTime: Double? = null,
-    @SerialName("totalWeight") val totalWeight: Double? = null,
-    @SerialName("uri") val uri: String? = null,
-    @SerialName("url") val url: String? = null,
-    @SerialName("yield") val yield: Double? = null
+    @SerializedName("totalTime") val totalTime: Double? = null,
+    @SerializedName("totalWeight") val totalWeight: Double? = null,
+    @SerializedName("uri") val uri: String? = null,
+    @SerializedName("url") val url: String? = null,
+    @SerializedName("yield") val yield: Double? = null
 )
 
 @Serializable
 data class Self(
-    @SerialName("href") val href: String? = null,
-    @SerialName("title") val title: String? = null
+    @SerializedName("href") val href: String? = null,
+    @SerializedName("title") val title: String? = null
 )
 
 //@Serializable
@@ -80,22 +81,22 @@ data class Self(
 
 @Serializable
 data class ImagesEntity(
-    @SerialName("LARGE") val large: LargeEntity? = null,
-    @SerialName("REGULAR") val regular: RegularEntity? = null,
-    @SerialName("SMALL") val small: SmallEntity? = null,
-    @SerialName("THUMBNAIL") val thumbnail: ThumbnailEntity? = null
+    @SerializedName("LARGE") val large: LargeEntity? = null,
+    @SerializedName("REGULAR") val regular: RegularEntity? = null,
+    @SerializedName("SMALL") val small: SmallEntity? = null,
+    @SerializedName("THUMBNAIL") val thumbnail: ThumbnailEntity? = null
 )
 
 @Serializable
 data class IngredientEntity(
-    @SerialName("food") val food: String? = null,
-    @SerialName("foodCategory") val foodCategory: String? = null,
-    @SerialName("foodId") val foodId: String? = null,
+    @SerializedName("food") val food: String? = null,
+    @SerializedName("foodCategory") val foodCategory: String? = null,
+    @SerializedName("foodId") val foodId: String? = null,
     /*@SerialName("image") */val image: String? = null,
-    @SerialName("measure") val measure: String? = null,
-    @SerialName("quantity") val quantity: Double? = null,
-    @SerialName("text") val text: String? = null,
-    @SerialName("weight") val weight: Double? = null
+    @SerializedName("measure") val measure: String? = null,
+    @SerializedName("quantity") val quantity: Double? = null,
+    @SerializedName("text") val text: String? = null,
+    @SerializedName("weight") val weight: Double? = null
 )
 
 //@Serializable

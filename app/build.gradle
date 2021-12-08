@@ -92,6 +92,8 @@ dependencies {
 
     implementation 'com.github.bumptech.glide:glide:4.11.0'
 
+    implementation 'com.github.kirich1409:viewbindingpropertydelegate-noreflection:1.4.6'
+
     //paging 3
     implementation("androidx.paging:paging-runtime-ktx:$paging_version")
     implementation("androidx.paging:paging-compose:1.0.0-alpha14")

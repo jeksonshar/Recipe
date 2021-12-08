@@ -1,9 +1,9 @@
-package com.example.recipes.view.registration
+package com.example.recipes.ui.registration
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.recipes.R
-import com.example.recipes.db.TestData
+import com.example.recipes.datasouce.TestData
 
 class RegistrationActivity : AppCompatActivity() {
 

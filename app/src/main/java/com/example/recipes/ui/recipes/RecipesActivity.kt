@@ -1,7 +1,6 @@
-package com.example.recipes.view.recipes
+package com.example.recipes.ui.recipes
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.recipes.R
 
