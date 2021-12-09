@@ -28,11 +28,7 @@ class RecipesPagingSource(
         val href = params.key
         val response = recipesApiService.getNextRecipesByQuery(query, href)
 
-        return if (true) {   // true поставил для проверки
-            Log.d("TAG", "response recipesCount: ${ConverterModels.convertToRecipes(response.body() ?: RecipeSearchEntity()).size}")
-            Log.d("TAG", "response href: $href")
-            Log.d("TAG", "response nextHref: ${getHref(response.body() ?: RecipeSearchEntity())}")
-            Log.d("TAG", "-----------------------------")
+        return if (response.isSuccessful) {
             LoadResult.Page(
                 data = ConverterModels.convertToRecipes(response.body() ?: RecipeSearchEntity()),
                 prevKey = href,

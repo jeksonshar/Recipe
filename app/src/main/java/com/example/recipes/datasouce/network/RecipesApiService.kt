@@ -16,7 +16,7 @@ interface RecipesApiService {
     @GET("/api/recipes/v2")
     suspend fun getNextRecipesByQuery(
         @Query("q") query: String,
-        @Query("_cont") contId: String? = null
+        @Query("_cont", encoded = true) contId: String? = null
     ): Response<RecipeSearchEntity>
 
     @GET("/api/recipes/v2/{id}")
