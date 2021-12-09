@@ -11,7 +11,6 @@ import com.example.recipes.R
 import com.example.recipes.databinding.FragmentRecipeListBinding
 
 class RecipesLoadStateAdapter(
-//    private val binding: FragmentRecipeListBinding,
     private val retry: () -> Unit
 ) : LoadStateAdapter<ProgressViewHolder>() {
 
@@ -25,14 +24,12 @@ class RecipesLoadStateAdapter(
 }
 
 class ProgressViewHolder(
-//    binding: FragmentRecipeListBinding,
     parent: ViewGroup,
     retry: () -> Unit
 ) : RecyclerView.ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.fragment_recipe_list, parent, false)) {
 
     private val binding = FragmentRecipeListBinding.bind(itemView)
 
-    private val progressBar = binding.progressBarPaging
     private val errorMsg = binding.tvErrorLoading
     private val retry = binding.buttonRetry
         .also {
@@ -44,7 +41,6 @@ class ProgressViewHolder(
             errorMsg.text = loadState.error.localizedMessage
         }
 
-//        progressBar.isVisible = loadState is LoadState.Loading
         retry.isVisible = loadState is LoadState.Error
         errorMsg.isVisible = loadState is LoadState.Error
     }
