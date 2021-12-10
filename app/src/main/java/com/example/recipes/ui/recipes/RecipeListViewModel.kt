@@ -1,40 +1,39 @@
 package com.example.recipes.ui.recipes
 
 import android.text.Editable
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
+import androidx.lifecycle.*
+import androidx.paging.*
 import com.example.recipes.data.Recipe
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
 
 class RecipeListViewModel(
     private val recipesUseCase: RecipesUseCase,
     val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    //    val recipesRequest = MutableLiveData<RecipeSearchEntity>()
-//    val showUpdateProgress = MutableLiveData<Boolean>()
     val searchIsOpened = MutableLiveData<Int>()
+    private val _queryHandler = MutableStateFlow("chicken")
+    private val queryHandler: StateFlow<String> = _queryHandler
+    private var newPagingSource: PagingSource<*, *>? = null
 
-    //    val queryLiveData = MutableLiveData("chicken")
+    val recipes: Flow<PagingData<Recipe>> = queryHandler
+        .map(::newPager)
+        .flatMapLatest { pager -> pager.flow  }
+        .cachedIn(viewModelScope)
 
-    fun recipes(query: String): Flow<PagingData<Recipe>> {
+    private fun newPager(query: String): Pager<String, Recipe> {
         return Pager(PagingConfig(pageSize = 3)) {
-            recipesUseCase.invoke(query)
+            recipesUseCase.invoke(query).also {
+                newPagingSource = it
+            }
         }
-            .flow
-            .cachedIn(viewModelScope)
     }
 
     fun liveSearchByQuery(query: Editable?) {
         if (query != null && query.isNotEmpty()) {
             if (query[query.length - 1] == ' ' && query.length > 2) {
-                recipes(query.toString())
+                _queryHandler.tryEmit(query.toString())
             }
         }
     }

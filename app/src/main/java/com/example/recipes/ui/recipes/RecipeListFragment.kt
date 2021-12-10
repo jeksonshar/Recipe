@@ -57,14 +57,14 @@ class RecipeListFragment : Fragment() {
         }
 
         lifecycleScope.launch {
-            viewModel.recipes("chicken").collectLatest { pagingData ->
+            viewModel.recipes.collectLatest { pagingData ->
                 pagingAdapter.submitData(pagingData)
             }
         }
 
-        /**
-         *      Альтеранативная doAfterTextChanged {..} реализация живого поиска, более тяжелая и более функцинальная
-         */
+/**
+ *      Альтеранативная doAfterTextChanged {..} реализация живого поиска, более тяжелая и более функцинальная
+ */
 /*//        binding?.etSearch?.addTextChangedListener(object : TextWatcher {
 //            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 //            }
