@@ -48,10 +48,6 @@ class RecipePagingViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             tvNameRecipe.text = recipe.label
         }
     }
-
-    companion object {
-
-    }
 }
 
 private object RecipePagingComparator : DiffUtil.ItemCallback<Recipe>() {

@@ -38,6 +38,14 @@ class RecipeListViewModel(
         }
     }
 
+    fun searchByTouch(query: Editable?) {
+        if (query != null && query.isNotEmpty()) {
+            if (query.length > 1) {
+                _queryHandler.tryEmit(query.toString())
+            }
+        }
+    }
+
     fun changeSearchIsOpenedValue(currentVisibility: Int) {
         if (currentVisibility == 0) {
             searchIsOpened.value = 8

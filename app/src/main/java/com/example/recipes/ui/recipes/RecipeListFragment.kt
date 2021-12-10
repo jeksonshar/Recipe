@@ -51,7 +51,7 @@ class RecipeListFragment : Fragment() {
             pagingAdapter.loadStateFlow.collectLatest { loadState ->
                 binding?.progressBarWhileListEmpty?.isVisible = loadState.refresh is LoadState.Loading
                 binding?.buttonRetry?.isVisible = loadState.refresh !is LoadState.Loading && loadState.append is LoadState.Error
-                binding?.tvErrorLoading?.text = loadState.source.toString()
+                binding?.tvErrorLoading?.text = if (loadState.source.toString().contains("429")) "Да не торопись ты так\nЖди минуту!" else loadState.source.toString()
                 binding?.tvErrorLoading?.isVisible = loadState.refresh !is LoadState.Loading && loadState.append is LoadState.Error
             }
         }
@@ -87,6 +87,11 @@ class RecipeListFragment : Fragment() {
 
         binding?.buttonRetry?.setOnClickListener {
             pagingAdapter.retry()
+        }
+
+            binding?.etSearch?.setOnClickListener {
+            val text = binding?.etSearch?.text
+            viewModel.searchByTouch(text)
         }
 
         viewModel.searchIsOpened.observe(viewLifecycleOwner, {
