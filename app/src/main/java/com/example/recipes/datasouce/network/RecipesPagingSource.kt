@@ -7,6 +7,7 @@ import com.example.recipes.ConverterModels
 import com.example.recipes.data.Recipe
 import com.example.recipes.datasouce.network.entities.RecipeSearchEntity
 import retrofit2.HttpException
+import retrofit2.Response
 
 class RecipesPagingSource(
     private val recipesApiService: RecipesApiService,
@@ -26,7 +27,14 @@ class RecipesPagingSource(
             .substringBefore("&")
 
         val href = params.key
-        val response = recipesApiService.getNextRecipesByQuery(query, href)
+        val response: Response<RecipeSearchEntity>
+        try {
+            response = recipesApiService.getNextRecipesByQuery(query, href)
+
+        } catch (e: Throwable) {
+            Log.d("TAG", "ERROR: response didn't completed")
+            return LoadResult.Error(e)
+        }
 
         return if (response.isSuccessful) {
             LoadResult.Page(

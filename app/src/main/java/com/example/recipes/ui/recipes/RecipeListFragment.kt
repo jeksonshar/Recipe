@@ -7,13 +7,16 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.recipes.R
 import com.example.recipes.databinding.FragmentRecipeListBinding
 import com.example.recipes.datasouce.network.RetrofitModule
+import com.example.recipes.usecases.CheckConnectionImpl
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -31,6 +34,7 @@ class RecipeListFragment : Fragment() {
     private val pagingAdapter by lazy(LazyThreadSafetyMode.NONE) {
         RecipePagingAdapter()
     }
+    private val checkConnection = CheckConnectionImpl()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,14 +55,22 @@ class RecipeListFragment : Fragment() {
             pagingAdapter.loadStateFlow.collectLatest { loadState ->
                 binding?.progressBarWhileListEmpty?.isVisible = loadState.refresh is LoadState.Loading
                 binding?.buttonRetry?.isVisible = loadState.refresh !is LoadState.Loading && loadState.append is LoadState.Error
-                binding?.tvErrorLoading?.text = if (loadState.source.toString().contains("429")) "Да не торопись ты так\nЖди минуту!" else loadState.source.toString()
+                binding?.tvErrorLoading?.text =
+                    if (loadState.source.toString().contains("429")) "Да не торопись ты так\nЖди минуту!" else loadState.source.toString()
                 binding?.tvErrorLoading?.isVisible = loadState.refresh !is LoadState.Loading && loadState.append is LoadState.Error
             }
         }
 
-        lifecycleScope.launch {
-            viewModel.recipes.collectLatest { pagingData ->
-                pagingAdapter.submitData(pagingData)
+        if (!checkConnection.isNetConnected(requireContext())) {
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.addToBackStack(null)
+                    ?.replace(R.id.fragmentRecipesContainer, NoConnectionDialogFragment())
+                    ?.commit()
+        } else {
+            lifecycleScope.launch {
+                viewModel.recipes.collectLatest { pagingData ->
+                    pagingAdapter.submitData(pagingData)
+                }
             }
         }
 
@@ -89,7 +101,7 @@ class RecipeListFragment : Fragment() {
             pagingAdapter.retry()
         }
 
-            binding?.etSearch?.setOnClickListener {
+        binding?.etSearch?.setOnClickListener {
             val text = binding?.etSearch?.text
             viewModel.searchByTouch(text)
         }
