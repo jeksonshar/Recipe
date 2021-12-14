@@ -3,6 +3,7 @@ package com.example.recipes.ui.recipes
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.recipes.R
+import com.example.recipes.ui.recipes.list.RecipeListFragment
 
 class RecipesActivity : AppCompatActivity() {
 

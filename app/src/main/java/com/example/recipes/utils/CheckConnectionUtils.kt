@@ -1,4 +1,4 @@
-package com.example.recipes.usecases
+package com.example.recipes.utils
 
 import android.content.Context
 import android.net.ConnectivityManager
@@ -6,7 +6,7 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import androidx.core.content.ContextCompat
 
-class CheckConnectionImpl{
+object CheckConnectionUtils {
 
     fun isNetConnected(context: Context): Boolean {
         val cm = ContextCompat.getSystemService(context, ConnectivityManager::class.java)
@@ -25,6 +25,5 @@ class CheckConnectionImpl{
             @Suppress("DEPRECATION")
             return networkInfo.isConnected
         }
-//        return cm!!.activeNetworkInfo != null && cm.activeNetworkInfo?.isConnected ?:false
     }
 }

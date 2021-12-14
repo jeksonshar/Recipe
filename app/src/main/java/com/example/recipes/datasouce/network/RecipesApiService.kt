@@ -1,5 +1,7 @@
 package com.example.recipes.datasouce.network
 
+import com.example.recipes.datasouce.network.entities.HitEntity
+import com.example.recipes.datasouce.network.entities.RecipeEntity
 import com.example.recipes.datasouce.network.entities.RecipeSearchEntity
 import retrofit2.Response
 import retrofit2.http.GET
@@ -22,5 +24,5 @@ interface RecipesApiService {
     @GET("/api/recipes/v2/{id}")
     suspend fun getRecipeInfo(
         @Path("id") id: String
-    )
+    ): HitEntity
 }

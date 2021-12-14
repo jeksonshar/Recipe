@@ -1,4 +1,4 @@
-package com.example.recipes.ui.recipes
+package com.example.recipes.business.usecases
 
 import androidx.paging.PagingSource
 import com.example.recipes.data.Recipe

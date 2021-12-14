@@ -1,10 +1,10 @@
-package com.example.recipes.ui.recipes
+package com.example.recipes.ui.recipes.list
 
 import android.text.Editable
 import androidx.lifecycle.*
 import androidx.paging.*
+import com.example.recipes.business.usecases.RecipesUseCase
 import com.example.recipes.data.Recipe
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 
 class RecipeListViewModel(
@@ -47,10 +47,15 @@ class RecipeListViewModel(
     }
 
     fun changeSearchIsOpenedValue(currentVisibility: Int) {
-        if (currentVisibility == 0) {
-            searchIsOpened.value = 8
+        if (currentVisibility == VIEW_VISIBLE) {
+            searchIsOpened.value = VIEW_GONE
         } else {
-            searchIsOpened.value = 0
+            searchIsOpened.value = VIEW_VISIBLE
         }
+    }
+
+    companion object {
+        const val VIEW_VISIBLE = 0
+        const val VIEW_GONE = 8
     }
 }

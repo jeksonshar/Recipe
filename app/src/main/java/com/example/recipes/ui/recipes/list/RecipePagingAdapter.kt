@@ -1,11 +1,9 @@
-package com.example.recipes.ui.recipes
+package com.example.recipes.ui.recipes.list
 
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.AppCompatImageView
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -16,7 +14,9 @@ import com.example.recipes.R
 import com.example.recipes.data.Recipe
 import com.example.recipes.databinding.FragmentRecipeListItemBinding
 
-class RecipePagingAdapter : PagingDataAdapter<Recipe, RecipePagingViewHolder>(RecipePagingComparator) {
+class RecipePagingAdapter(
+    private val clickListener: RecipeFragmentClickListener
+) : PagingDataAdapter<Recipe, RecipePagingViewHolder>(RecipePagingComparator) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipePagingViewHolder {
         return RecipePagingViewHolder(
@@ -25,9 +25,12 @@ class RecipePagingAdapter : PagingDataAdapter<Recipe, RecipePagingViewHolder>(Re
     }
     override fun onBindViewHolder(holder: RecipePagingViewHolder, position: Int) {
         Log.d("TAG", "onBindViewHolder:")
-        getItem(position)?.let {
-            Log.d("TAG", "onBindViewHolder: $it")
-            holder.onBind(it)
+        getItem(position)?.let { recipe ->
+            Log.d("TAG", "onBindViewHolder: $recipe")
+            holder.onBind(recipe)
+            holder.itemView.setOnClickListener {
+                clickListener.openRecipeDetailsFragment(recipe)
+            }
         }
     }
 }

@@ -1,14 +1,13 @@
-package com.example.recipes.ui.recipes
+package com.example.recipes.ui.dialogs
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.DialogFragment
 import com.example.recipes.databinding.DialogNoConnectionBinding
-import com.example.recipes.databinding.FragmentRecipeListBinding
 
-class NoConnectionDialogFragment : Fragment() {
+class NoConnectionDialogFragment : DialogFragment() {
 
     private var _binding: DialogNoConnectionBinding? = null
     private val binding get() = _binding
