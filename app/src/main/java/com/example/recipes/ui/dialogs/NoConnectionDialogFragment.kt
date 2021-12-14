@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.example.recipes.databinding.DialogNoConnectionBinding
+import com.example.recipes.utils.CheckConnectionUtils
 
 class NoConnectionDialogFragment : DialogFragment() {
 
@@ -21,7 +22,9 @@ class NoConnectionDialogFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding?.okButton?.setOnClickListener {
-            activity?.onBackPressed()
+            if (CheckConnectionUtils.isNetConnected(requireContext())) {
+                requireActivity().onBackPressed()
+            }
         }
     }
 }

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
@@ -120,7 +121,11 @@ class RecipeListFragment : Fragment() {
         }
 
         if (!CheckConnectionUtils.isNetConnected(requireContext())) {
-            NoConnectionDialogFragment().show(requireActivity().supportFragmentManager, null)
+//            NoConnectionDialogFragment().show(requireActivity().supportFragmentManager, null)
+            requireActivity().supportFragmentManager.commit {
+                replace(R.id.fragmentRecipesContainer, NoConnectionDialogFragment())
+                    .addToBackStack(null)
+            }
         } else {
             lifecycleScope.launch {
                 viewModel.recipes.collectLatest { pagingData ->
