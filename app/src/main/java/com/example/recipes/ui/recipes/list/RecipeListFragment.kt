@@ -21,6 +21,7 @@ import com.example.recipes.databinding.FragmentRecipeListBinding
 import com.example.recipes.datasouce.network.RetrofitModule
 import com.example.recipes.business.usecases.GetRecipeUseCase
 import com.example.recipes.business.usecases.RecipesUseCase
+import com.example.recipes.datasouce.RecipeDataStore
 import com.example.recipes.ui.dialogs.NoConnectionDialogFragment
 import com.example.recipes.ui.recipes.MyViewModelFactory
 import com.example.recipes.ui.recipes.details.RecipeDetailsFragment
@@ -36,7 +37,7 @@ class RecipeListFragment : Fragment() {
     private val apiService = RetrofitModule.RECIPES_API_SERVICE
 
     private val viewModel: RecipeListViewModel by viewModels {
-        MyViewModelFactory(RecipesUseCase(apiService), GetRecipeUseCase(apiService), this)
+        MyViewModelFactory(RecipesUseCase(apiService), GetRecipeUseCase(apiService), RecipeDataStore(requireContext()),this)
     }
 
     private var clickListener: RecipeFragmentClickListener? = object : RecipeFragmentClickListener {
@@ -121,7 +122,8 @@ class RecipeListFragment : Fragment() {
         }
 
         if (!CheckConnectionUtils.isNetConnected(requireContext())) {
-//            NoConnectionDialogFragment().show(requireActivity().supportFragmentManager, null)
+
+//            NoConnectionDialogFragment().show(requireActivity().supportFragmentManager, null) // не подходит по логике работы диалога
             requireActivity().supportFragmentManager.commit {
                 replace(R.id.fragmentRecipesContainer, NoConnectionDialogFragment())
                     .addToBackStack(null)

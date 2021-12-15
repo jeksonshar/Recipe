@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.example.recipes.business.usecases.GetRecipeUseCase
 import com.example.recipes.business.usecases.RecipesUseCase
 import com.example.recipes.databinding.FragmentDetailRecipeBinding
+import com.example.recipes.datasouce.RecipeDataStore
 import com.example.recipes.datasouce.network.RetrofitModule
 import com.example.recipes.ui.recipes.MyViewModelFactory
 
@@ -23,7 +24,7 @@ class RecipeDetailsFragment : Fragment() {
     private val apiService = RetrofitModule.RECIPES_API_SERVICE
 
     private val viewModel: RecipeDetailsViewModel by viewModels {
-        MyViewModelFactory(RecipesUseCase(apiService), GetRecipeUseCase(apiService), this)
+        MyViewModelFactory(RecipesUseCase(apiService), GetRecipeUseCase(apiService), RecipeDataStore(requireContext()),this)
     }
 
     private val adapter by lazy(LazyThreadSafetyMode.NONE) {

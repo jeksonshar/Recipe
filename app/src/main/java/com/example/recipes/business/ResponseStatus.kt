@@ -1,6 +1,10 @@
 package com.example.recipes.business
 
-data class ResponseStatus<out T>(val status: Status, val data: T?, val message: String?) {
+data class ResponseStatus<out T>(
+    val status: Status,
+    val data: T?,
+    val message: String?
+    ) {
     companion object {
         fun <T> success(data: T?): ResponseStatus<T> =
             ResponseStatus(Status.SUCCESS, data, null)

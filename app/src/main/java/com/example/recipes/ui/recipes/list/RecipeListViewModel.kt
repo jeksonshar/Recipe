@@ -5,21 +5,24 @@ import androidx.lifecycle.*
 import androidx.paging.*
 import com.example.recipes.business.usecases.RecipesUseCase
 import com.example.recipes.data.Recipe
+import com.example.recipes.datasouce.RecipeDataStore
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 class RecipeListViewModel(
     private val recipesUseCase: RecipesUseCase,
+    private val recipeDataStore: RecipeDataStore,
     val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     val searchIsOpened = MutableLiveData<Int>()
-    private val _queryHandler = MutableStateFlow("chicken")
-    private val queryHandler: StateFlow<String> = _queryHandler
+
+    private val queryHandler = recipeDataStore.getLastQuery()
     private var newPagingSource: PagingSource<*, *>? = null
 
     val recipes: Flow<PagingData<Recipe>> = queryHandler
         .map(::newPager)
-        .flatMapLatest { pager -> pager.flow  }
+        .flatMapLatest { pager -> pager.flow }
         .cachedIn(viewModelScope)
 
     private fun newPager(query: String): Pager<String, Recipe> {
@@ -33,7 +36,9 @@ class RecipeListViewModel(
     fun liveSearchByQuery(query: Editable?) {
         if (query != null && query.isNotEmpty()) {
             if (query[query.length - 1] == ' ' && query.length > 2) {
-                _queryHandler.tryEmit(query.toString())
+                viewModelScope.launch {
+                    recipeDataStore.setLastQuery(query.toString())
+                }
             }
         }
     }
@@ -41,7 +46,9 @@ class RecipeListViewModel(
     fun searchByTouch(query: Editable?) {
         if (query != null && query.isNotEmpty()) {
             if (query.length > 1) {
-                _queryHandler.tryEmit(query.toString())
+                viewModelScope.launch {
+                    recipeDataStore.setLastQuery(query.toString())
+                }
             }
         }
     }

@@ -1,6 +1,5 @@
 package com.example.recipes.ui.recipes.details
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.example.recipes.business.usecases.GetRecipeUseCase
 import com.example.recipes.data.Ingredient
@@ -19,10 +18,10 @@ class RecipeDetailsViewModel(
 
     fun getRecipe(id: String) {
         viewModelScope.launch {
-            val recipe = useCase.getRecipe(id)
-            Log.d("TAG", "getRecipe: $recipe")
-            _currentRecipe.value = recipe
-            _currentRecipeIngredients.value = recipe.ingredients
+            useCase.getRecipe(id).also {
+                _currentRecipe.value = it
+                _currentRecipeIngredients.value = it.ingredients
+            }
         }
     }
 }

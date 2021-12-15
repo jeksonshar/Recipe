@@ -24,5 +24,5 @@ interface RecipesApiService {
     @GET("/api/recipes/v2/{id}")
     suspend fun getRecipeInfo(
         @Path("id") id: String
-    ): HitEntity
+    ): Response<HitEntity>
 }
