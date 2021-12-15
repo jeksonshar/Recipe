@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,7 +25,12 @@ class RecipeDetailsFragment : Fragment() {
     private val apiService = RetrofitModule.RECIPES_API_SERVICE
 
     private val viewModel: RecipeDetailsViewModel by viewModels {
-        MyViewModelFactory(RecipesUseCase(apiService), GetRecipeUseCase(apiService), RecipeDataStore(requireContext()),this)
+        MyViewModelFactory(
+            RecipesUseCase(apiService),
+            GetRecipeUseCase(apiService),
+            RecipeDataStore(requireContext()),
+            this
+        )
     }
 
     private val adapter by lazy(LazyThreadSafetyMode.NONE) {
@@ -38,8 +44,6 @@ class RecipeDetailsFragment : Fragment() {
         Log.d("TAG", "onCreateDetailFragment: $idRecipe")
 
         viewModel.getRecipe(idRecipe ?: "")
-
-
     }
 
     override fun onCreateView(
@@ -51,6 +55,10 @@ class RecipeDetailsFragment : Fragment() {
         binding.apply {
             rvIngredients.layoutManager = LinearLayoutManager(requireContext())
             rvIngredients.adapter = adapter
+            buttonRetryDetail.setOnClickListener {
+                val idRecipe = requireArguments().getString(RECIPE_KEY)
+                viewModel.getRecipe(idRecipe ?: "")
+            }
         }
         return binding.root
     }
@@ -69,6 +77,30 @@ class RecipeDetailsFragment : Fragment() {
 
         viewModel.currentRecipeIngredients.observe(viewLifecycleOwner, {
             adapter.submitList(it)
+        })
+
+        viewModel.progressVisibilityLiveData.observe(viewLifecycleOwner, {
+            binding.progressBarDetail.isVisible = it
+        })
+
+        viewModel.errorMassageLiveData.observe(viewLifecycleOwner, {
+            if (!it.isNullOrEmpty()) {
+                binding.apply {
+                    tvErrorDetail.text = it
+                    tvErrorDetail.isVisible = true
+                    buttonRetryDetail.isVisible = true
+                }
+            } else {
+                binding.apply {
+                    tvErrorDetail.isVisible = false
+                    buttonRetryDetail.isVisible = false
+                    tvDetailIngredient.isVisible = true
+                }
+            }
+        })
+
+        viewModel.retryVisibilityLiveData.observe(viewLifecycleOwner, {
+            binding.buttonRetryDetail.isVisible = it
         })
     }
 
