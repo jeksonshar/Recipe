@@ -3,14 +3,14 @@ package com.example.recipes.ui.recipes.list
 import android.text.Editable
 import androidx.lifecycle.*
 import androidx.paging.*
-import com.example.recipes.business.usecases.RecipesUseCase
+import com.example.recipes.business.usecases.GetRecipeListUseCase
 import com.example.recipes.data.Recipe
 import com.example.recipes.datasouce.RecipeDataStore
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class RecipeListViewModel(
-    private val recipesUseCase: RecipesUseCase,
+    private val getRecipeListUseCase: GetRecipeListUseCase,
     private val recipeDataStore: RecipeDataStore,
     val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -27,7 +27,7 @@ class RecipeListViewModel(
 
     private fun newPager(query: String): Pager<String, Recipe> {
         return Pager(PagingConfig(pageSize = 3)) {
-            recipesUseCase.invoke(query).also {
+            getRecipeListUseCase.invoke(query).also {
                 newPagingSource = it
             }
         }

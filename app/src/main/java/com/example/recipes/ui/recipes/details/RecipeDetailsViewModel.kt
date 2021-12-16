@@ -1,11 +1,12 @@
 package com.example.recipes.ui.recipes.details
 
 import androidx.lifecycle.*
-import com.example.recipes.ConverterModels
+import com.example.recipes.ConverterNetModels
 import com.example.recipes.business.Status
 import com.example.recipes.business.usecases.GetRecipeUseCase
 import com.example.recipes.data.Ingredient
 import com.example.recipes.data.Recipe
+import com.example.recipes.datasouce.RecipeDataStore
 import kotlinx.coroutines.launch
 
 class RecipeDetailsViewModel(
@@ -24,7 +25,7 @@ class RecipeDetailsViewModel(
     fun getRecipe(id: String) {
         viewModelScope.launch {
             useCase.getRecipe(id).also {
-                val recipe = ConverterModels.convertToRecipe(it.data)
+                val recipe = ConverterNetModels.convertToRecipe(it.data)
                 when (it.status) {
                     Status.SUCCESS -> {
                         _currentRecipe.value = recipe
@@ -46,5 +47,19 @@ class RecipeDetailsViewModel(
                 }
             }
         }
+    }
+
+    fun changeIsFavorite(recipe: Recipe, dataStore: RecipeDataStore) {
+        viewModelScope.launch {
+            if (!recipe.isFavorite) {
+                dataStore.setFavoriteRecipe(recipe)
+            } else {
+                dataStore.delFavoriteRecipe(recipe)
+            }
+        }
+    }
+
+    fun isContainFavoriteRecipe(recipe: Recipe, dataStore: RecipeDataStore): LiveData<Boolean> {
+        return dataStore.isContainFavoriteRecipe(recipe).asLiveData()
     }
 }

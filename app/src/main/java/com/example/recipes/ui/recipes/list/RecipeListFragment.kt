@@ -20,7 +20,7 @@ import com.example.recipes.data.Recipe
 import com.example.recipes.databinding.FragmentRecipeListBinding
 import com.example.recipes.datasouce.network.RetrofitModule
 import com.example.recipes.business.usecases.GetRecipeUseCase
-import com.example.recipes.business.usecases.RecipesUseCase
+import com.example.recipes.business.usecases.GetRecipeListUseCase
 import com.example.recipes.datasouce.RecipeDataStore
 import com.example.recipes.ui.dialogs.NoConnectionDialogFragment
 import com.example.recipes.ui.recipes.MyViewModelFactory
@@ -37,7 +37,7 @@ class RecipeListFragment : Fragment() {
     private val apiService = RetrofitModule.RECIPES_API_SERVICE
 
     private val viewModel: RecipeListViewModel by viewModels {
-        MyViewModelFactory(RecipesUseCase(apiService), GetRecipeUseCase(apiService), RecipeDataStore(requireContext()),this)
+        MyViewModelFactory(GetRecipeListUseCase(apiService), GetRecipeUseCase(apiService), RecipeDataStore(requireContext()), this)
     }
 
     private var clickListener: RecipeFragmentClickListener? = object : RecipeFragmentClickListener {

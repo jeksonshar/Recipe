@@ -22,5 +22,6 @@ data class Recipe(
     val totalWeight: Double,
     val uri: String,
     val url: String,
-    val yield: Double
+    val yield: Double,
+    val isFavorite: Boolean = false
 )

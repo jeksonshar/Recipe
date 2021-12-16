@@ -17,4 +17,5 @@
     <string name="test_text">Test text</string>
     <string name="reload">Reload</string>
     <string name="turn_on_the_internet_connection_and_reload">Turn on the internet connection and reload</string>
+    <string name="image_view">image view</string>
 </resources>

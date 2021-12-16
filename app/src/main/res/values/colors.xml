@@ -12,4 +12,6 @@
 
     <color name="colorDialogBackground">#1E1E1E</color>
     <color name="colorSplitDialog">#262525</color>
+    <color name="black_half_transparent">#33000000</color>
+
 </resources>

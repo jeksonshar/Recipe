@@ -1,27 +1,26 @@
-package com.example.recipes.datasouce.network.entities
+package com.example.recipes.datasouce.network.models
 
 import com.google.gson.annotations.SerializedName
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RecipeSearchEntity(
-    @SerializedName("_links") val links: LinksEntity? = null,
+data class RecipeSearchModel(
+    @SerializedName("_links") val links: LinksModel? = null,
     @SerializedName("count") val count: Int? = null,
     @SerializedName("from") val from: Int? = null,
-    @SerializedName("hits") val hits: List<HitEntity>? = null,
+    @SerializedName("hits") val hits: List<HitModel>? = null,
     @SerializedName("to") val to: Int? = null
 )
 
 @Serializable
-data class LinksEntity(
+data class LinksModel(
     @SerializedName("next") val next: Next? = null
 )
 
 @Serializable
-data class HitEntity(
-    @SerializedName("_links") val linksEntity: LinksXEntity? = null,
-    @SerializedName("recipe") val recipeEntity: RecipeEntity? = null
+data class HitModel(
+    @SerializedName("_links") val linksModel: LinksXModel? = null,
+    @SerializedName("recipe") val recipeModel: RecipeModel? = null
 )
 
 @Serializable
@@ -31,12 +30,12 @@ data class Next(
 )
 
 @Serializable
-data class LinksXEntity(
+data class LinksXModel(
     @SerializedName("self") val self: Self? = null
 )
 
 @Serializable
-data class RecipeEntity(
+data class RecipeModel(
     @SerializedName("calories") val calories: Double? = null,
     @SerializedName("cautions") val cautions: List<String>? = null,
     @SerializedName("cuisineType") val cuisineType: List<String>? = null,
@@ -45,9 +44,9 @@ data class RecipeEntity(
     @SerializedName("dishType") val dishType: List<String>? = null,
     @SerializedName("healthLabels") val healthLabels: List<String>? = null,
     @SerializedName("image") val image: String? = null,
-    @SerializedName("images") val images: ImagesEntity? = null,
+    @SerializedName("images") val images: ImagesModel? = null,
     @SerializedName("ingredientLines") val ingredientLines: List<String>? = null,
-    @SerializedName("ingredients") val ingredients: List<IngredientEntity>? = null,
+    @SerializedName("ingredients") val ingredients: List<IngredientModel>? = null,
     @SerializedName("label") val label: String? = null,
     @SerializedName("mealType") val mealType: List<String>? = null,
     @SerializedName("shareAs") val shareAs: String? = null,
@@ -80,15 +79,15 @@ data class Self(
 //)
 
 @Serializable
-data class ImagesEntity(
-    @SerializedName("LARGE") val large: LargeEntity? = null,
-    @SerializedName("REGULAR") val regular: RegularEntity? = null,
-    @SerializedName("SMALL") val small: SmallEntity? = null,
-    @SerializedName("THUMBNAIL") val thumbnail: ThumbnailEntity? = null
+data class ImagesModel(
+    @SerializedName("LARGE") val large: LargeModel? = null,
+    @SerializedName("REGULAR") val regular: RegularModel? = null,
+    @SerializedName("SMALL") val small: SmallModel? = null,
+    @SerializedName("THUMBNAIL") val thumbnail: ThumbnailModel? = null
 )
 
 @Serializable
-data class IngredientEntity(
+data class IngredientModel(
     @SerializedName("food") val food: String? = null,
     @SerializedName("foodCategory") val foodCategory: String? = null,
     @SerializedName("foodId") val foodId: String? = null,
@@ -177,25 +176,25 @@ data class IngredientEntity(
 //)
 
 @Serializable
-data class LargeEntity(
+data class LargeModel(
     val height: Int? = null,
     val url: String? = null,
     val width: Int? = null
 )
 @Serializable
-data class RegularEntity(
+data class RegularModel(
     val height: Int? = null,
     val url: String? = null,
     val width: Int? = null
 )
 @Serializable
-data class SmallEntity(
+data class SmallModel(
     val height: Int? = null,
     val url: String? = null,
     val width: Int? = null
 )
 @Serializable
-data class ThumbnailEntity(
+data class ThumbnailModel(
     val height: Int? = null,
     val url: String? = null,
     val width: Int? = null

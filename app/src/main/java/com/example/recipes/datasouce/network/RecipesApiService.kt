@@ -1,8 +1,7 @@
 package com.example.recipes.datasouce.network
 
-import com.example.recipes.datasouce.network.entities.HitEntity
-import com.example.recipes.datasouce.network.entities.RecipeEntity
-import com.example.recipes.datasouce.network.entities.RecipeSearchEntity
+import com.example.recipes.datasouce.network.models.HitModel
+import com.example.recipes.datasouce.network.models.RecipeSearchModel
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -13,16 +12,16 @@ interface RecipesApiService {
     @GET("/api/recipes/v2")
     suspend fun getRecipesByQuery(
         @Query("q") query: String
-    ): RecipeSearchEntity
+    ): RecipeSearchModel
 
     @GET("/api/recipes/v2")
     suspend fun getNextRecipesByQuery(
         @Query("q") query: String,
         @Query("_cont", encoded = true) contId: String? = null
-    ): Response<RecipeSearchEntity>
+    ): Response<RecipeSearchModel>
 
     @GET("/api/recipes/v2/{id}")
     suspend fun getRecipeInfo(
         @Path("id") id: String
-    ): Response<HitEntity>
+    ): Response<HitModel>
 }
