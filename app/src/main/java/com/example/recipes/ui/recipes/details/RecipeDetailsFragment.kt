@@ -13,13 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.recipes.R
 import com.example.recipes.business.usecases.GetRecipeUseCase
-import com.example.recipes.business.usecases.GetRecipesBySearchUseCase
+import com.example.recipes.business.usecases.SaveFavoriteRecipeUseCase
 import com.example.recipes.databinding.FragmentDetailRecipeBinding
-import com.example.recipes.datasouce.RecipeDataStore
 import com.example.recipes.datasouce.network.RetrofitModule
 import com.example.recipes.datasouce.room.RecipeDataBase
-import com.example.recipes.business.usecases.SaveFavoriteRecipeUseCase
-import com.example.recipes.ui.recipes.MyViewModelFactory
 import kotlinx.coroutines.launch
 
 class RecipeDetailsFragment : Fragment() {
@@ -30,10 +27,14 @@ class RecipeDetailsFragment : Fragment() {
     private val apiService = RetrofitModule.RECIPES_API_SERVICE
 
     private val viewModel: RecipeDetailsViewModel by viewModels {
-        MyViewModelFactory(
-            GetRecipesBySearchUseCase(apiService),
+//        MyViewModelFactory(
+//            GetRecipesBySearchUseCase(apiService),
+//            GetRecipeUseCase(apiService),
+//            RecipeDataStore(requireContext()),
+//            this
+//        )
+        RecipeDetailsViewModelFactory(
             GetRecipeUseCase(apiService),
-            RecipeDataStore(requireContext()),
             this
         )
     }

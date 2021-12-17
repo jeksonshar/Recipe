@@ -16,14 +16,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.recipes.R
-import com.example.recipes.data.Recipe
-import com.example.recipes.datasouce.network.RetrofitModule
-import com.example.recipes.business.usecases.GetRecipeUseCase
 import com.example.recipes.business.usecases.GetRecipesBySearchUseCase
+import com.example.recipes.data.Recipe
 import com.example.recipes.databinding.FragmentRecipeSearchListBinding
 import com.example.recipes.datasouce.RecipeDataStore
+import com.example.recipes.datasouce.network.RetrofitModule
 import com.example.recipes.ui.dialogs.NoConnectionDialogFragment
-import com.example.recipes.ui.recipes.MyViewModelFactory
+import com.example.recipes.ui.recipes.RecipeFragmentClickListener
 import com.example.recipes.ui.recipes.details.RecipeDetailsFragment
 import com.example.recipes.utils.CheckConnectionUtils
 import kotlinx.coroutines.flow.collectLatest
@@ -37,9 +36,14 @@ class RecipeSearchListFragment : Fragment() {
     private val apiService = RetrofitModule.RECIPES_API_SERVICE
 
     private val viewModelSearch: RecipeSearchListViewModel by viewModels {
-        MyViewModelFactory(
+//        MyViewModelFactory(
+//            GetRecipesBySearchUseCase(apiService),
+//            GetRecipeUseCase(apiService),
+//            RecipeDataStore(requireContext()),
+//            this
+//        )
+        RecipeSearchViewModelFactory(
             GetRecipesBySearchUseCase(apiService),
-            GetRecipeUseCase(apiService),
             RecipeDataStore(requireContext()),
             this
         )
@@ -57,7 +61,9 @@ class RecipeSearchListFragment : Fragment() {
     }
 
     private val pagingAdapter by lazy(LazyThreadSafetyMode.NONE) {
-        clickListener?.let { RecipePagingAdapter(it) }
+        clickListener?.let {
+            RecipePagingAdapter(it)
+        }
     }
 
     override fun onAttach(context: Context) {
@@ -108,6 +114,8 @@ class RecipeSearchListFragment : Fragment() {
                 val text = etSearch.text
                 viewModelSearch.searchByTouch(text)
             }
+
+//            bottomNavigation.
 
         }
         return binding.root

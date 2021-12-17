@@ -13,6 +13,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.recipes.R
 import com.example.recipes.data.Recipe
 import com.example.recipes.databinding.FragmentRecipeSearchListItemBinding
+import com.example.recipes.ui.recipes.RecipeFragmentClickListener
 
 class RecipePagingAdapter(
     private val clickListener: RecipeFragmentClickListener
