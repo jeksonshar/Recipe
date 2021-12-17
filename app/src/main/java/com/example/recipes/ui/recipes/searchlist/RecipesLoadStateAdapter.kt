@@ -1,4 +1,4 @@
-package com.example.recipes.ui.recipes.list
+package com.example.recipes.ui.recipes.searchlist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,7 +7,7 @@ import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipes.R
-import com.example.recipes.databinding.FragmentRecipeListBinding
+import com.example.recipes.databinding.FragmentRecipeSearchListBinding
 
 class RecipesLoadStateAdapter(
     private val retry: () -> Unit
@@ -25,9 +25,9 @@ class RecipesLoadStateAdapter(
 class ProgressViewHolder(
     parent: ViewGroup,
     retry: () -> Unit
-) : RecyclerView.ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.fragment_recipe_list, parent, false)) {
+) : RecyclerView.ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.fragment_recipe_search_list, parent, false)) {
 
-    private val binding = FragmentRecipeListBinding.bind(itemView)
+    private val binding = FragmentRecipeSearchListBinding.bind(itemView)
 
     private val errorMsg = binding.tvErrorLoading
     private val retry = binding.buttonRetry

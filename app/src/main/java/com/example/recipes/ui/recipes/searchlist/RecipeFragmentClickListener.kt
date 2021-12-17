@@ -1,4 +1,4 @@
-package com.example.recipes.ui.recipes.list
+package com.example.recipes.ui.recipes.searchlist
 
 import com.example.recipes.data.Recipe
 

@@ -3,7 +3,6 @@ package com.example.recipes.datasouce.network
 import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.recipes.ConverterNetModels
 import com.example.recipes.data.Recipe
 import com.example.recipes.datasouce.network.models.RecipeSearchModel
 import retrofit2.HttpException
@@ -22,7 +21,7 @@ class RecipesPagingSource(
 
     override suspend fun load(params: LoadParams<String>): LoadResult<String, Recipe> {
 
-        fun getHref(recipeSearchEntity: RecipeSearchModel): String = ConverterNetModels.getHrefNextRecipes(recipeSearchEntity)
+        fun getHref(recipeSearchEntity: RecipeSearchModel): String = NetWorkEntitiesMappers.getHrefNextRecipes(recipeSearchEntity)
             .substringAfter("_cont=")
             .substringBefore("&")
 
@@ -38,7 +37,7 @@ class RecipesPagingSource(
 
         return if (response.isSuccessful) {
             LoadResult.Page(
-                data = ConverterNetModels.convertToRecipes(response.body() ?: RecipeSearchModel()),
+                data = NetWorkEntitiesMappers.mapToRecipes(response.body() ?: RecipeSearchModel()),
                 prevKey = href,
                 nextKey = getHref(response.body() ?: RecipeSearchModel())
             )

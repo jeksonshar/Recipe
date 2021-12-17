@@ -1,16 +1,16 @@
-package com.example.recipes.ui.recipes.list
+package com.example.recipes.ui.recipes.searchlist
 
 import android.text.Editable
 import androidx.lifecycle.*
 import androidx.paging.*
-import com.example.recipes.business.usecases.GetRecipeListUseCase
+import com.example.recipes.business.usecases.GetRecipesBySearchUseCase
 import com.example.recipes.data.Recipe
 import com.example.recipes.datasouce.RecipeDataStore
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class RecipeListViewModel(
-    private val getRecipeListUseCase: GetRecipeListUseCase,
+class RecipeSearchListViewModel(
+    private val getRecipesBySearchUseCase: GetRecipesBySearchUseCase,
     private val recipeDataStore: RecipeDataStore,
     val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -27,7 +27,7 @@ class RecipeListViewModel(
 
     private fun newPager(query: String): Pager<String, Recipe> {
         return Pager(PagingConfig(pageSize = 3)) {
-            getRecipeListUseCase.invoke(query).also {
+            getRecipesBySearchUseCase.invoke(query).also {
                 newPagingSource = it
             }
         }

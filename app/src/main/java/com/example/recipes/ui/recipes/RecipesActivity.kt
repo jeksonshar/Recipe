@@ -3,7 +3,7 @@ package com.example.recipes.ui.recipes
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.recipes.R
-import com.example.recipes.ui.recipes.list.RecipeListFragment
+import com.example.recipes.ui.recipes.searchlist.RecipeSearchListFragment
 
 class RecipesActivity : AppCompatActivity() {
 
@@ -13,7 +13,7 @@ class RecipesActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .add(R.id.fragmentRecipesContainer, RecipeListFragment(), CURRENT_FRAGMENT_TAG)
+                .add(R.id.fragmentRecipesContainer, RecipeSearchListFragment(), CURRENT_FRAGMENT_TAG)
                 .commit()
         } else {
             supportFragmentManager.findFragmentByTag(CURRENT_FRAGMENT_TAG)

@@ -1,4 +1,4 @@
-package com.example.recipes.ui.recipes.list
+package com.example.recipes.ui.recipes.searchlist
 
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +19,7 @@ class RecipeListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipePagingViewHolder {
         return RecipePagingViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.fragment_recipe_list_item, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.fragment_recipe_search_list_item, parent, false)
         )
     }
     override fun onBindViewHolder(holder: RecipePagingViewHolder, position: Int) {

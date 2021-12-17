@@ -1,5 +1,6 @@
 package com.example.recipes.datasouce.room.models
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.recipes.data.Ingredient
@@ -7,17 +8,17 @@ import com.example.recipes.data.Ingredient
 @Entity(tableName = "recipes")
 data class RecipeEntity(
     val calories: Double = 0.0,
-    val cautions: String = "",
-    val cuisineType: String = "",
-    val dietLabels: String = "",
-    val dishType: String = "",
-    val healthLabels: String = "",
+    val cautions: List<String> ,
+    val cuisineType: List<String>,
+    val dietLabels: List<String>,
+    val dishType: List<String>,
+    val healthLabels: List<String>,
     val image: String = "",
-    val images: ImagesEntity,
-    val ingredientLines: String = "",
+    @Embedded val images: ImagesEntity,
+    val ingredientLines: List<String>,
     val ingredients: List<IngredientEntity> = emptyList(),
     val label: String = "",
-    val mealType: String = "",
+    val mealType: List<String>,
     val shareAs: String = "",
     val source: String = "",
     val totalTime: Double = 0.0,

@@ -5,7 +5,7 @@ import com.example.recipes.data.Recipe
 import com.example.recipes.datasouce.network.RecipesApiService
 import com.example.recipes.datasouce.network.RecipesPagingSource
 
-class GetRecipeListUseCase(private val apiService: RecipesApiService) {
+class GetRecipesBySearchUseCase(private val apiService: RecipesApiService) {
 
     operator fun invoke(query: String): PagingSource<String, Recipe> {
         return RecipesPagingSource(apiService, query)

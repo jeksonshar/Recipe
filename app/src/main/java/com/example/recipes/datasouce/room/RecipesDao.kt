@@ -18,8 +18,8 @@ interface RecipesDao {
     @Query("SELECT * From recipes WHERE uri == :uri")
     suspend fun getRecipeByUri(uri: String): RecipeEntity
 
-    @Query("SELECT * FROM ingredient")
-    suspend fun getIngredientsRecipe(): List<Ingredient>
+//    @Query("SELECT * FROM ingredient")
+//    suspend fun getIngredientsRecipe(): List<Ingredient>
 
     @Insert(onConflict = REPLACE)
     suspend fun insertRecipes(vararg recipe: RecipeEntity)

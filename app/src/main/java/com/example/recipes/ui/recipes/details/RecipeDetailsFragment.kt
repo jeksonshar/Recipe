@@ -8,15 +8,19 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.recipes.R
 import com.example.recipes.business.usecases.GetRecipeUseCase
-import com.example.recipes.business.usecases.GetRecipeListUseCase
+import com.example.recipes.business.usecases.GetRecipesBySearchUseCase
 import com.example.recipes.databinding.FragmentDetailRecipeBinding
 import com.example.recipes.datasouce.RecipeDataStore
 import com.example.recipes.datasouce.network.RetrofitModule
+import com.example.recipes.datasouce.room.RecipeDataBase
+import com.example.recipes.business.usecases.SaveFavoriteRecipeUseCase
 import com.example.recipes.ui.recipes.MyViewModelFactory
+import kotlinx.coroutines.launch
 
 class RecipeDetailsFragment : Fragment() {
 
@@ -27,7 +31,7 @@ class RecipeDetailsFragment : Fragment() {
 
     private val viewModel: RecipeDetailsViewModel by viewModels {
         MyViewModelFactory(
-            GetRecipeListUseCase(apiService),
+            GetRecipesBySearchUseCase(apiService),
             GetRecipeUseCase(apiService),
             RecipeDataStore(requireContext()),
             this
@@ -38,6 +42,8 @@ class RecipeDetailsFragment : Fragment() {
         DetailAdapter()
     }
 
+    private lateinit var db: SaveFavoriteRecipeUseCase                                    //  Костыль, вынести отсюда
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -45,6 +51,8 @@ class RecipeDetailsFragment : Fragment() {
         Log.d("TAG", "onCreateDetailFragment: $idRecipe")
 
         viewModel.getRecipe(idRecipe ?: "")
+
+        db = SaveFavoriteRecipeUseCase(RecipeDataBase.create(requireContext()))           //  Костыль, вынести отсюда
     }
 
     override fun onCreateView(
@@ -61,7 +69,9 @@ class RecipeDetailsFragment : Fragment() {
                 viewModel.getRecipe(idRecipe ?: "")
             }
             isFavorite.setOnClickListener {
-//                viewModel.currentRecipe.value
+                lifecycleScope.launch {
+                    db.saveRecipeToRoom(viewModel.currentRecipe.value!!)                  //  Костыль, вынести отсюда
+                }
             }
         }
         return binding.root

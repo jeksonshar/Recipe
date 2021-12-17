@@ -9,11 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.recipes.R
 import com.example.recipes.data.Ingredient
-import com.example.recipes.data.Recipe
 import com.example.recipes.databinding.FragmentDetailRecipeItemBinding
-import com.example.recipes.databinding.FragmentRecipeListItemBinding
-import com.example.recipes.ui.recipes.list.RecipePagingViewHolder
-import com.example.recipes.ui.recipes.list.RecipesComparator
 
 class DetailAdapter : ListAdapter<Ingredient, DetailViewHolder>(IngredientsComparator()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailViewHolder {

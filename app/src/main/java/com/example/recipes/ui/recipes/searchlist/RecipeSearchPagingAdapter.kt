@@ -1,4 +1,4 @@
-package com.example.recipes.ui.recipes.list
+package com.example.recipes.ui.recipes.searchlist
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.recipes.R
 import com.example.recipes.data.Recipe
-import com.example.recipes.databinding.FragmentRecipeListItemBinding
+import com.example.recipes.databinding.FragmentRecipeSearchListItemBinding
 
 class RecipePagingAdapter(
     private val clickListener: RecipeFragmentClickListener
@@ -20,7 +20,7 @@ class RecipePagingAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipePagingViewHolder {
         return RecipePagingViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.fragment_recipe_list_item, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.fragment_recipe_search_list_item, parent, false)
         )
     }
     override fun onBindViewHolder(holder: RecipePagingViewHolder, position: Int) {
@@ -37,7 +37,7 @@ class RecipePagingAdapter(
 
 class RecipePagingViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-    private val viewBinding by viewBinding(FragmentRecipeListItemBinding::bind)
+    private val viewBinding by viewBinding(FragmentRecipeSearchListItemBinding::bind)
 
     fun onBind(recipe: Recipe) {
 

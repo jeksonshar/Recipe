@@ -1,4 +1,4 @@
-package com.example.recipes.ui.recipes.list
+package com.example.recipes.ui.recipes.searchlist
 
 import android.content.Context
 import android.os.Bundle
@@ -17,10 +17,10 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.recipes.R
 import com.example.recipes.data.Recipe
-import com.example.recipes.databinding.FragmentRecipeListBinding
 import com.example.recipes.datasouce.network.RetrofitModule
 import com.example.recipes.business.usecases.GetRecipeUseCase
-import com.example.recipes.business.usecases.GetRecipeListUseCase
+import com.example.recipes.business.usecases.GetRecipesBySearchUseCase
+import com.example.recipes.databinding.FragmentRecipeSearchListBinding
 import com.example.recipes.datasouce.RecipeDataStore
 import com.example.recipes.ui.dialogs.NoConnectionDialogFragment
 import com.example.recipes.ui.recipes.MyViewModelFactory
@@ -29,15 +29,20 @@ import com.example.recipes.utils.CheckConnectionUtils
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class RecipeListFragment : Fragment() {
+class RecipeSearchListFragment : Fragment() {
 
-    private var _binding: FragmentRecipeListBinding? = null
+    private var _binding: FragmentRecipeSearchListBinding? = null
     private val binding get() = _binding!!
 
     private val apiService = RetrofitModule.RECIPES_API_SERVICE
 
-    private val viewModel: RecipeListViewModel by viewModels {
-        MyViewModelFactory(GetRecipeListUseCase(apiService), GetRecipeUseCase(apiService), RecipeDataStore(requireContext()), this)
+    private val viewModelSearch: RecipeSearchListViewModel by viewModels {
+        MyViewModelFactory(
+            GetRecipesBySearchUseCase(apiService),
+            GetRecipeUseCase(apiService),
+            RecipeDataStore(requireContext()),
+            this
+        )
     }
 
     private var clickListener: RecipeFragmentClickListener? = object : RecipeFragmentClickListener {
@@ -67,13 +72,13 @@ class RecipeListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentRecipeListBinding.inflate(inflater, container, false)
+        _binding = FragmentRecipeSearchListBinding.inflate(inflater, container, false)
         binding.apply {
             recyclerRecipe.layoutManager = GridLayoutManager(requireContext(), 2)
             recyclerRecipe.adapter = pagingAdapter
 
             etSearch.doAfterTextChanged {
-                viewModel.liveSearchByQuery(it)
+                viewModelSearch.liveSearchByQuery(it)
             }
 
             /**
@@ -92,7 +97,7 @@ class RecipeListFragment : Fragment() {
 //        })*/
 
             ivOpenSearchET.setOnClickListener {
-                viewModel.changeSearchIsOpenedValue(etSearch.visibility)
+                viewModelSearch.changeSearchIsOpenedValue(etSearch.visibility)
             }
 
             buttonRetry.setOnClickListener {
@@ -101,7 +106,7 @@ class RecipeListFragment : Fragment() {
 
             etSearch.setOnClickListener {
                 val text = etSearch.text
-                viewModel.searchByTouch(text)
+                viewModelSearch.searchByTouch(text)
             }
 
         }
@@ -130,13 +135,13 @@ class RecipeListFragment : Fragment() {
             }
         } else {
             lifecycleScope.launch {
-                viewModel.recipes.collectLatest { pagingData ->
+                viewModelSearch.recipes.collectLatest { pagingData ->
                     pagingAdapter?.submitData(pagingData)
                 }
             }
         }
 
-        viewModel.searchIsOpened.observe(viewLifecycleOwner, {
+        viewModelSearch.searchIsOpened.observe(viewLifecycleOwner, {
             binding.etSearch.visibility = it
         })
 

@@ -1,7 +1,7 @@
 package com.example.recipes.ui.recipes.details
 
 import androidx.lifecycle.*
-import com.example.recipes.ConverterNetModels
+import com.example.recipes.datasouce.network.NetWorkEntitiesMappers
 import com.example.recipes.business.Status
 import com.example.recipes.business.usecases.GetRecipeUseCase
 import com.example.recipes.data.Ingredient
@@ -25,7 +25,7 @@ class RecipeDetailsViewModel(
     fun getRecipe(id: String) {
         viewModelScope.launch {
             useCase.getRecipe(id).also {
-                val recipe = ConverterNetModels.convertToRecipe(it.data)
+                val recipe = NetWorkEntitiesMappers.mapToRecipe(it.data)
                 when (it.status) {
                     Status.SUCCESS -> {
                         _currentRecipe.value = recipe

@@ -18,4 +18,6 @@
     <string name="reload">Reload</string>
     <string name="turn_on_the_internet_connection_and_reload">Turn on the internet connection and reload</string>
     <string name="image_view">image view</string>
+    <string name="favorite">Favorite</string>
+    <string name="list">List</string>
 </resources>
