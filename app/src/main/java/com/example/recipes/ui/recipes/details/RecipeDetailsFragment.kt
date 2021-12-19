@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.recipes.R
+import com.example.recipes.business.usecases.GetFavoriteRecipesUseCase
 import com.example.recipes.business.usecases.GetRecipeUseCase
 import com.example.recipes.business.usecases.SaveFavoriteRecipeUseCase
 import com.example.recipes.databinding.FragmentDetailRecipeBinding
@@ -27,12 +28,6 @@ class RecipeDetailsFragment : Fragment() {
     private val apiService = RetrofitModule.RECIPES_API_SERVICE
 
     private val viewModel: RecipeDetailsViewModel by viewModels {
-//        MyViewModelFactory(
-//            GetRecipesBySearchUseCase(apiService),
-//            GetRecipeUseCase(apiService),
-//            RecipeDataStore(requireContext()),
-//            this
-//        )
         RecipeDetailsViewModelFactory(
             GetRecipeUseCase(apiService),
             this
@@ -43,7 +38,8 @@ class RecipeDetailsFragment : Fragment() {
         DetailAdapter()
     }
 
-    private lateinit var db: SaveFavoriteRecipeUseCase                                    //  Костыль, вынести отсюда
+    private lateinit var dbSave: SaveFavoriteRecipeUseCase                                    //  Костыль, вынести отсюда
+    private lateinit var dbGet: GetFavoriteRecipesUseCase                                     //  Костыль, вынести отсюда
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +49,8 @@ class RecipeDetailsFragment : Fragment() {
 
         viewModel.getRecipe(idRecipe ?: "")
 
-        db = SaveFavoriteRecipeUseCase(RecipeDataBase.create(requireContext()))           //  Костыль, вынести отсюда
+        dbSave = SaveFavoriteRecipeUseCase(RecipeDataBase.create(requireContext()))           //  Костыль, вынести отсюда
+        dbGet = GetFavoriteRecipesUseCase(RecipeDataBase.create(requireContext()))            //  Костыль, вынести отсюда
     }
 
     override fun onCreateView(
@@ -71,7 +68,8 @@ class RecipeDetailsFragment : Fragment() {
             }
             isFavorite.setOnClickListener {
                 lifecycleScope.launch {
-                    db.saveRecipeToRoom(viewModel.currentRecipe.value!!)                  //  Костыль, вынести отсюда
+                    viewModel.currentRecipeIsFavorite.value = !viewModel.currentRecipeIsFavorite.value!!
+                    dbSave.saveRecipeToRoom(viewModel.currentRecipe.value!!)                  //  Костыль, вынести отсюда
                 }
             }
         }
@@ -87,11 +85,15 @@ class RecipeDetailsFragment : Fragment() {
             binding.apply {
                 ivRecipeDetail.let { Glide.with(requireContext()).load(recipe.image).into(it) }
                 tvDetailRecipeName.text = recipe.label
-                if (recipe.isFavorite) {
-                    favoriteImage.setImageResource(R.drawable.like_on)
-                } else {
-                    favoriteImage.setImageResource(R.drawable.like_off)
-                }
+                viewModel.recipeIsFavorite(dbGet)
+            }
+        })
+
+        viewModel.currentRecipeIsFavorite.observe(viewLifecycleOwner, {
+            if (it) {
+                binding.favoriteImage.setImageResource(R.drawable.like_on)
+            } else {
+                binding.favoriteImage.setImageResource(R.drawable.like_off)
             }
         })
 

@@ -1,12 +1,12 @@
 package com.example.recipes.ui.recipes.details
 
 import androidx.lifecycle.*
-import com.example.recipes.datasouce.network.NetWorkEntitiesMappers
 import com.example.recipes.business.Status
+import com.example.recipes.business.usecases.GetFavoriteRecipesUseCase
 import com.example.recipes.business.usecases.GetRecipeUseCase
 import com.example.recipes.data.Ingredient
 import com.example.recipes.data.Recipe
-import com.example.recipes.datasouce.RecipeDataStore
+import com.example.recipes.datasouce.network.NetWorkEntitiesMappers
 import kotlinx.coroutines.launch
 
 class RecipeDetailsViewModel(
@@ -21,6 +21,7 @@ class RecipeDetailsViewModel(
     val progressVisibilityLiveData = MutableLiveData<Boolean>()
     val errorMassageLiveData = MutableLiveData<String?>()
     val retryVisibilityLiveData = MutableLiveData<Boolean>()
+    var currentRecipeIsFavorite = MutableLiveData(false)
 
     fun getRecipe(id: String) {
         viewModelScope.launch {
@@ -49,17 +50,15 @@ class RecipeDetailsViewModel(
         }
     }
 
-    fun changeIsFavorite(recipe: Recipe, dataStore: RecipeDataStore) {
+    fun recipeIsFavorite(getRecipes: GetFavoriteRecipesUseCase) {
         viewModelScope.launch {
-            if (!recipe.isFavorite) {
-                dataStore.setFavoriteRecipe(recipe)
-            } else {
-                dataStore.delFavoriteRecipe(recipe)
+            val favoriteRecipes = getRecipes.getRecipesFromRoom()
+            for (rec in favoriteRecipes) {
+                if (rec.uri == currentRecipe.value?.uri) {
+                    currentRecipeIsFavorite.value = true
+                    return@launch
+                }
             }
         }
-    }
-
-    fun isContainFavoriteRecipe(recipe: Recipe, dataStore: RecipeDataStore): LiveData<Boolean> {
-        return dataStore.isContainFavoriteRecipe(recipe).asLiveData()
     }
 }

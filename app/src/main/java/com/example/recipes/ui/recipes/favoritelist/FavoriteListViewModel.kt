@@ -1,9 +1,11 @@
 package com.example.recipes.ui.recipes.favoritelist
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.recipes.business.usecases.GetFavoriteRecipesUseCase
+import com.example.recipes.data.Recipe
 import kotlinx.coroutines.launch
 
 class FavoriteListViewModel(
@@ -11,9 +13,11 @@ class FavoriteListViewModel(
     val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
+    val favoriteRecipes = MutableLiveData<List<Recipe>>()
+
     fun getFavoriteRecipes() {
         viewModelScope.launch {
-            getFavoriteRecipesUseCase.getRecipesFromRoom()
+            favoriteRecipes.value = getFavoriteRecipesUseCase.getRecipesFromRoom()
         }
     }
 

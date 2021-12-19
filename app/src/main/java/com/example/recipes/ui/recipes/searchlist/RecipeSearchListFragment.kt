@@ -24,6 +24,7 @@ import com.example.recipes.datasouce.network.RetrofitModule
 import com.example.recipes.ui.dialogs.NoConnectionDialogFragment
 import com.example.recipes.ui.recipes.RecipeFragmentClickListener
 import com.example.recipes.ui.recipes.details.RecipeDetailsFragment
+import com.example.recipes.ui.recipes.favoritelist.FavoriteListFragment
 import com.example.recipes.utils.CheckConnectionUtils
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -36,12 +37,6 @@ class RecipeSearchListFragment : Fragment() {
     private val apiService = RetrofitModule.RECIPES_API_SERVICE
 
     private val viewModelSearch: RecipeSearchListViewModel by viewModels {
-//        MyViewModelFactory(
-//            GetRecipesBySearchUseCase(apiService),
-//            GetRecipeUseCase(apiService),
-//            RecipeDataStore(requireContext()),
-//            this
-//        )
         RecipeSearchViewModelFactory(
             GetRecipesBySearchUseCase(apiService),
             RecipeDataStore(requireContext()),
@@ -115,8 +110,19 @@ class RecipeSearchListFragment : Fragment() {
                 viewModelSearch.searchByTouch(text)
             }
 
-//            bottomNavigation.
+            bottomNavigation.selectedItemId = R.id.nav_search
 
+            bottomNavigation.setOnItemSelectedListener {
+                when (it.itemId) {
+                    R.id.nav_favorite -> {
+                        parentFragmentManager.beginTransaction()
+                            .replace(R.id.fragmentRecipesContainer, FavoriteListFragment())
+                            .commit()
+                        true
+                    }
+                    else -> false
+                }
+            }
         }
         return binding.root
     }
@@ -129,7 +135,11 @@ class RecipeSearchListFragment : Fragment() {
                 binding.progressBarWhileListEmpty.isVisible = loadState.refresh is LoadState.Loading
                 binding.buttonRetry.isVisible = loadState.refresh !is LoadState.Loading && loadState.append is LoadState.Error
                 binding.tvErrorLoading.text =
-                    if (loadState.source.toString().contains("429")) "Да не торопись ты так\nЖди минуту!" else loadState.source.toString()
+                    if (loadState.source.toString().contains("429")) {
+                        "Да не торопись ты так\nЖди минуту!"
+                    } else {
+                        loadState.source.toString()
+                    }
                 binding.tvErrorLoading.isVisible = loadState.refresh !is LoadState.Loading && loadState.append is LoadState.Error
             }
         }
