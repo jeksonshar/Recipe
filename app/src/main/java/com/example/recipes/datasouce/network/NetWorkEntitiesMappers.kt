@@ -1,10 +1,10 @@
 package com.example.recipes.datasouce.network
 
-import com.example.recipes.data.*
-import com.example.recipes.datasouce.network.models.ImagesModel
-import com.example.recipes.datasouce.network.models.IngredientModel
-import com.example.recipes.datasouce.network.models.RecipeModel
-import com.example.recipes.datasouce.network.models.RecipeSearchModel
+import com.example.recipes.business.domain.models.*
+import com.example.recipes.datasouce.network.entities.ImagesModel
+import com.example.recipes.datasouce.network.entities.IngredientModel
+import com.example.recipes.datasouce.network.entities.RecipeModel
+import com.example.recipes.datasouce.network.entities.RecipeSearchModel
 
 object NetWorkEntitiesMappers {
 

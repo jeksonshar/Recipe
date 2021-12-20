@@ -1,7 +1,7 @@
 package com.example.recipes.business.usecases
 
 import androidx.paging.PagingSource
-import com.example.recipes.data.Recipe
+import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.datasouce.network.RecipesApiService
 import com.example.recipes.datasouce.network.RecipesPagingSource
 

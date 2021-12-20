@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Recipes">
         <activity
-            android:name=".ui.recipes.RecipesActivity"
+            android:name="com.example.recipes.presentation.ui.recipes.RecipesActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

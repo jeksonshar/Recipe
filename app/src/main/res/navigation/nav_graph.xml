@@ -6,18 +6,18 @@
 
     <fragment
         android:id="@+id/recipeSearchListFragment"
-        android:name="com.example.recipes.ui.recipes.searchlist.RecipeSearchListFragment"
+        android:name="com.example.recipes.presentation.ui.recipes.searchlist.RecipeSearchListFragment"
         android:label="RecipeSearchListFragment" />
     <fragment
         android:id="@+id/favoriteListFragment"
-        android:name="com.example.recipes.ui.recipes.favoritelist.FavoriteListFragment"
+        android:name="com.example.recipes.presentation.ui.recipes.favoritelist.FavoriteListFragment"
         android:label="FavoriteListFragment" />
     <fragment
         android:id="@+id/recipeDetailsFragment"
-        android:name="com.example.recipes.ui.recipes.details.RecipeDetailsFragment"
+        android:name="com.example.recipes.presentation.ui.recipes.details.RecipeDetailsFragment"
         android:label="RecipeDetailsFragment" />
     <fragment
         android:id="@+id/noConnectionDialogFragment"
-        android:name="com.example.recipes.ui.dialogs.NoConnectionDialogFragment"
+        android:name="com.example.recipes.presentation.ui.dialogs.NoConnectionDialogFragment"
         android:label="NoConnectionDialogFragment" />
 </navigation>

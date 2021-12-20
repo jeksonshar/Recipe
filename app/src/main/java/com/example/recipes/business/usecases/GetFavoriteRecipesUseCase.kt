@@ -1,9 +1,8 @@
 package com.example.recipes.business.usecases
 
-import com.example.recipes.data.Recipe
-import com.example.recipes.datasouce.room.ConvertersRoom
-import com.example.recipes.datasouce.room.DataBaseEntitiesMappers
-import com.example.recipes.datasouce.room.RecipeDataBase
+import com.example.recipes.business.domain.models.Recipe
+import com.example.recipes.datasouce.local.room.DataBaseEntitiesMappers
+import com.example.recipes.datasouce.local.room.RecipeDataBase
 
 class GetFavoriteRecipesUseCase(private val dataBase: RecipeDataBase) {
 

@@ -3,7 +3,7 @@ package com.example.recipes.business.usecases
 import android.util.Log
 import com.example.recipes.business.ResponseStatus
 import com.example.recipes.datasouce.network.RecipesApiService
-import com.example.recipes.datasouce.network.models.RecipeModel
+import com.example.recipes.datasouce.network.entities.RecipeModel
 
 class GetRecipeUseCase(private val apiService: RecipesApiService) {
 

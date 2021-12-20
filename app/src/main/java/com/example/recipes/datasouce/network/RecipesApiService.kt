@@ -1,7 +1,7 @@
 package com.example.recipes.datasouce.network
 
-import com.example.recipes.datasouce.network.models.HitModel
-import com.example.recipes.datasouce.network.models.RecipeSearchModel
+import com.example.recipes.datasouce.network.entities.HitModel
+import com.example.recipes.datasouce.network.entities.RecipeSearchModel
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

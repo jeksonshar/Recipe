@@ -3,8 +3,8 @@ package com.example.recipes.datasouce.network
 import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.recipes.data.Recipe
-import com.example.recipes.datasouce.network.models.RecipeSearchModel
+import com.example.recipes.business.domain.models.Recipe
+import com.example.recipes.datasouce.network.entities.RecipeSearchModel
 import retrofit2.HttpException
 import retrofit2.Response
 
