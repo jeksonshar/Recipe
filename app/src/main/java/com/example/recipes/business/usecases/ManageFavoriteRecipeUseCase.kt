@@ -7,22 +7,18 @@ import com.example.recipes.datasouce.local.room.RecipeDataBase
 class ManageFavoriteRecipeUseCase(private val dataBase: RecipeDataBase) {
 
     suspend fun manageRecipe(recipe: Recipe) {
-        val recipeEntities = dataBase.recipesDao().getAllRecipes()
-        if (recipeEntities.isEmpty()) {
+        val recipeEntity = dataBase.recipesDao().getRecipeByUri(recipe.uri)
+        if (recipeEntity == null) {
             save(recipe)
         } else {
-            for (entity in recipeEntities) {
-                if(entity.uri != recipe.uri) {
-                    save(recipe)
-                } else {
-                    delete(recipe)
-                }
-            }
+            delete(recipe)
         }
     }
+
     private suspend fun save(recipe: Recipe) {
         dataBase.recipesDao().insertRecipes(DataBaseEntitiesMappers.mapToRecipeEntity(recipe))
     }
+
     private suspend fun delete(recipe: Recipe) {
         dataBase.recipesDao().deleteRecipeFromFavorite(DataBaseEntitiesMappers.mapToRecipeEntity(recipe))
     }

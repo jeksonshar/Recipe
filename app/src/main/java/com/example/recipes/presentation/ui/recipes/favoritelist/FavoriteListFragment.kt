@@ -39,7 +39,7 @@ class FavoriteListFragment : Fragment() {
             Log.d("TAG", "openRecipeDetailsFragment: ")
             parentFragmentManager.beginTransaction()
                 .addToBackStack(null)
-                .replace(R.id.fragmentRecipesContainer, RecipeDetailsFragment.newInstance(recipe.uri.substringAfter('_')))
+                .replace(R.id.fragmentRecipesContainer, RecipeDetailsFragment.newInstance(recipe))
                 .commit()
         }
     }

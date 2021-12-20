@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.recipes.business.domain.models.Recipe
-import com.example.recipes.datasouce.network.entities.RecipeSearchModel
+import com.example.recipes.datasouce.network.entities.RecipeSearchEntity
 import retrofit2.HttpException
 import retrofit2.Response
 
@@ -21,12 +21,12 @@ class RecipesPagingSource(
 
     override suspend fun load(params: LoadParams<String>): LoadResult<String, Recipe> {
 
-        fun getHref(recipeSearchEntity: RecipeSearchModel): String = NetWorkEntitiesMappers.getHrefNextRecipes(recipeSearchEntity)
+        fun getHref(recipeSearchEntity: RecipeSearchEntity): String = NetWorkEntitiesMappers.getHrefNextRecipes(recipeSearchEntity)
             .substringAfter("_cont=")
             .substringBefore("&")
 
         val href = params.key
-        val response: Response<RecipeSearchModel>
+        val response: Response<RecipeSearchEntity>
         try {
             response = recipesApiService.getNextRecipesByQuery(query, href)
 
@@ -37,9 +37,9 @@ class RecipesPagingSource(
 
         return if (response.isSuccessful) {
             LoadResult.Page(
-                data = NetWorkEntitiesMappers.mapToRecipes(response.body() ?: RecipeSearchModel()),
+                data = NetWorkEntitiesMappers.mapToRecipes(response.body() ?: RecipeSearchEntity()),
                 prevKey = href,
-                nextKey = getHref(response.body() ?: RecipeSearchModel())
+                nextKey = getHref(response.body() ?: RecipeSearchEntity())
             )
         } else {
             Log.d("TAG", "responseNOT: $response")

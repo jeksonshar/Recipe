@@ -1,41 +1,34 @@
 package com.example.recipes.datasouce.network.entities
 
 import com.google.gson.annotations.SerializedName
-import kotlinx.serialization.Serializable
 
-@Serializable
-data class RecipeSearchModel(
-    @SerializedName("_links") val links: LinksModel? = null,
+data class RecipeSearchEntity(
+    @SerializedName("_links") val links: LinksEntity? = null,
     @SerializedName("count") val count: Int? = null,
     @SerializedName("from") val from: Int? = null,
-    @SerializedName("hits") val hits: List<HitModel>? = null,
+    @SerializedName("hits") val hits: List<HitEntity>? = null,
     @SerializedName("to") val to: Int? = null
 )
 
-@Serializable
-data class LinksModel(
+data class LinksEntity(
     @SerializedName("next") val next: Next? = null
 )
 
-@Serializable
-data class HitModel(
-    @SerializedName("_links") val linksModel: LinksXModel? = null,
-    @SerializedName("recipe") val recipeModel: RecipeModel? = null
+data class HitEntity(
+    @SerializedName("_links") val linksEntity: LinksXEntity? = null,
+    @SerializedName("recipe") val recipeEntity: RecipeEntity? = null
 )
 
-@Serializable
 data class Next(
     @SerializedName("href") val href: String? = null,
     @SerializedName("title") val title: String? = null
 )
 
-@Serializable
-data class LinksXModel(
+data class LinksXEntity(
     @SerializedName("self") val self: Self? = null
 )
 
-@Serializable
-data class RecipeModel(
+data class RecipeEntity(
     @SerializedName("calories") val calories: Double? = null,
     @SerializedName("cautions") val cautions: List<String>? = null,
     @SerializedName("cuisineType") val cuisineType: List<String>? = null,
@@ -44,9 +37,9 @@ data class RecipeModel(
     @SerializedName("dishType") val dishType: List<String>? = null,
     @SerializedName("healthLabels") val healthLabels: List<String>? = null,
     @SerializedName("image") val image: String? = null,
-    @SerializedName("images") val images: ImagesModel? = null,
+    @SerializedName("images") val images: ImagesEntity? = null,
     @SerializedName("ingredientLines") val ingredientLines: List<String>? = null,
-    @SerializedName("ingredients") val ingredients: List<IngredientModel>? = null,
+    @SerializedName("ingredients") val ingredients: List<IngredientEntity>? = null,
     @SerializedName("label") val label: String? = null,
     @SerializedName("mealType") val mealType: List<String>? = null,
     @SerializedName("shareAs") val shareAs: String? = null,
@@ -60,10 +53,33 @@ data class RecipeModel(
     @SerializedName("yield") val yield: Double? = null
 )
 
-@Serializable
 data class Self(
     @SerializedName("href") val href: String? = null,
     @SerializedName("title") val title: String? = null
+)
+
+data class ImagesEntity(
+    @SerializedName("LARGE") val large: ImageEntity? = null,
+    @SerializedName("REGULAR") val regular: ImageEntity? = null,
+    @SerializedName("SMALL") val small: ImageEntity? = null,
+    @SerializedName("THUMBNAIL") val thumbnail: ImageEntity? = null
+)
+
+data class IngredientEntity(
+    @SerializedName("food") val food: String? = null,
+    @SerializedName("foodCategory") val foodCategory: String? = null,
+    @SerializedName("foodId") val foodId: String? = null,
+    /*@SerialName("image") */val image: String? = null,
+    @SerializedName("measure") val measure: String? = null,
+    @SerializedName("quantity") val quantity: Double? = null,
+    @SerializedName("text") val text: String? = null,
+    @SerializedName("weight") val weight: Double? = null
+)
+
+data class ImageEntity(
+    val height: Int? = null,
+    val url: String? = null,
+    val width: Int? = null
 )
 
 //@Serializable
@@ -77,26 +93,6 @@ data class Self(
 //    @SerialName("total") val total: Double? = null,
 //    @SerialName("unit") val unit: String? = null
 //)
-
-@Serializable
-data class ImagesModel(
-    @SerializedName("LARGE") val large: LargeModel? = null,
-    @SerializedName("REGULAR") val regular: RegularModel? = null,
-    @SerializedName("SMALL") val small: SmallModel? = null,
-    @SerializedName("THUMBNAIL") val thumbnail: ThumbnailModel? = null
-)
-
-@Serializable
-data class IngredientModel(
-    @SerializedName("food") val food: String? = null,
-    @SerializedName("foodCategory") val foodCategory: String? = null,
-    @SerializedName("foodId") val foodId: String? = null,
-    /*@SerialName("image") */val image: String? = null,
-    @SerializedName("measure") val measure: String? = null,
-    @SerializedName("quantity") val quantity: Double? = null,
-    @SerializedName("text") val text: String? = null,
-    @SerializedName("weight") val weight: Double? = null
-)
 
 //@Serializable
 //data class TotalDailyEntity(
@@ -175,30 +171,6 @@ data class IngredientModel(
 //    @SerialName("unit") val unit: String? = null
 //)
 
-@Serializable
-data class LargeModel(
-    val height: Int? = null,
-    val url: String? = null,
-    val width: Int? = null
-)
-@Serializable
-data class RegularModel(
-    val height: Int? = null,
-    val url: String? = null,
-    val width: Int? = null
-)
-@Serializable
-data class SmallModel(
-    val height: Int? = null,
-    val url: String? = null,
-    val width: Int? = null
-)
-@Serializable
-data class ThumbnailModel(
-    val height: Int? = null,
-    val url: String? = null,
-    val width: Int? = null
-)
 
 /*
 
