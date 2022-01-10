@@ -5,10 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import com.example.recipes.R
 import com.example.recipes.databinding.DialogNoConnectionBinding
 import com.example.recipes.business.utils.CheckConnectionUtils
 
-class NoConnectionDialogFragment : DialogFragment() {
+class NoConnectionDialogFragment : DialogFragment(R.layout.dialog_no_connection) {
 
     private var _binding: DialogNoConnectionBinding? = null
     private val binding get() = _binding

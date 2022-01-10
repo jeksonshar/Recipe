@@ -2,36 +2,32 @@ package com.example.recipes.presentation.ui.recipes.searchlist
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.recipes.R
-import com.example.recipes.business.usecases.GetRecipesBySearchUseCase
 import com.example.recipes.business.domain.models.Recipe
-import com.example.recipes.databinding.FragmentRecipeSearchListBinding
+import com.example.recipes.business.usecases.GetRecipesBySearchUseCase
+import com.example.recipes.business.utils.CheckConnectionUtils
+import com.example.recipes.databinding.FragmentRecipeListBinding
 import com.example.recipes.datasouce.local.datastore.RecipeDataStore
 import com.example.recipes.datasouce.network.RetrofitModule
-import com.example.recipes.presentation.ui.dialogs.NoConnectionDialogFragment
 import com.example.recipes.presentation.ui.recipes.RecipeFragmentClickListener
-import com.example.recipes.presentation.ui.recipes.details.RecipeDetailsFragment
-import com.example.recipes.presentation.ui.recipes.favoritelist.FavoriteListFragment
-import com.example.recipes.business.utils.CheckConnectionUtils
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class RecipeSearchListFragment : Fragment() {
+class RecipeSearchListFragment : Fragment(R.layout.fragment_recipe_list) {
 
-    private var _binding: FragmentRecipeSearchListBinding? = null
+    private var _binding: FragmentRecipeListBinding? = null
     private val binding get() = _binding!!
 
     private val apiService = RetrofitModule.RECIPES_API_SERVICE
@@ -46,12 +42,9 @@ class RecipeSearchListFragment : Fragment() {
 
     private var clickListener: RecipeFragmentClickListener? = object : RecipeFragmentClickListener {
         override fun openRecipeDetailsFragment(recipe: Recipe) {
-
-            Log.d("TAG", "openRecipeDetailsFragment: ")
-            parentFragmentManager.beginTransaction()
-                .addToBackStack(null)
-                .replace(R.id.fragmentRecipesContainer, RecipeDetailsFragment.newInstance(recipe))
-                .commit()
+//            RecipeDetailsSingleton.recipe = recipe
+            viewModelSearch.setRecipeToSingleton(recipe)
+            findNavController().navigate(R.id.action_recipeSearchListFragment_to_recipeDetailsFragment)
         }
     }
 
@@ -73,7 +66,7 @@ class RecipeSearchListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentRecipeSearchListBinding.inflate(inflater, container, false)
+        _binding = FragmentRecipeListBinding.inflate(inflater, container, false)
         binding.apply {
             recyclerRecipe.layoutManager = GridLayoutManager(requireContext(), 2)
             recyclerRecipe.adapter = pagingAdapter
@@ -110,15 +103,14 @@ class RecipeSearchListFragment : Fragment() {
                 viewModelSearch.searchByTouch(text)
             }
 
-            bottomNavigation.selectedItemId = R.id.nav_search
+            bottomNavigation.selectedItemId = R.id.recipeSearchListFragment
 
+//            bottomNavigation.setupWithNavController(findNavController())
             bottomNavigation.setOnItemSelectedListener {
                 when (it.itemId) {
-                    R.id.nav_favorite -> {
-                        parentFragmentManager.beginTransaction()
-                            .replace(R.id.fragmentRecipesContainer, FavoriteListFragment())
-                            .commit()
-                        true
+                    R.id.favoriteListFragment -> {
+                        findNavController().navigate(R.id.action_recipeSearchListFragment_to_favoriteListFragment)
+                        false
                     }
                     else -> false
                 }
@@ -147,10 +139,7 @@ class RecipeSearchListFragment : Fragment() {
         if (!CheckConnectionUtils.isNetConnected(requireContext())) {
 
 //            NoConnectionDialogFragment().show(requireActivity().supportFragmentManager, null) // не подходит по логике работы диалога
-            requireActivity().supportFragmentManager.commit {
-                replace(R.id.fragmentRecipesContainer, NoConnectionDialogFragment())
-                    .addToBackStack(null)
-            }
+            findNavController().navigate(R.id.action_recipeSearchListFragment_to_noConnectionDialogFragment)
         } else {
             lifecycleScope.launch {
                 viewModelSearch.recipes.collectLatest { pagingData ->

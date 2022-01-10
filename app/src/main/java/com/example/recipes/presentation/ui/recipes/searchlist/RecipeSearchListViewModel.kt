@@ -6,6 +6,7 @@ import androidx.paging.*
 import com.example.recipes.business.usecases.GetRecipesBySearchUseCase
 import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.datasouce.local.datastore.RecipeDataStore
+import com.example.recipes.business.domain.singletons.RecipeSingleton
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -59,6 +60,10 @@ class RecipeSearchListViewModel(
         } else {
             searchIsOpened.value = VIEW_VISIBLE
         }
+    }
+
+    fun setRecipeToSingleton(recipe: Recipe) {
+        RecipeSingleton.recipe = recipe
     }
 
     companion object {

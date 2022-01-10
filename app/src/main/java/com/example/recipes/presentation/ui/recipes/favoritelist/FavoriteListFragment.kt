@@ -2,26 +2,24 @@ package com.example.recipes.presentation.ui.recipes.favoritelist
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.recipes.R
-import com.example.recipes.business.usecases.GetFavoriteRecipesUseCase
 import com.example.recipes.business.domain.models.Recipe
-import com.example.recipes.databinding.FragmentRecipeSearchListBinding
+import com.example.recipes.business.usecases.GetFavoriteRecipesUseCase
+import com.example.recipes.databinding.FragmentRecipeListBinding
 import com.example.recipes.datasouce.local.room.RecipeDataBase
 import com.example.recipes.presentation.ui.recipes.RecipeFragmentClickListener
-import com.example.recipes.presentation.ui.recipes.details.RecipeDetailsFragment
-import com.example.recipes.presentation.ui.recipes.searchlist.RecipeSearchListFragment
 
-class FavoriteListFragment : Fragment() {
+class FavoriteListFragment : Fragment(R.layout.fragment_recipe_list) {
 
-    private var _binding: FragmentRecipeSearchListBinding? = null
+    private var _binding: FragmentRecipeListBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var db: RecipeDataBase
@@ -35,12 +33,8 @@ class FavoriteListFragment : Fragment() {
 
     private var clickListener: RecipeFragmentClickListener? = object : RecipeFragmentClickListener {
         override fun openRecipeDetailsFragment(recipe: Recipe) {
-
-            Log.d("TAG", "openRecipeDetailsFragment: ")
-            parentFragmentManager.beginTransaction()
-                .addToBackStack(null)
-                .replace(R.id.fragmentRecipesContainer, RecipeDetailsFragment.newInstance(recipe))
-                .commit()
+            viewModelFavorite.setRecipeToSingleton(recipe)
+            findNavController().navigate(R.id.action_favoriteListFragment_to_recipeDetailsFragment)
         }
     }
 
@@ -61,7 +55,7 @@ class FavoriteListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentRecipeSearchListBinding.inflate(inflater, container, false)
+        _binding = FragmentRecipeListBinding.inflate(inflater, container, false)
         binding.apply {
             recyclerRecipe.layoutManager = GridLayoutManager(requireContext(), 2)
             recyclerRecipe.adapter = adapter
@@ -71,13 +65,12 @@ class FavoriteListFragment : Fragment() {
             progressBarPaging.isVisible = false
             progressBarWhileListEmpty.isVisible = false
 
-            bottomNavigation.selectedItemId = R.id.nav_favorite
+            bottomNavigation.selectedItemId = R.id.favoriteListFragment
+//            bottomNavigation.setupWithNavController(findNavController()) // при нажатии назад selectedItem остается на предидущем значении
             bottomNavigation.setOnItemSelectedListener {
                 when (it.itemId) {
-                    R.id.nav_search -> {
-                        parentFragmentManager.beginTransaction()
-                            .replace(R.id.fragmentRecipesContainer, RecipeSearchListFragment())
-                            .commit()
+                    R.id.recipeSearchListFragment -> {
+                        findNavController().navigate(R.id.action_favoriteListFragment_to_recipeSearchListFragment)
                         true
                     }
                     else -> false
@@ -97,8 +90,8 @@ class FavoriteListFragment : Fragment() {
         })
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 

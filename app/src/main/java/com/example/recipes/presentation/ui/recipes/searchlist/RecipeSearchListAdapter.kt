@@ -18,7 +18,7 @@ class RecipeSearchListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeSearchListViewHolder {
         return RecipeSearchListViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.fragment_recipe_search_list_item, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.fragment_recipe_list_item, parent, false)
         )
     }
     override fun onBindViewHolder(holder: RecipeSearchListViewHolder, position: Int) {

@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/nav_search"
+        android:id="@+id/recipeSearchListFragment"
         android:enabled="true"
         android:icon="@drawable/ic_search_list_icon"
         android:title="@string/list"/>
 
     <item
-        android:id="@+id/nav_favorite"
+        android:id="@+id/favoriteListFragment"
         android:enabled="true"
         android:icon="@drawable/ic_favorite_icon"
         android:title="@string/favorite"/>

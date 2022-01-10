@@ -10,7 +10,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipes.R
 import com.example.recipes.business.domain.models.Recipe
-import com.example.recipes.databinding.FragmentRecipeSearchListItemBinding
+import com.example.recipes.databinding.FragmentRecipeListItemBinding
 import com.example.recipes.presentation.ui.recipes.RecipeFragmentClickListener
 import com.example.recipes.presentation.utils.ImagesUtil
 
@@ -20,7 +20,7 @@ class RecipePagingAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipePagingViewHolder {
         return RecipePagingViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.fragment_recipe_search_list_item, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.fragment_recipe_list_item, parent, false)
         )
     }
     override fun onBindViewHolder(holder: RecipePagingViewHolder, position: Int) {
@@ -37,7 +37,7 @@ class RecipePagingAdapter(
 
 class RecipePagingViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-    private val viewBinding by viewBinding(FragmentRecipeSearchListItemBinding::bind)
+    private val viewBinding by viewBinding(FragmentRecipeListItemBinding::bind)
 
     fun onBind(recipe: Recipe) {
 

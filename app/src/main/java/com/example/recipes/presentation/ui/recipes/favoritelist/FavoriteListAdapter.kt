@@ -19,7 +19,7 @@ class FavoriteListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteListViewHolder {
         return FavoriteListViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.fragment_recipe_search_list_item, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.fragment_recipe_list_item, parent, false)
         )
     }
 

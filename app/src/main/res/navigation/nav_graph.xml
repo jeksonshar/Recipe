@@ -1,23 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/recipeSearchListFragment">
-
     <fragment
         android:id="@+id/recipeSearchListFragment"
         android:name="com.example.recipes.presentation.ui.recipes.searchlist.RecipeSearchListFragment"
-        android:label="RecipeSearchListFragment" />
-    <fragment
-        android:id="@+id/favoriteListFragment"
-        android:name="com.example.recipes.presentation.ui.recipes.favoritelist.FavoriteListFragment"
-        android:label="FavoriteListFragment" />
+        android:label="fragment_recipe_search_list"
+        tools:layout="@layout/fragment_recipe_list" >
+        <action
+            android:id="@+id/action_recipeSearchListFragment_to_recipeDetailsFragment"
+            app:destination="@id/recipeDetailsFragment"
+            app:popUpTo="@id/recipeSearchListFragment" />
+        <action
+            android:id="@+id/action_recipeSearchListFragment_to_noConnectionDialogFragment"
+            app:destination="@id/noConnectionDialogFragment"
+            app:popUpTo="@id/recipeSearchListFragment" />
+        <action
+            android:id="@+id/action_recipeSearchListFragment_to_favoriteListFragment"
+            app:destination="@id/favoriteListFragment" />
+    </fragment>
     <fragment
         android:id="@+id/recipeDetailsFragment"
         android:name="com.example.recipes.presentation.ui.recipes.details.RecipeDetailsFragment"
-        android:label="RecipeDetailsFragment" />
+        android:label="fragment_detail_recipe"
+        tools:layout="@layout/fragment_detail_recipe" />
     <fragment
         android:id="@+id/noConnectionDialogFragment"
         android:name="com.example.recipes.presentation.ui.dialogs.NoConnectionDialogFragment"
-        android:label="NoConnectionDialogFragment" />
+        android:label="dialog_no_connection"
+        tools:layout="@layout/dialog_no_connection" />
+    <fragment
+        android:id="@+id/favoriteListFragment"
+        android:name="com.example.recipes.presentation.ui.recipes.favoritelist.FavoriteListFragment"
+        android:label="FavoriteListFragment" >
+        <action
+            android:id="@+id/action_favoriteListFragment_to_recipeSearchListFragment"
+            app:destination="@id/recipeSearchListFragment"
+            app:popUpTo="@id/nav_graph" />
+        <action
+            android:id="@+id/action_favoriteListFragment_to_recipeDetailsFragment"
+            app:destination="@id/recipeDetailsFragment"
+            app:popUpTo="@id/favoriteListFragment" />
+    </fragment>
 </navigation>

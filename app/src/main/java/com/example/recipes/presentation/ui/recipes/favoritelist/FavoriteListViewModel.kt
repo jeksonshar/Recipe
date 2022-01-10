@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.recipes.business.usecases.GetFavoriteRecipesUseCase
 import com.example.recipes.business.domain.models.Recipe
+import com.example.recipes.business.domain.singletons.RecipeSingleton
 import kotlinx.coroutines.launch
 
 class FavoriteListViewModel(
@@ -19,6 +20,10 @@ class FavoriteListViewModel(
         viewModelScope.launch {
             favoriteRecipes.value = getFavoriteRecipesUseCase.getRecipesFromRoom()
         }
+    }
+
+    fun setRecipeToSingleton(recipe: Recipe) {
+        RecipeSingleton.recipe = recipe
     }
 
 

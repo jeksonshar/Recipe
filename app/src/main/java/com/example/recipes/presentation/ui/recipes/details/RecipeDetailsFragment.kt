@@ -5,14 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipes.R
-import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.business.usecases.GetFavoriteRecipesUseCase
 import com.example.recipes.business.usecases.ManageFavoriteRecipeUseCase
 import com.example.recipes.databinding.FragmentDetailRecipeBinding
@@ -21,7 +19,7 @@ import com.example.recipes.datasouce.network.RetrofitModule
 import com.example.recipes.presentation.utils.ImagesUtil
 import kotlinx.coroutines.launch
 
-class RecipeDetailsFragment : Fragment() {
+class RecipeDetailsFragment : Fragment(R.layout.fragment_detail_recipe) {
 
     private var _binding: FragmentDetailRecipeBinding? = null
     private val binding get() = _binding!!
@@ -125,13 +123,5 @@ class RecipeDetailsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-
-        fun newInstance(recipe: Recipe): RecipeDetailsFragment {
-            RecipeDetailsSingleton.recipe = recipe
-            return RecipeDetailsFragment()
-        }
     }
 }

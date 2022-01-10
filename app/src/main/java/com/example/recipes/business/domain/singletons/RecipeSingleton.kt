@@ -1,8 +1,8 @@
-package com.example.recipes.presentation.ui.recipes.details
+package com.example.recipes.business.domain.singletons
 
 import com.example.recipes.business.domain.models.Recipe
 
-object RecipeDetailsSingleton {
+object RecipeSingleton {
     var recipe: Recipe? = null
 
     fun clear() {
