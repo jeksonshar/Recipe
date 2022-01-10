@@ -4,12 +4,13 @@ import androidx.lifecycle.*
 import com.example.recipes.business.domain.models.Ingredient
 import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.business.domain.singletons.RecipeSingleton
+import com.example.recipes.business.usecases.GetFavoriteRecipeUseCase
 import com.example.recipes.business.usecases.GetFavoriteRecipesUseCase
 import com.example.recipes.business.usecases.GetRecipeUseCase
 import kotlinx.coroutines.launch
 
 class RecipeDetailsViewModel(
-
+    private val getFavoriteRecipeUseCase: GetFavoriteRecipeUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -32,16 +33,11 @@ class RecipeDetailsViewModel(
         retryVisibilityLiveData.value = false
     }
 
-    // не нужно скачивать весь список favorites, добавить use case проверки одного рецепта IsRecipeFavorite(uri: String)
-    // и проверять через него
-    fun recipeIsFavorite(getRecipes: GetFavoriteRecipesUseCase) {
+    fun recipeIsFavorite(uri: String) {
         viewModelScope.launch {
-            val favoriteRecipes = getRecipes.getRecipesFromRoom()
-            for (rec in favoriteRecipes) {
-                if (rec.uri == currentRecipe.value?.uri) {
-                    currentRecipeIsFavorite.value = true
-                    return@launch
-                }
+            val favoriteRecipe = getFavoriteRecipeUseCase.getFavoriteRecipe(uri)
+            if (favoriteRecipe != null) {
+                currentRecipeIsFavorite.value = true
             }
         }
     }

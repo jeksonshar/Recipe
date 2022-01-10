@@ -42,7 +42,6 @@ class RecipeSearchListFragment : Fragment(R.layout.fragment_recipe_list) {
 
     private var clickListener: RecipeFragmentClickListener? = object : RecipeFragmentClickListener {
         override fun openRecipeDetailsFragment(recipe: Recipe) {
-//            RecipeDetailsSingleton.recipe = recipe
             viewModelSearch.setRecipeToSingleton(recipe)
             findNavController().navigate(R.id.action_recipeSearchListFragment_to_recipeDetailsFragment)
         }

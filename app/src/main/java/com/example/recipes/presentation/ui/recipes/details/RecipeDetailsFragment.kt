@@ -11,7 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipes.R
-import com.example.recipes.business.usecases.GetFavoriteRecipesUseCase
+import com.example.recipes.business.usecases.GetFavoriteRecipeUseCase
 import com.example.recipes.business.usecases.ManageFavoriteRecipeUseCase
 import com.example.recipes.databinding.FragmentDetailRecipeBinding
 import com.example.recipes.datasouce.local.room.RecipeDataBase
@@ -28,6 +28,7 @@ class RecipeDetailsFragment : Fragment(R.layout.fragment_detail_recipe) {
 
     private val viewModel: RecipeDetailsViewModel by viewModels {
         RecipeDetailsViewModelFactory(
+            GetFavoriteRecipeUseCase(RecipeDataBase.create(requireContext())), //  Костыль, вынести отсюда
             this,
             null
         )
@@ -38,7 +39,6 @@ class RecipeDetailsFragment : Fragment(R.layout.fragment_detail_recipe) {
     }
 
     private lateinit var dbManage: ManageFavoriteRecipeUseCase                                    //  Костыль, вынести отсюда
-    private lateinit var dbGet: GetFavoriteRecipesUseCase                                     //  Костыль, вынести отсюда
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +46,6 @@ class RecipeDetailsFragment : Fragment(R.layout.fragment_detail_recipe) {
         viewModel.moveToRecipe()
 
         dbManage = ManageFavoriteRecipeUseCase(RecipeDataBase.create(requireContext()))           //  Костыль, вынести отсюда
-        dbGet = GetFavoriteRecipesUseCase(RecipeDataBase.create(requireContext()))            //  Костыль, вынести отсюда
     }
 
     override fun onCreateView(
@@ -79,7 +78,7 @@ class RecipeDetailsFragment : Fragment(R.layout.fragment_detail_recipe) {
                     ImagesUtil.setImage(recipe.image, it)
                 }
                 tvDetailRecipeName.text = recipe.label
-                viewModel.recipeIsFavorite(dbGet)
+                viewModel.recipeIsFavorite(recipe.uri)
             }
         })
 
