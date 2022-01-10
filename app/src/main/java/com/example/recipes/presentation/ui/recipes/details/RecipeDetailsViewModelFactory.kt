@@ -6,20 +6,21 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
 import com.example.recipes.business.usecases.GetFavoriteRecipeUseCase
-import com.example.recipes.business.usecases.GetRecipeUseCase
+import com.example.recipes.business.usecases.ManageFavoriteRecipeUseCase
 
 @Suppress("UNCHECKED_CAST")
 class RecipeDetailsViewModelFactory(
     private val getFavoriteRecipeUseCase: GetFavoriteRecipeUseCase,
+    private val manageFavoriteRecipeUseCase: ManageFavoriteRecipeUseCase,
     owner: SavedStateRegistryOwner,
     defaultArgs: Bundle?
-): AbstractSavedStateViewModelFactory(owner, defaultArgs) {
+) : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
 
     override fun <T : ViewModel?> create(
         key: String,
         modelClass: Class<T>,
         handle: SavedStateHandle
     ): T {
-        return RecipeDetailsViewModel(getFavoriteRecipeUseCase, handle) as T
+        return RecipeDetailsViewModel(getFavoriteRecipeUseCase, manageFavoriteRecipeUseCase, handle) as T
     }
 }

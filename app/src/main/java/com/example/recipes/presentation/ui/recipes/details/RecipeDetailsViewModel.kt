@@ -5,12 +5,12 @@ import com.example.recipes.business.domain.models.Ingredient
 import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.business.domain.singletons.RecipeSingleton
 import com.example.recipes.business.usecases.GetFavoriteRecipeUseCase
-import com.example.recipes.business.usecases.GetFavoriteRecipesUseCase
-import com.example.recipes.business.usecases.GetRecipeUseCase
+import com.example.recipes.business.usecases.ManageFavoriteRecipeUseCase
 import kotlinx.coroutines.launch
 
 class RecipeDetailsViewModel(
     private val getFavoriteRecipeUseCase: GetFavoriteRecipeUseCase,
+    private val manageFavoriteRecipeUseCase: ManageFavoriteRecipeUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -39,6 +39,12 @@ class RecipeDetailsViewModel(
             if (favoriteRecipe != null) {
                 currentRecipeIsFavorite.value = true
             }
+        }
+    }
+
+    fun saveOrDeleteRecipeToFavorite() {
+        viewModelScope.launch {
+            currentRecipe.value?.let { manageFavoriteRecipeUseCase.manageRecipe(it) }
         }
     }
 

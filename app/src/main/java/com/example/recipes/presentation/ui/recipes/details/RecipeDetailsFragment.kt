@@ -1,5 +1,6 @@
 package com.example.recipes.presentation.ui.recipes.details
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipes.R
+import com.example.recipes.RecipeApplication
 import com.example.recipes.business.usecases.GetFavoriteRecipeUseCase
 import com.example.recipes.business.usecases.ManageFavoriteRecipeUseCase
 import com.example.recipes.databinding.FragmentDetailRecipeBinding
@@ -26,9 +28,12 @@ class RecipeDetailsFragment : Fragment(R.layout.fragment_detail_recipe) {
 
     private val apiService = RetrofitModule.RECIPES_API_SERVICE
 
+    private var db: RecipeDataBase? = null
+
     private val viewModel: RecipeDetailsViewModel by viewModels {
         RecipeDetailsViewModelFactory(
-            GetFavoriteRecipeUseCase(RecipeDataBase.create(requireContext())), //  Костыль, вынести отсюда
+            GetFavoriteRecipeUseCase(db),
+            ManageFavoriteRecipeUseCase(db),
             this,
             null
         )
@@ -38,14 +43,15 @@ class RecipeDetailsFragment : Fragment(R.layout.fragment_detail_recipe) {
         DetailAdapter()
     }
 
-    private lateinit var dbManage: ManageFavoriteRecipeUseCase                                    //  Костыль, вынести отсюда
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        db = (requireActivity().applicationContext as RecipeApplication).db
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         viewModel.moveToRecipe()
-
-        dbManage = ManageFavoriteRecipeUseCase(RecipeDataBase.create(requireContext()))           //  Костыль, вынести отсюда
     }
 
     override fun onCreateView(
@@ -60,7 +66,7 @@ class RecipeDetailsFragment : Fragment(R.layout.fragment_detail_recipe) {
             isFavorite.setOnClickListener {
                 lifecycleScope.launch {
                     viewModel.currentRecipeIsFavorite.value = !viewModel.currentRecipeIsFavorite.value!!
-                    dbManage.manageRecipe(viewModel.currentRecipe.value!!)                  //  Костыль, вынести отсюда
+                    viewModel.saveOrDeleteRecipeToFavorite()
                 }
             }
         }

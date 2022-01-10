@@ -27,9 +27,22 @@ abstract class RecipeDataBase : RoomDatabase() {
     companion object {
         private const val DATABASE_NAME = "Recipes.db"
 
-        fun create(context: Context): RecipeDataBase {
+        @Volatile
+        private var INSTANCE: RecipeDataBase? = null
+
+        fun getDataBase(context: Context): RecipeDataBase {
+
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE ?: buildDataBase(context).also {
+                    INSTANCE = it
+                }
+            }
+        }
+
+        private fun buildDataBase(context: Context): RecipeDataBase {
+
             return Room.databaseBuilder(
-                context,
+                context.applicationContext,
                 RecipeDataBase::class.java,
                 DATABASE_NAME
             ).build()
