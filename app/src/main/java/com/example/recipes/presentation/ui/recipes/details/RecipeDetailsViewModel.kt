@@ -6,9 +6,12 @@ import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.business.domain.singletons.RecipeSingleton
 import com.example.recipes.business.usecases.GetFavoriteRecipeUseCase
 import com.example.recipes.business.usecases.ManageFavoriteRecipeUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RecipeDetailsViewModel(
+@HiltViewModel
+class RecipeDetailsViewModel @Inject constructor(
     private val getFavoriteRecipeUseCase: GetFavoriteRecipeUseCase,
     private val manageFavoriteRecipeUseCase: ManageFavoriteRecipeUseCase,
     private val savedStateHandle: SavedStateHandle

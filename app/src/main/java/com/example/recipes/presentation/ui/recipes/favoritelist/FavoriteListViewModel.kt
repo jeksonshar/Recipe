@@ -7,9 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.recipes.business.usecases.GetFavoriteRecipesUseCase
 import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.business.domain.singletons.RecipeSingleton
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FavoriteListViewModel(
+@HiltViewModel
+class FavoriteListViewModel @Inject constructor(
     private val getFavoriteRecipesUseCase: GetFavoriteRecipesUseCase,
     val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -24,11 +27,5 @@ class FavoriteListViewModel(
 
     fun setRecipeToSingleton(recipe: Recipe) {
         RecipeSingleton.recipe = recipe
-    }
-
-
-    companion object {
-        const val VIEW_VISIBLE = 0
-        const val VIEW_GONE = 8
     }
 }

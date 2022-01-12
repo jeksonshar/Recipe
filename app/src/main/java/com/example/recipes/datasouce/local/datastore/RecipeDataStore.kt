@@ -8,10 +8,14 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.recipes.business.domain.models.Recipe
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class RecipeDataStore(context: Context) {
+class RecipeDataStore @Inject constructor(
+    @ApplicationContext context: Context
+) {
 
     private val settingsDataStore = context.dataStore
 

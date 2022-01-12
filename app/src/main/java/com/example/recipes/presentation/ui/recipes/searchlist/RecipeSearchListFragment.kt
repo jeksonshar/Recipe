@@ -16,29 +16,20 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.recipes.R
 import com.example.recipes.business.domain.models.Recipe
-import com.example.recipes.business.usecases.GetRecipesBySearchUseCase
 import com.example.recipes.business.utils.CheckConnectionUtils
 import com.example.recipes.databinding.FragmentRecipeListBinding
-import com.example.recipes.datasouce.local.datastore.RecipeDataStore
-import com.example.recipes.datasouce.network.RetrofitModule
 import com.example.recipes.presentation.ui.recipes.RecipeFragmentClickListener
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class RecipeSearchListFragment : Fragment(R.layout.fragment_recipe_list) {
 
     private var _binding: FragmentRecipeListBinding? = null
     private val binding get() = _binding!!
 
-    private val apiService = RetrofitModule.RECIPES_API_SERVICE
-
-    private val viewModelSearch: RecipeSearchListViewModel by viewModels {
-        RecipeSearchViewModelFactory(
-            GetRecipesBySearchUseCase(apiService),
-            RecipeDataStore(requireContext()),
-            this
-        )
-    }
+    private val viewModelSearch: RecipeSearchListViewModel by viewModels()
 
     private var clickListener: RecipeFragmentClickListener? = object : RecipeFragmentClickListener {
         override fun openRecipeDetailsFragment(recipe: Recipe) {
@@ -104,7 +95,7 @@ class RecipeSearchListFragment : Fragment(R.layout.fragment_recipe_list) {
 
             bottomNavigation.selectedItemId = R.id.recipeSearchListFragment
 
-//            bottomNavigation.setupWithNavController(findNavController())
+//            bottomNavigation.setupWithNavController(findNavController()) // при нажатии назад selectedItem остается на предидущем значении
             bottomNavigation.setOnItemSelectedListener {
                 when (it.itemId) {
                     R.id.favoriteListFragment -> {

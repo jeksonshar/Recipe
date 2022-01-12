@@ -7,10 +7,13 @@ import com.example.recipes.business.usecases.GetRecipesBySearchUseCase
 import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.datasouce.local.datastore.RecipeDataStore
 import com.example.recipes.business.domain.singletons.RecipeSingleton
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RecipeSearchListViewModel(
+@HiltViewModel
+class RecipeSearchListViewModel @Inject constructor(
     private val getRecipesBySearchUseCase: GetRecipesBySearchUseCase,
     private val recipeDataStore: RecipeDataStore,
     val savedStateHandle: SavedStateHandle

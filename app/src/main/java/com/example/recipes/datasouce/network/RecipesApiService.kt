@@ -10,11 +10,6 @@ import retrofit2.http.Query
 interface RecipesApiService {
 
     @GET("/api/recipes/v2")
-    suspend fun getRecipesByQuery(
-        @Query("q") query: String
-    ): RecipeSearchEntity
-
-    @GET("/api/recipes/v2")
     suspend fun getNextRecipesByQuery(
         @Query("q") query: String,
         @Query("_cont", encoded = true) contId: String? = null

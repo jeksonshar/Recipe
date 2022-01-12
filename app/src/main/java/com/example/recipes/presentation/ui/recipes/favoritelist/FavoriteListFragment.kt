@@ -11,26 +11,18 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.recipes.R
-import com.example.recipes.RecipeApplication
 import com.example.recipes.business.domain.models.Recipe
-import com.example.recipes.business.usecases.GetFavoriteRecipesUseCase
 import com.example.recipes.databinding.FragmentRecipeListBinding
-import com.example.recipes.datasouce.local.room.RecipeDataBase
 import com.example.recipes.presentation.ui.recipes.RecipeFragmentClickListener
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FavoriteListFragment : Fragment(R.layout.fragment_recipe_list) {
 
     private var _binding: FragmentRecipeListBinding? = null
     private val binding get() = _binding!!
 
-    private var db: RecipeDataBase? = null
-
-    private val viewModelFavorite: FavoriteListViewModel by viewModels {
-        FavoriteListViewModelFactory(
-            GetFavoriteRecipesUseCase(db),
-            this
-        )
-    }
+    private val viewModelFavorite: FavoriteListViewModel by viewModels()
 
     private var clickListener: RecipeFragmentClickListener? = object : RecipeFragmentClickListener {
         override fun openRecipeDetailsFragment(recipe: Recipe) {
@@ -45,8 +37,6 @@ class FavoriteListFragment : Fragment(R.layout.fragment_recipe_list) {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-//        db = RecipeDataBase.getDataBase(context)
-        db = (requireActivity().applicationContext as RecipeApplication).db
         if (context is RecipeFragmentClickListener) {
             clickListener = context
         }

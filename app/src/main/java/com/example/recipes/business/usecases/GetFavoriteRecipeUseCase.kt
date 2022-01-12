@@ -3,8 +3,11 @@ package com.example.recipes.business.usecases
 import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.datasouce.local.room.DataBaseEntitiesMappers
 import com.example.recipes.datasouce.local.room.RecipeDataBase
+import javax.inject.Inject
 
-class GetFavoriteRecipeUseCase(private val dataBase: RecipeDataBase?) {
+class GetFavoriteRecipeUseCase @Inject constructor(
+    private val dataBase: RecipeDataBase?
+) {
 
     suspend fun getFavoriteRecipe(uri: String): Recipe? {
         if (dataBase == null) {
