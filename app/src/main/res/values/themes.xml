@@ -14,9 +14,19 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="Theme.Recipes.MaterialCardView" parent="">
+    <style name="Theme.Recipes.MaterialCardView" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="cornerFamilyTopRight">rounded</item>
         <item name="cornerFamilyTopLeft">rounded</item>
         <item name="cornerSize">8dp</item>
+    </style>
+
+    <!-- Theme Splash Android <12-->
+    <style name="SplashTheme" parent="Theme.SplashScreen">
+
+        <item name="windowSplashScreenBackground">#D3E4CD</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/avd_anim_recipe124_new</item>
+        <item name="windowSplashScreenAnimationDuration">100</item>
+        <item name="postSplashScreenTheme">@style/Theme.Recipes.MaterialCardView</item>
+
     </style>
 </resources>

@@ -140,6 +140,11 @@ class RecipeSearchListFragment : Fragment(R.layout.fragment_recipe_list) {
 
         viewModelSearch.searchIsOpened.observe(viewLifecycleOwner, {
             binding.etSearch.visibility = it
+            if (it == RecipeSearchListViewModel.VIEW_VISIBLE) {
+                binding.ivOpenSearchET.setImageResource(R.drawable.up_arrow)
+            } else {
+                binding.ivOpenSearchET.setImageResource(R.drawable.search)
+            }
         })
 
         pagingAdapter?.loadStateFlow?.asLiveData()?.observe(viewLifecycleOwner, {

@@ -1,20 +1,17 @@
 package com.example.recipes.presentation.ui.recipes
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.example.recipes.R
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
-class RecipesActivity : AppCompatActivity() {
+class SplashActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Handle the splash screen transition.
         installSplashScreen()
 
-        setContentView(R.layout.activity_recipes)
+        startActivity(Intent(this, RecipesActivity::class.java))
+        finish()
     }
 }

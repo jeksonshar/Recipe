@@ -14,18 +14,32 @@
         <entry key="..\:/Users/User/AndroidStudioProjects/Recipes/app/src/main/res/layout/fragment_recipe_list.xml" value="0.3546875" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Recipes/app/src/main/res/layout/fragment_recipe_list_item.xml" value="0.3546875" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Recipes/app/src/main/res/layout/item_error.xml" value="0.3546875" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/drawable-v23/backgroung_splash.xml" value="0.37083333333333335" />
         <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.21354166666666666" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/drawable/avd_anim_recipe.xml" value="0.37083333333333335" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/drawable/avd_anim_recipe108.xml" value="0.67" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/drawable/avd_anim_recipe124.xml" value="1.0" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/drawable/avd_anim_recipe124_new.xml" value="0.29814814814814816" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/drawable/avd_anim_recipe96.xml" value="0.30092592592592593" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/drawable/background_bottom_navigation.xml" value="0.29814814814814816" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/drawable/background_edit_text.xml" value="0.37083333333333335" />
         <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/drawable/background_favorite.xml" value="0.21354166666666666" />
         <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/drawable/background_radius.xml" value="0.21354166666666666" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/drawable/background_splash.xml" value="0.29814814814814816" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/drawable/backgroung_splash.xml" value="0.37083333333333335" />
         <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/drawable/bg_dialog_connection.xml" value="0.37083333333333335" />
         <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/drawable/dialog_button_background.xml" value="0.37083333333333335" />
         <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/drawable/ic_baseline_list_alt_24.xml" value="0.37083333333333335" />
         <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/drawable/ic_favorite_icon.xml" value="0.37083333333333335" />
         <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3605128205128205" />
         <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/drawable/ic_search_list_icon.xml" value="0.37083333333333335" />
-        <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/drawable/layout_item_shape.xml" value="0.37083333333333335" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/drawable/layout_item_shape.xml" value="0.33" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/drawable/recipe_124_new.xml" value="0.29814814814814816" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/drawable/recipe_launcher_foreground.xml" value="0.3037037037037037" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/drawable/recipe_vector.xml" value="0.21875" />
         <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/layout/activity_recipes.xml" value="0.3546875" />
         <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/layout/activity_registration.xml" value="0.3546875" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/layout/activity_splash_screen.xml" value="0.3546875" />
         <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/layout/dialog_no_connection.xml" value="0.3546875" />
         <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/layout/fragment_detail_recipe.xml" value="0.3546875" />
         <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/layout/fragment_detail_recipe_item.xml" value="0.3546875" />
@@ -34,8 +48,12 @@
         <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/layout/fragment_recipe_list_item.xml" value="0.3546875" />
         <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/layout/fragment_recipe_search_list.xml" value="0.3546875" />
         <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/layout/fragment_recipe_search_list_item.xml" value="0.3546875" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/layout/fragment_splash.xml" value="0.3546875" />
         <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/layout/item_error.xml" value="0.3546875" />
         <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/menu/menu_bottom_navigation.xml" value="0.3546875" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.37083333333333335" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/mipmap-anydpi-v26/recipe_launcher.xml" value="0.3037037037037037" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/recipe-app-eugene/app/src/main/res/mipmap-anydpi-v26/recipe_launcher_round.xml" value="0.3037037037037037" />
       </map>
     </option>
   </component>
