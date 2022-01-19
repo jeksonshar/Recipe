@@ -6,15 +6,40 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="gray">#6D6D80</color>
+    <color name="gray_dark">#2A2A38</color>
     <color name="olive">#808056</color>
+    <color name="red">#FF1700</color>
+    <color name="blue">#2E749A</color>
+    <color name="orange">#FF4800</color>
+    <color name="yellow">#FFC900</color>
+    <color name="green">#06FF00</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
     <color name="colorDialogBackground">#1E1E1E</color>
     <color name="colorSplitDialog">#262525</color>
     <color name="white_gray">#D8D8D8</color>
+    <color name="green_light">#D3E4CD</color>
+    <color name="yellow_light">#DAD992</color>
     <color name="black_half_transparent">#33000000</color>
+    <color name="full_transparent">#00000000</color>
     <color name="cream">#FFF2DDC1</color>
     <color name="background_list">#EEF2FF</color>
+
+    <!-- dots active colors -->
+    <array name="array_dot_active">
+        <item>@color/orange</item>
+        <item>@color/yellow</item>
+        <item>@color/green</item>
+        <item>@color/red</item>
+    </array>
+
+    <!-- dots inactive colors -->
+    <array name="array_dot_inactive">
+        <item>@color/gray</item>
+        <item>@color/gray</item>
+        <item>@color/gray</item>
+        <item>@color/gray</item>
+    </array>
 
 </resources>

@@ -20,4 +20,11 @@
     <string name="image_view">image view</string>
     <string name="favorite">Favorite</string>
     <string name="list">List</string>
+    <string name="first_slide">First slide</string>
+    <string name="second_slide">Second slide</string>
+    <string name="third_slide">Third slide</string>
+    <string name="fourth_slide">Fourth slide</string>
+    <string name="skip">Skip</string>
+    <string name="next">Next</string>
+    <string name="start">Start</string>
 </resources>
