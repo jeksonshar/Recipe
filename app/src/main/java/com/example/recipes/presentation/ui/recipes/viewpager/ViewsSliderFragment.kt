@@ -1,24 +1,22 @@
 package com.example.recipes.presentation.ui.recipes.viewpager
 
-import android.animation.TimeInterpolator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.recipes.R
 import com.example.recipes.databinding.FragmentViewsSliderBinding
-import com.example.recipes.presentation.ui.recipes.viewpager.transfotmers.*
-import com.example.recipes.presentation.ui.recipes.viewpager.transfotmers.worse.VerticalShutTransformation
-import com.example.recipes.presentation.ui.recipes.viewpager.transfotmers.worse.ZoomInTransformer
+import com.example.recipes.presentation.ui.recipes.viewpager.transfotmers.DepthTransformation
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ViewsSliderFragment : Fragment(R.layout.fragment_views_slider) {
 
     private var _binding: FragmentViewsSliderBinding? = null
@@ -30,6 +28,8 @@ class ViewsSliderFragment : Fragment(R.layout.fragment_views_slider) {
         R.layout.slide_three,
         R.layout.slide_four
     )
+
+    private val viewModelSlider: ViewsSliderViewModel by viewModels()
 
     private val pageChangeCallback: ViewPager2.OnPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
 
@@ -58,24 +58,29 @@ class ViewsSliderFragment : Fragment(R.layout.fragment_views_slider) {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentViewsSliderBinding.inflate(inflater, container, false)
-        binding.apply {
-            viewPager.adapter = adapter
-            viewPager.registerOnPageChangeCallback(pageChangeCallback)
-            viewPager.setPageTransformer(DepthTransformation())
 
-            btnSkip.setOnClickListener {
-                launchNextFragment()
-            }
-            btnNext.setOnClickListener {
-                val nextPage = getNextItem()
-                if (nextPage < layouts.size) {
-                    viewPager.currentItem = nextPage
-                } else {
+        val isFirstLaunch = viewModelSlider.getLaunch()
+        if (!isFirstLaunch) {
+            binding.apply {
+                viewPager.adapter = adapter
+                viewPager.registerOnPageChangeCallback(pageChangeCallback)
+                viewPager.setPageTransformer(DepthTransformation())
+
+                btnSkip.setOnClickListener {
                     launchNextFragment()
                 }
+                btnNext.setOnClickListener {
+                    val nextPage = getNextItem()
+                    if (nextPage < layouts.size) {
+                        viewPager.currentItem = nextPage
+                    } else {
+                        launchNextFragment()
+                    }
+                }
             }
+        } else {
+            launchNextFragment()
         }
-
         return binding.root
     }
 
@@ -85,6 +90,7 @@ class ViewsSliderFragment : Fragment(R.layout.fragment_views_slider) {
     }
 
     private fun launchNextFragment() {
+        viewModelSlider.setNotFirstLaunch()
         findNavController().navigate(R.id.action_viewsSliderFragment_to_recipeSearchListFragment)
     }
 
