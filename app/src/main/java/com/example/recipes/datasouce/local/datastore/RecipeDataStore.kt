@@ -26,8 +26,8 @@ class RecipeDataStore @Inject constructor(
         private val IS_NOT_FIRST_LAUNCH = booleanPreferencesKey("is not first launch")
     }
 
-    fun getLastQuery(): Flow<String> = settingsDataStore.data.map {
-        it[LAST_QUERY] ?: "chicken"
+    fun getLastQuery(): Flow<String?> = settingsDataStore.data.map {
+        it[LAST_QUERY]
     }
 
     suspend fun setLastQuery(query: String) {

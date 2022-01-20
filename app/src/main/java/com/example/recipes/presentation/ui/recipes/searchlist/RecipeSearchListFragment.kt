@@ -20,6 +20,7 @@ import com.example.recipes.business.utils.CheckConnectionUtils
 import com.example.recipes.databinding.FragmentRecipeListBinding
 import com.example.recipes.presentation.ui.recipes.RecipeFragmentClickListener
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -127,13 +128,26 @@ class RecipeSearchListFragment : Fragment(R.layout.fragment_recipe_list) {
         }
 
         if (!CheckConnectionUtils.isNetConnected(requireContext())) {
-
 //            NoConnectionDialogFragment().show(requireActivity().supportFragmentManager, null) // не подходит по логике работы диалога
             findNavController().navigate(R.id.action_recipeSearchListFragment_to_noConnectionDialogFragment)
-        } else {
-            lifecycleScope.launch {
-                viewModelSearch.recipes.collectLatest { pagingData ->
-                    pagingAdapter?.submitData(pagingData)
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModelSearch.queryHandler.collect {
+                if (it != null) {                                       // добавить условие для исправления пункта 5
+                    lifecycleScope.launch {
+                        viewModelSearch.recipes(it)?.collectLatest { pagingData ->
+                            pagingAdapter?.submitData(pagingData)
+                        }
+                    }
+                } else {
+                    viewModelSearch.changeSearchIsOpenedValue(binding.etSearch.visibility)
+                    binding.apply {
+                        buttonRetry.visibility = View.GONE
+                        tvErrorLoading.visibility = View.GONE
+                        progressBarPaging.visibility = View.GONE
+                        progressBarWhileListEmpty.visibility = View.INVISIBLE
+                    }
                 }
             }
         }

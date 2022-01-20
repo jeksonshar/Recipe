@@ -1,14 +1,19 @@
 package com.example.recipes.presentation.ui.recipes.searchlist
 
 import android.text.Editable
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.*
-import com.example.recipes.business.usecases.GetRecipesBySearchUseCase
 import com.example.recipes.business.domain.models.Recipe
-import com.example.recipes.datasouce.local.datastore.RecipeDataStore
 import com.example.recipes.business.domain.singletons.RecipeSingleton
+import com.example.recipes.business.usecases.GetRecipesBySearchUseCase
+import com.example.recipes.datasouce.local.datastore.RecipeDataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,19 +26,29 @@ class RecipeSearchListViewModel @Inject constructor(
 
     val searchIsOpened = MutableLiveData<Int>()
 
-    private val queryHandler = recipeDataStore.getLastQuery()
+    val queryHandler = recipeDataStore.getLastQuery()
     private var newPagingSource: PagingSource<*, *>? = null
 
-    val recipes: Flow<PagingData<Recipe>> = queryHandler
-        .map(::newPager)
-        .flatMapLatest { pager -> pager.flow }
-        .cachedIn(viewModelScope)
+    fun recipes(query: String?): Flow<PagingData<Recipe>>? {
+        return if (query != null) {
+            queryHandler
+                .map(::newPager)
+                .flatMapLatest { pager -> pager!!.flow }
+                .cachedIn(viewModelScope)
+        } else {
+            null
+        }
+    }
 
-    private fun newPager(query: String): Pager<String, Recipe> {
-        return Pager(PagingConfig(pageSize = 3)) {
-            getRecipesBySearchUseCase.invoke(query).also {
-                newPagingSource = it
+    private fun newPager(query: String?): Pager<String, Recipe>? {
+        return if (query != null) {
+            Pager(PagingConfig(pageSize = 3)) {
+                getRecipesBySearchUseCase.invoke(query).also {
+                    newPagingSource = it
+                }
             }
+        } else {
+            null
         }
     }
 
