@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.recipes.R
 import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.databinding.FragmentRecipeListBinding
-import com.example.recipes.presentation.ui.recipes.RecipeFragmentClickListener
+import com.example.recipes.presentation.ui.recipes.RecipeClickListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,7 +24,7 @@ class FavoriteListFragment : Fragment(R.layout.fragment_recipe_list) {
 
     private val viewModelFavorite: FavoriteListViewModel by viewModels()
 
-    private var clickListener: RecipeFragmentClickListener? = object : RecipeFragmentClickListener {
+    private var clickListener: RecipeClickListener? = object : RecipeClickListener {
         override fun openRecipeDetailsFragment(recipe: Recipe) {
             viewModelFavorite.setRecipeToSingleton(recipe)
             findNavController().navigate(R.id.action_favoriteListFragment_to_recipeDetailsFragment)
@@ -37,7 +37,7 @@ class FavoriteListFragment : Fragment(R.layout.fragment_recipe_list) {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is RecipeFragmentClickListener) {
+        if (context is RecipeClickListener) {
             clickListener = context
         }
     }
@@ -79,6 +79,12 @@ class FavoriteListFragment : Fragment(R.layout.fragment_recipe_list) {
 
         viewModelFavorite.favoriteRecipes.observe(viewLifecycleOwner, {
             adapter?.submitList(it)
+            if (it.isEmpty()) {
+                binding.ivEmptyList.setImageResource(R.drawable.empty_favorite_list)
+                binding.ivEmptyList.visibility = View.VISIBLE
+            } else {
+                binding.ivEmptyList.visibility = View.GONE
+            }
         })
     }
 

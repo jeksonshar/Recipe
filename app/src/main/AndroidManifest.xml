@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/recipe_launcher_round"
         android:supportsRtl="true">
         <activity
-            android:name="com.example.recipes.presentation.ui.recipes.SplashActivity"
+            android:name=".presentation.ui.SplashActivity"
             android:theme="@style/SplashTheme"
             android:exported="true">
             <intent-filter>
@@ -22,6 +22,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".presentation.ui.viewpager.ViewPagerActivity"
+            android:theme="@style/Theme.Recipes"/>
 
         <activity android:name=".presentation.ui.recipes.RecipesActivity"
             android:theme="@style/Theme.Recipes"/>

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.recipes.business.usecases.GetFavoriteRecipesUseCase
 import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.business.domain.singletons.RecipeSingleton
+import com.example.recipes.presentation.ui.recipes.BackPressedSingleton
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,5 +28,10 @@ class FavoriteListViewModel @Inject constructor(
 
     fun setRecipeToSingleton(recipe: Recipe) {
         RecipeSingleton.recipe = recipe
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        BackPressedSingleton.clear()
     }
 }

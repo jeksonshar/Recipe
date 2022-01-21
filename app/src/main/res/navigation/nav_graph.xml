@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/viewsSliderFragment">
+    app:startDestination="@id/recipeSearchListFragment">
     <fragment
         android:id="@+id/recipeSearchListFragment"
         android:name="com.example.recipes.presentation.ui.recipes.searchlist.RecipeSearchListFragment"
@@ -44,15 +44,5 @@
             android:id="@+id/action_favoriteListFragment_to_recipeDetailsFragment"
             app:destination="@id/recipeDetailsFragment"
             app:popUpTo="@id/favoriteListFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/viewsSliderFragment"
-        android:name="com.example.recipes.presentation.ui.recipes.viewpager.ViewsSliderFragment"
-        android:label="fragment_views_slider"
-        tools:layout="@layout/fragment_views_slider" >
-        <action
-            android:id="@+id/action_viewsSliderFragment_to_recipeSearchListFragment"
-            app:destination="@id/recipeSearchListFragment"
-            app:popUpTo="@id/nav_graph" />
     </fragment>
 </navigation>

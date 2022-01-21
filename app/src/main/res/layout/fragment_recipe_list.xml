@@ -70,6 +70,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleOfList" />
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivEmptyList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/empty_list"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etSearch"/>
+
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progressBarPaging"
         android:layout_width="0dp"
@@ -102,7 +112,7 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="52dp"
             android:layout_gravity="bottom"
             android:background="@drawable/background_bottom_navigation"
             app:labelVisibilityMode="selected"

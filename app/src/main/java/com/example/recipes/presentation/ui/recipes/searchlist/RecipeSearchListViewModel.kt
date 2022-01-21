@@ -10,6 +10,7 @@ import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.business.domain.singletons.RecipeSingleton
 import com.example.recipes.business.usecases.GetRecipesBySearchUseCase
 import com.example.recipes.datasouce.local.datastore.RecipeDataStore
+import com.example.recipes.presentation.ui.recipes.BackPressedSingleton
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
@@ -82,6 +83,11 @@ class RecipeSearchListViewModel @Inject constructor(
 
     fun setRecipeToSingleton(recipe: Recipe) {
         RecipeSingleton.recipe = recipe
+    }
+
+    override fun onCleared() {
+        BackPressedSingleton.clear()
+        super.onCleared()
     }
 
     companion object {

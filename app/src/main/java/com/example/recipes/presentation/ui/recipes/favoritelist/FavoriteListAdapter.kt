@@ -10,11 +10,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipes.R
 import com.example.recipes.business.domain.models.Recipe
-import com.example.recipes.presentation.ui.recipes.RecipeFragmentClickListener
+import com.example.recipes.presentation.ui.recipes.RecipeClickListener
 import com.example.recipes.presentation.utils.ImagesUtil
 
 class FavoriteListAdapter(
-    private val clickListener: RecipeFragmentClickListener
+    private val clickListener: RecipeClickListener
 ) : ListAdapter<Recipe, FavoriteListViewHolder>(FavoriteRecipesComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteListViewHolder {
@@ -50,6 +50,7 @@ class FavoriteRecipesComparator : DiffUtil.ItemCallback<Recipe>() {
     override fun areItemsTheSame(oldItem: Recipe, newItem: Recipe): Boolean {
         return oldItem == newItem
     }
+
     override fun areContentsTheSame(oldItem: Recipe, newItem: Recipe): Boolean {
         return oldItem.uri == newItem.uri
     }

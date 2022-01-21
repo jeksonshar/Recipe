@@ -15,7 +15,7 @@ class ApiKeyInterceptor : Interceptor {
             .addQueryParameter(API_ID_HEADER, apiID)
             .addQueryParameter(API_KEY_HEADER, apiKey)
             .build()
-        Log.d("TAG", "intercept URL: $url")
+        Log.d("TAG", "intercept request URL: $url")
         val requestBuilder = originalRequest.newBuilder().url(url)
         val request = requestBuilder.build()
 

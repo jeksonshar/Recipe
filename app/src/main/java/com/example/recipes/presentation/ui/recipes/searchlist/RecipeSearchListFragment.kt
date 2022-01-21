@@ -18,7 +18,8 @@ import com.example.recipes.R
 import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.business.utils.CheckConnectionUtils
 import com.example.recipes.databinding.FragmentRecipeListBinding
-import com.example.recipes.presentation.ui.recipes.RecipeFragmentClickListener
+import com.example.recipes.presentation.ui.recipes.BackPressedSingleton
+import com.example.recipes.presentation.ui.recipes.RecipeClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
@@ -32,7 +33,7 @@ class RecipeSearchListFragment : Fragment(R.layout.fragment_recipe_list) {
 
     private val viewModelSearch: RecipeSearchListViewModel by viewModels()
 
-    private var clickListener: RecipeFragmentClickListener? = object : RecipeFragmentClickListener {
+    private var clickListener: RecipeClickListener? = object : RecipeClickListener {
         override fun openRecipeDetailsFragment(recipe: Recipe) {
             viewModelSearch.setRecipeToSingleton(recipe)
             findNavController().navigate(R.id.action_recipeSearchListFragment_to_recipeDetailsFragment)
@@ -47,7 +48,7 @@ class RecipeSearchListFragment : Fragment(R.layout.fragment_recipe_list) {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is RecipeFragmentClickListener) {
+        if (context is RecipeClickListener) {
             clickListener = context
         }
     }
@@ -134,10 +135,13 @@ class RecipeSearchListFragment : Fragment(R.layout.fragment_recipe_list) {
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModelSearch.queryHandler.collect {
-                if (it != null) {                                       // добавить условие для исправления пункта 5
-                    lifecycleScope.launch {
-                        viewModelSearch.recipes(it)?.collectLatest { pagingData ->
-                            pagingAdapter?.submitData(pagingData)
+                if (it != null) {
+                    if (BackPressedSingleton.isBackPressClick == null) {
+                        lifecycleScope.launch {
+                            viewModelSearch.recipes(it)?.collectLatest { pagingData ->
+                                binding.ivEmptyList.visibility = View.GONE
+                                pagingAdapter?.submitData(pagingData)
+                            }
                         }
                     }
                 } else {
@@ -147,6 +151,7 @@ class RecipeSearchListFragment : Fragment(R.layout.fragment_recipe_list) {
                         tvErrorLoading.visibility = View.GONE
                         progressBarPaging.visibility = View.GONE
                         progressBarWhileListEmpty.visibility = View.INVISIBLE
+                        ivEmptyList.visibility = View.VISIBLE
                     }
                 }
             }

@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.recipes.R
 import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.databinding.FragmentRecipeListItemBinding
-import com.example.recipes.presentation.ui.recipes.RecipeFragmentClickListener
+import com.example.recipes.presentation.ui.recipes.RecipeClickListener
 import com.example.recipes.presentation.utils.ImagesUtil
 
 class RecipePagingAdapter(
-    private val clickListener: RecipeFragmentClickListener
+    private val clickListener: RecipeClickListener
 ) : PagingDataAdapter<Recipe, RecipePagingViewHolder>(RecipePagingComparator) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipePagingViewHolder {
@@ -23,6 +23,7 @@ class RecipePagingAdapter(
             LayoutInflater.from(parent.context).inflate(R.layout.fragment_recipe_list_item, parent, false)
         )
     }
+
     override fun onBindViewHolder(holder: RecipePagingViewHolder, position: Int) {
         Log.d("TAG", "onBindViewHolder:")
         getItem(position)?.let { recipe ->
@@ -56,6 +57,7 @@ private object RecipePagingComparator : DiffUtil.ItemCallback<Recipe>() {
     override fun areItemsTheSame(oldItem: Recipe, newItem: Recipe): Boolean {
         return oldItem == newItem
     }
+
     override fun areContentsTheSame(oldItem: Recipe, newItem: Recipe): Boolean {
         return oldItem.uri == newItem.uri
     }

@@ -7,7 +7,7 @@
     <string name="sign_up">Sign Up</string>
     <string name="recipes">Recipes</string>
     <string name="name_of_recipe">Name of recipe</string>
-    <string name="type_your_query">Type your query</string>
+    <string name="type_your_query">Type your query for searching</string>
     <string name="retry">Retry</string>
     <string name="error_message">Error message</string>
     <string name="no_internet_connection_message">You need internet connection to load.</string>
