@@ -150,7 +150,7 @@ class RecipeSearchListFragment : Fragment(R.layout.fragment_recipe_list) {
                         buttonRetry.visibility = View.GONE
                         tvErrorLoading.visibility = View.GONE
                         progressBarPaging.visibility = View.GONE
-                        progressBarWhileListEmpty.visibility = View.INVISIBLE
+                        progressBarWhileListEmpty.visibility = View.GONE
                         ivEmptyList.visibility = View.VISIBLE
                     }
                 }

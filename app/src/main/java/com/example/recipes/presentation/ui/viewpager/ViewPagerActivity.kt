@@ -13,6 +13,8 @@ import com.example.recipes.R
 import com.example.recipes.databinding.ActivityViewPagerBinding
 import com.example.recipes.presentation.ui.recipes.RecipesActivity
 import com.example.recipes.presentation.ui.viewpager.transfotmers.DepthTransformation
+import com.example.recipes.presentation.ui.viewpager.transfotmers.HorizontalFlipTransformation
+import com.example.recipes.presentation.ui.viewpager.transfotmers.worse.VerticalFlipTransformation
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -64,7 +66,7 @@ class ViewPagerActivity : AppCompatActivity() {
         binding.apply {
             viewPager.adapter = adapter
             viewPager.registerOnPageChangeCallback(pageChangeCallback)
-            viewPager.setPageTransformer(DepthTransformation())
+            viewPager.setPageTransformer(HorizontalFlipTransformation())
 
             btnSkip.setOnClickListener {
                 launchNextFragment()
