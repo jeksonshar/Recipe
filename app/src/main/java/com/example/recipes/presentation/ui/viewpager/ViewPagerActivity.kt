@@ -7,20 +7,18 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.viewpager2.widget.ViewPager2
 import com.example.recipes.R
 import com.example.recipes.databinding.ActivityViewPagerBinding
 import com.example.recipes.presentation.ui.recipes.RecipesActivity
-import com.example.recipes.presentation.ui.viewpager.transfotmers.DepthTransformation
 import com.example.recipes.presentation.ui.viewpager.transfotmers.HorizontalFlipTransformation
-import com.example.recipes.presentation.ui.viewpager.transfotmers.worse.VerticalFlipTransformation
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ViewPagerActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityViewPagerBinding
+    private var _binding: ActivityViewPagerBinding? = null
+    private val binding get() = _binding!!
 
     private val layouts = intArrayOf(
         R.layout.slide_one,
@@ -30,6 +28,10 @@ class ViewPagerActivity : AppCompatActivity() {
     )
 
     private val viewModelPager: ViewPagerViewModel by viewModels()
+
+    private val adapter by lazy {
+        ViewPagerAdapter(layouts)
+    }
 
     private val pageChangeCallback: ViewPager2.OnPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
@@ -43,20 +45,15 @@ class ViewPagerActivity : AppCompatActivity() {
                 binding.btnNext.text = getString(R.string.next)
                 binding.btnSkip.visibility = View.VISIBLE
             }
-            binding.layoutDots.isVisible = true
+            binding.layoutDots.visibility = View.VISIBLE
         }
-    }
-
-    private val adapter by lazy {
-        ViewPagerAdapter(layouts)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityViewPagerBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        _binding = ActivityViewPagerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
     }
 
