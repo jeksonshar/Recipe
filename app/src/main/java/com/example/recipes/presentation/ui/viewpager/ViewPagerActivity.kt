@@ -3,15 +3,14 @@ package com.example.recipes.presentation.ui.viewpager
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.example.recipes.R
 import com.example.recipes.databinding.ActivityViewPagerBinding
 import com.example.recipes.presentation.ui.recipes.RecipesActivity
 import com.example.recipes.presentation.ui.viewpager.transfotmers.HorizontalFlipTransformation
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,7 +35,6 @@ class ViewPagerActivity : AppCompatActivity() {
     private val pageChangeCallback: ViewPager2.OnPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
-            addBottomDots(position)
 
             if (position == layouts.size - 1) {
                 binding.btnNext.text = getString(R.string.start)
@@ -45,7 +43,7 @@ class ViewPagerActivity : AppCompatActivity() {
                 binding.btnNext.text = getString(R.string.next)
                 binding.btnSkip.visibility = View.VISIBLE
             }
-            binding.layoutDots.visibility = View.VISIBLE
+            binding.tabLayoutDots.visibility = View.VISIBLE
         }
     }
 
@@ -53,12 +51,6 @@ class ViewPagerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         _binding = ActivityViewPagerBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-    }
-
-    override fun onStart() {
-        super.onStart()
 
         binding.apply {
             viewPager.adapter = adapter
@@ -76,7 +68,11 @@ class ViewPagerActivity : AppCompatActivity() {
                     launchNextFragment()
                 }
             }
+            TabLayoutMediator(tabLayoutDots, viewPager) { tab, position ->
+            }.attach()
         }
+        setContentView(binding.root)
+
     }
 
     override fun onStop() {
@@ -88,22 +84,6 @@ class ViewPagerActivity : AppCompatActivity() {
         viewModelPager.setNotFirstLaunch()
         startActivity(Intent(this, RecipesActivity::class.java))
         finish()
-    }
-
-    private fun addBottomDots(currentPage: Int) {
-        val dots = arrayOfNulls<TextView>(layouts.size)
-        val colorsActive: IntArray = resources.getIntArray(R.array.array_dot_active)
-
-        binding.layoutDots.removeAllViews()
-        for (i in dots.indices) {
-            dots[i] = TextView(applicationContext)
-            dots[i]?.text = "•"
-            dots[i]?.textSize = 36F
-            dots[i]?.setTextColor(ContextCompat.getColor(applicationContext, R.color.gray))
-
-            binding.layoutDots.addView(dots[i])
-        }
-        if (dots.isNotEmpty()) dots[currentPage]!!.setTextColor(colorsActive[currentPage])
     }
 
     private fun getNextItem(): Int {

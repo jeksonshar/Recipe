@@ -27,11 +27,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/viewPager" />
 
-    <LinearLayout
-        android:id="@+id/layoutDots"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayoutDots"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:orientation="horizontal"
+        app:tabBackground="@drawable/tab_selector"
+        app:tabGravity="center"
+        app:tabIndicatorHeight="0dp"
+        android:background="#00000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
