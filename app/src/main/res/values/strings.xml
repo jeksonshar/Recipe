@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Recipes</string>
     <string name="login">login</string>
+    <string name="email">email</string>
     <string name="password">password</string>
     <string name="confirm_password">confirm password</string>
     <string name="sign_in">Sign In</string>
@@ -27,4 +28,12 @@
     <string name="skip">Skip</string>
     <string name="next">Next</string>
     <string name="start">Start</string>
+    <string name="sign_up_in_recipe_application">Sign Up in Recipe application or Sign In  if you have an account to continue</string>
+    <string name="sign_up_to_continue">SIGN UP</string>
+    <string name="log_in_to_continue">LOG IN</string>
+    <string name="log_in">Log In</string>
+    <string name="value_not_email">значение не является email</string>
+    <string name="min_length_password">минимальная длина пароля 8 символов</string>
+    <string name="value_not_match_password">значение не соответствует паролю</string>
+
 </resources>

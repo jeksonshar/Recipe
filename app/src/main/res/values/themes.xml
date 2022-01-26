@@ -30,4 +30,8 @@
         <item name="postSplashScreenTheme">@style/Theme.Recipes.MaterialCardView</item>
 
     </style>
+
+    <style name="ImageButtonStyle" parent="@style/Widget.AppCompat.Button.Borderless.Colored">
+        <item name="colorOnBackground">@color/green_light</item>
+    </style>
 </resources>

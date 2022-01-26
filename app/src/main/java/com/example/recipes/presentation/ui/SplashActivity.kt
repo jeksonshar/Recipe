@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.recipes.datasouce.local.datastore.RecipeDataStore
 import com.example.recipes.presentation.ui.recipes.RecipesActivity
+import com.example.recipes.presentation.ui.registration.RegistrationActivity
 import com.example.recipes.presentation.ui.viewpager.ViewPagerActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
@@ -21,12 +22,13 @@ class SplashActivity: ComponentActivity() {
         super.onCreate(savedInstanceState)
         installSplashScreen()
 
-        val isNotFirstLaunch = runBlocking { recipeDataStore.checkNotFistLaunch().first() }
-        if (isNotFirstLaunch) {
-            startActivity(Intent(this, RecipesActivity::class.java))
-        } else {
-            startActivity(Intent(this, ViewPagerActivity::class.java))
-        }
+//        val isNotFirstLaunch = runBlocking { recipeDataStore.checkNotFistLaunch().first() }
+//        if (isNotFirstLaunch) {
+//            startActivity(Intent(this, RecipesActivity::class.java))
+//        } else {
+//            startActivity(Intent(this, ViewPagerActivity::class.java))
+//        }
+        startActivity(Intent(this, RegistrationActivity::class.java))
         finish()
     }
 }

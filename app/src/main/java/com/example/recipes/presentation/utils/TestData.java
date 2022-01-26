@@ -1,4 +1,4 @@
-package com.example.recipes.datasouce;
+package com.example.recipes.presentation.utils;
 
 public enum TestData {
     DATA_1,

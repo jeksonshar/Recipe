@@ -28,6 +28,9 @@
 
         <activity android:name=".presentation.ui.recipes.RecipesActivity"
             android:theme="@style/Theme.Recipes"/>
+
+        <activity android:name=".presentation.ui.registration.RegistrationActivity"
+            android:theme="@style/Theme.Recipes"/>
     </application>
 
 </manifest>
