@@ -68,19 +68,21 @@ class RecipeSearchListFragment : Fragment(R.layout.fragment_recipe_list) {
             }
 
             /**
-             *      Альтеранативная doAfterTextChanged {..} реализация живого поиска, более тяжелая и более функцинальная
+            Альтеранативная doAfterTextChanged {..} реализация живого поиска, более тяжелая и более функцинальная
+
+            binding?.etSearch?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            viewModel.liveSearchByQuery(s)
+            }
+            })
              */
-/*//        binding?.etSearch?.addTextChangedListener(object : TextWatcher {
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//            }
-//
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//            }
-//
-//            override fun afterTextChanged(s: Editable?) {
-//                viewModel.liveSearchByQuery(s)
-//            }
-//        })*/
+
 
             ivOpenSearchET.setOnClickListener {
                 viewModelSearch.changeSearchIsOpenedValue(etSearch.visibility)

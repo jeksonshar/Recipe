@@ -11,7 +11,19 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
         android:padding="4dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivRecipeLogo"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginTop="24dp"
+            android:src="@drawable/chef_hat"
+            app:layout_constraintBottom_toTopOf="@id/tvProposeToLogin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvProposeToLogin"
@@ -19,14 +31,14 @@
             android:layout_height="wrap_content"
             android:layout_margin="24dp"
             android:gravity="center"
-            tools:text="@string/sign_up_to_continue"
             android:textColor="@color/purple_700"
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@id/etLogin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:layout_constraintTop_toBottomOf="@id/ivRecipeLogo"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="@string/sign_up_to_continue" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/etLogin"
@@ -45,6 +57,7 @@
             app:startIconDrawable="@drawable/ic_login_icon">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEditLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/email"
@@ -68,6 +81,7 @@
             app:startIconDrawable="@drawable/ic_password_icon">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEditPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/password"
@@ -92,6 +106,7 @@
             app:startIconDrawable="@drawable/ic_confirm_password_icon">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEditConfirmPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/confirm_password"
@@ -104,12 +119,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginVertical="8dp"
-            tools:text="@string/sign_up"
             android:textAllCaps="false"
             app:layout_constraintBottom_toTopOf="@id/tvSwitchLogReg"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etConfirmPassword" />
+            app:layout_constraintTop_toBottomOf="@+id/etConfirmPassword"
+            tools:text="@string/sign_up" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvSwitchLogReg"
@@ -117,6 +132,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
             tools:text="@string/sign_in"
+            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/ibtnGoogle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

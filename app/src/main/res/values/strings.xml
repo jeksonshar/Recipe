@@ -35,5 +35,10 @@
     <string name="value_not_email">значение не является email</string>
     <string name="min_length_password">минимальная длина пароля 8 символов</string>
     <string name="value_not_match_password">значение не соответствует паролю</string>
+    <string name="or_use_social_networks">or use social networks</string>
+
+    <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
+    <string name="facebook_application_id" translatable="false">308378624662427</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb308378624662427</string>
 
 </resources>

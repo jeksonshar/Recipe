@@ -22,13 +22,13 @@ class SplashActivity: ComponentActivity() {
         super.onCreate(savedInstanceState)
         installSplashScreen()
 
-//        val isNotFirstLaunch = runBlocking { recipeDataStore.checkNotFistLaunch().first() }
-//        if (isNotFirstLaunch) {
+        val isNotFirstLaunch = runBlocking { recipeDataStore.checkNotFistLaunch().first() }
+        if (isNotFirstLaunch) {
 //            startActivity(Intent(this, RecipesActivity::class.java))
-//        } else {
-//            startActivity(Intent(this, ViewPagerActivity::class.java))
-//        }
-        startActivity(Intent(this, RegistrationActivity::class.java))
+            startActivity(Intent(this, RegistrationActivity::class.java))
+        } else {
+            startActivity(Intent(this, ViewPagerActivity::class.java))
+        }
         finish()
     }
 }

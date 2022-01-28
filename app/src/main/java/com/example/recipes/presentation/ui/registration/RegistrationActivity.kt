@@ -1,18 +1,26 @@
 package com.example.recipes.presentation.ui.registration
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Patterns
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import com.example.recipes.R
 import com.example.recipes.databinding.ActivityRegistrationBinding
+import com.example.recipes.presentation.ui.recipes.RecipesActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class RegistrationActivity : AppCompatActivity() {
 
     private var _binding: ActivityRegistrationBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var auth: FirebaseAuth
 
     val viewModel: RegistrationViewModel by viewModels()
 
@@ -20,20 +28,10 @@ class RegistrationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityRegistrationBinding.inflate(layoutInflater)
 
-        if (viewModel.confirmPasswordVisibility.value != null) {
-            binding.etConfirmPassword.visibility = viewModel.confirmPasswordVisibility.value!!
-        }
-        if (viewModel.email.value != null) {
-            binding.etLogin.editText?.text = viewModel.email.value
-            binding.etLogin.errorIconDrawable = null
-        }
-        if (viewModel.password.value != null) {
-            binding.etPassword.editText?.text = viewModel.password.value
-            binding.etPassword.errorIconDrawable = null
-        }
-        if (viewModel.confirmPassword.value != null) {
-            binding.etConfirmPassword.editText?.text = viewModel.confirmPassword.value
-            binding.etConfirmPassword.errorIconDrawable = null
+        auth = Firebase.auth
+
+        if (viewModel.signUpOrLogIn.value != null) {
+            binding.etConfirmPassword.visibility = viewModel.signUpOrLogIn.value!!
         }
 
         setContentView(binding.root)
@@ -49,6 +47,13 @@ class RegistrationActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            startActivity(Intent(this, RecipesActivity::class.java))
+            finish()
+        }
 
         if (binding.etConfirmPassword.visibility == View.VISIBLE) {
             setValuesDependingConfirmIsVisible()
@@ -89,7 +94,7 @@ class RegistrationActivity : AppCompatActivity() {
          */
 
         binding.etLogin.editText?.doAfterTextChanged {
-            if (it.isNullOrEmpty() || Patterns.EMAIL_ADDRESS.matcher(it.toString()).matches()) {           // перенести во вьюмодель
+            if (viewModel.checkForWatcherEmail(it.toString())) {
                 binding.etLogin.error = null
             } else {
                 binding.etLogin.error = getString(R.string.value_not_email)
@@ -99,7 +104,7 @@ class RegistrationActivity : AppCompatActivity() {
         }
 
         binding.etPassword.editText?.doAfterTextChanged {
-            if (it.isNullOrEmpty() || it.length > 7) {                                                   // перенести во вьюмодель
+            if (viewModel.checkForWatcherPassword(it.toString())) {
                 binding.etPassword.error = null
             } else {
                 binding.etPassword.error = getString(R.string.min_length_password)
@@ -109,7 +114,7 @@ class RegistrationActivity : AppCompatActivity() {
         }
 
         binding.etConfirmPassword.editText?.doAfterTextChanged {
-            if (it.toString() == binding.etPassword.editText?.text.toString()) {                          // перенести во вьюмодель
+            if (viewModel.checkForWatcherConfirmPassword(binding.etPassword.editText?.text.toString(), it.toString())) {
                 binding.etConfirmPassword.error = null
             } else {
                 binding.etConfirmPassword.error = getString(R.string.value_not_match_password)
@@ -119,10 +124,27 @@ class RegistrationActivity : AppCompatActivity() {
         }
 
         binding.btnSignIn.setOnClickListener {
-//TODO
+            // запустить прогресс бар
+
+            when (viewModel.signUpOrLogIn.value) {
+                RegistrationViewModel.SIGN_UP -> viewModel.signUp(auth)
+                RegistrationViewModel.LOG_IN -> viewModel.logIn(auth)
+            }
         }
 
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        viewModel.toast.observe(this, {
+            showToast(it)
+        })
+
+        viewModel.user.observe(this, {
+            openRecipeByUser(it)
+        })
     }
 
     private fun setValuesDependingConfirmIsVisible() {
@@ -136,6 +158,19 @@ class RegistrationActivity : AppCompatActivity() {
         binding.btnSignIn.setText(R.string.sign_in)
         binding.tvSwitchLogReg.setText(R.string.sign_up)
     }
+
+    private fun openRecipeByUser(user: FirebaseUser?) {
+        // если запущен прогресс бар - прячем его
+        if (user != null) {
+            startActivity(Intent(this, RecipesActivity::class.java))
+            viewModel.setFirebaseUser(user)
+        }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    }
+
 }
 
 //val <T> T.exclusive: T

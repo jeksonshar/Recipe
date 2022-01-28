@@ -9,6 +9,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.recipes.R
 import com.example.recipes.databinding.ActivityViewPagerBinding
 import com.example.recipes.presentation.ui.recipes.RecipesActivity
+import com.example.recipes.presentation.ui.registration.RegistrationActivity
 import com.example.recipes.presentation.ui.viewpager.transfotmers.HorizontalFlipTransformation
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -82,7 +83,8 @@ class ViewPagerActivity : AppCompatActivity() {
 
     private fun launchNextFragment() {
         viewModelPager.setNotFirstLaunch()
-        startActivity(Intent(this, RecipesActivity::class.java))
+//        startActivity(Intent(this, RecipesActivity::class.java))
+        startActivity(Intent(this, RegistrationActivity::class.java))
         finish()
     }
 
