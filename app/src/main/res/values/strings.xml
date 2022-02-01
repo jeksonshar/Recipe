@@ -33,6 +33,7 @@
     <string name="log_in_to_continue">LOG IN</string>
     <string name="log_in">Log In</string>
     <string name="value_not_email">значение не является email</string>
+    <string name="user_name_not_set">Имя пользователя не задано</string>
     <string name="min_length_password">минимальная длина пароля 8 символов</string>
     <string name="value_not_match_password">значение не соответствует паролю</string>
     <string name="or_use_social_networks">or use social networks</string>
@@ -45,5 +46,6 @@
     <string name="profile">Profile</string>
     <string name="header_title">Header title</string>
     <string name="header_text">Header text</string>
+    <string name="user_name">user name</string>
 
 </resources>

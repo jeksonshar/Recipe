@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import com.example.recipes.R
 import com.example.recipes.databinding.ActivityRegistrationBinding
@@ -31,8 +30,9 @@ class RegistrationActivity : AppCompatActivity() {
 
         auth = Firebase.auth
 
-        if (viewModel.signUpOrLogIn.value != null) {
-            binding.etConfirmPassword.visibility = viewModel.signUpOrLogIn.value!!
+        binding.apply {
+            etConfirmPassword.visibility = viewModel.signUpOrLogIn.value!!
+            etUserName.visibility = viewModel.signUpOrLogIn.value!!
         }
 
         setContentView(binding.root)
@@ -62,15 +62,19 @@ class RegistrationActivity : AppCompatActivity() {
             setValuesDependingConfirmIsGone()
         }
 
-        binding.tvSwitchLogReg.setOnClickListener {
-            if (binding.etConfirmPassword.visibility == View.VISIBLE) {
-                binding.etConfirmPassword.visibility = View.GONE
-                setValuesDependingConfirmIsGone()
-            } else {
-                binding.etConfirmPassword.visibility = View.VISIBLE
-                setValuesDependingConfirmIsVisible()
+        binding.apply {
+            tvSwitchLogReg.setOnClickListener {
+                if (etConfirmPassword.visibility == View.VISIBLE) {
+                    etConfirmPassword.visibility = View.GONE
+                    etUserName.visibility = View.GONE
+                    setValuesDependingConfirmIsGone()
+                } else {
+                    etConfirmPassword.visibility = View.VISIBLE
+                    etUserName.visibility = View.VISIBLE
+                    setValuesDependingConfirmIsVisible()
+                }
+                viewModel.changeConfirmPasswordVisibility(etConfirmPassword.visibility)
             }
-            viewModel.changeConfirmPasswordVisibility(binding.etConfirmPassword.visibility)
         }
 
         /** Альтеранативная doAfterTextChanged {..} реализация живого listener-a, более тяжелая и более функцинальная
@@ -93,44 +97,58 @@ class RegistrationActivity : AppCompatActivity() {
         })
          */
 
-        binding.etLogin.editText?.doAfterTextChanged {
-            if (viewModel.checkForWatcherEmail(it.toString())) {
-                binding.etLogin.error = null
-            } else {
-                binding.etLogin.error = getString(R.string.value_not_email)
-                binding.etLogin.errorIconDrawable = null
+        binding.apply {
+
+            etLogin.editText?.doAfterTextChanged {
+                if (viewModel.checkForWatcherEmail(it.toString())) {
+                    etLogin.error = null
+                } else {
+                    etLogin.error = getString(R.string.value_not_email)
+                    etLogin.errorIconDrawable = null
+                }
+                viewModel.setEmail(it)
             }
-            viewModel.setEmail(it)
+
+            etUserName.editText?.doAfterTextChanged {
+                if (viewModel.checkForWatcherUserName(it.toString())) {
+                    etUserName.error = null
+                } else {
+                    etUserName.error = getString(R.string.user_name_not_set)
+                }
+                viewModel.setUserName(it)
+            }
+
+            etPassword.editText?.doAfterTextChanged {
+                if (viewModel.checkForWatcherPassword(it.toString())) {
+                    etPassword.error = null
+                } else {
+                    etPassword.error = getString(R.string.min_length_password)
+                    etPassword.errorIconDrawable = null
+                }
+                viewModel.setPassword(it)
+            }
+
+            etConfirmPassword.editText?.doAfterTextChanged {
+                if (viewModel.checkForWatcherConfirmPassword(etPassword.editText?.text.toString(), it.toString())) {
+                    etConfirmPassword.error = null
+                } else {
+                    etConfirmPassword.error = getString(R.string.value_not_match_password)
+                    etConfirmPassword.errorIconDrawable = null
+                }
+                viewModel.setConfirmPassword(it)
+            }
         }
 
-        binding.etPassword.editText?.doAfterTextChanged {
-            if (viewModel.checkForWatcherPassword(it.toString())) {
-                binding.etPassword.error = null
-            } else {
-                binding.etPassword.error = getString(R.string.min_length_password)
-                binding.etPassword.errorIconDrawable = null
-            }
-            viewModel.setPassword(it)
-        }
+        binding.apply {
+            btnSignIn.setOnClickListener {
+                // запустить прогресс бар
+                progressSinging.visibility = View.VISIBLE
+                btnSignIn.visibility = View.INVISIBLE
 
-        binding.etConfirmPassword.editText?.doAfterTextChanged {
-            if (viewModel.checkForWatcherConfirmPassword(binding.etPassword.editText?.text.toString(), it.toString())) {
-                binding.etConfirmPassword.error = null
-            } else {
-                binding.etConfirmPassword.error = getString(R.string.value_not_match_password)
-                binding.etConfirmPassword.errorIconDrawable = null
-            }
-            viewModel.setConfirmPassword(it)
-        }
-
-        binding.btnSignIn.setOnClickListener {
-            // запустить прогресс бар
-            binding.progressSinging.visibility = View.VISIBLE
-            binding.btnSignIn.visibility = View.INVISIBLE
-
-            when (viewModel.signUpOrLogIn.value) {
-                RegistrationViewModel.SIGN_UP -> viewModel.signUp(auth)
-                RegistrationViewModel.LOG_IN -> viewModel.logIn(auth)
+                when (viewModel.signUpOrLogIn.value) {
+                    RegistrationViewModel.SIGN_UP -> viewModel.signUp(auth)
+                    RegistrationViewModel.LOG_IN -> viewModel.logIn(auth)
+                }
             }
         }
 
@@ -150,21 +168,27 @@ class RegistrationActivity : AppCompatActivity() {
     }
 
     private fun setValuesDependingConfirmIsVisible() {
-        binding.tvProposeToLogin.setText(R.string.sign_up_to_continue)
-        binding.btnSignIn.setText(R.string.sign_up)
-        binding.tvSwitchLogReg.setText(R.string.log_in)
+        binding.apply {
+            tvProposeToLogin.setText(R.string.sign_up_to_continue)
+            btnSignIn.setText(R.string.sign_up)
+            tvSwitchLogReg.setText(R.string.log_in)
+        }
     }
 
     private fun setValuesDependingConfirmIsGone() {
-        binding.tvProposeToLogin.setText(R.string.log_in_to_continue)
-        binding.btnSignIn.setText(R.string.sign_in)
-        binding.tvSwitchLogReg.setText(R.string.sign_up)
+        binding.apply {
+            tvProposeToLogin.setText(R.string.log_in_to_continue)
+            btnSignIn.setText(R.string.sign_in)
+            tvSwitchLogReg.setText(R.string.sign_up)
+        }
     }
 
     private fun openRecipeByUser(user: FirebaseUser?) {
         // если запущен прогресс бар - прячем его
-        binding.progressSinging.visibility = View.INVISIBLE
-        binding.btnSignIn.visibility = View.VISIBLE
+        binding.apply {
+            progressSinging.visibility = View.INVISIBLE
+            btnSignIn.visibility = View.VISIBLE
+        }
 
         if (user != null) {
             startActivity(Intent(this, RecipesActivity::class.java))

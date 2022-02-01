@@ -17,6 +17,7 @@ class RegistrationViewModel : ViewModel() {
 
     val signUpOrLogIn = MutableLiveData(LOG_IN)
     private val email = MutableLiveData<Editable>()
+    private val userName = MutableLiveData<Editable>()
     private val password = MutableLiveData<Editable>()
     private val confirmPassword = MutableLiveData<Editable>()
 
@@ -31,6 +32,10 @@ class RegistrationViewModel : ViewModel() {
         value?.let { email.value = it }
     }
 
+    fun setUserName(value: Editable?) {
+        value.let { userName.value = it }
+    }
+
     fun setPassword(value: Editable?) {
         value?.let { password.value = it }
     }
@@ -40,7 +45,7 @@ class RegistrationViewModel : ViewModel() {
     }
 
     fun signUp(auth: FirebaseAuth) {
-        if (checkForClickPasswordsSingUp() && checkForClickEmail()) {
+        if (checkForClickPasswordsSingUp() && checkForClickEmail() && checkForClickUserName()) {
             auth.createUserWithEmailAndPassword(email.value.toString(), password.value.toString())          // перенести в юзкейс
                 .addOnCompleteListener { task ->
                     taskResultSingUp(task)
@@ -59,8 +64,8 @@ class RegistrationViewModel : ViewModel() {
     }
 
     private fun setName(auth: FirebaseAuth) {
-        auth.currentUser?.updateProfile(userProfileChangeRequest {                                           // для пробы, потом изменить
-            displayName = "Jekson"
+        auth.currentUser?.updateProfile(userProfileChangeRequest {                                           // перенести в юзкейс
+            displayName = userName.value.toString()
         })?.addOnCompleteListener {
             if (it.isSuccessful) {
                 user.value = auth.currentUser
@@ -92,6 +97,10 @@ class RegistrationViewModel : ViewModel() {
 
     fun checkForWatcherEmail(email: String): Boolean {
         return email.isEmpty() || Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+    fun checkForWatcherUserName(userName: String): Boolean {
+        return userName.isNotEmpty()
     }
 
     fun checkForWatcherPassword(password: String): Boolean {
@@ -151,6 +160,17 @@ class RegistrationViewModel : ViewModel() {
             !Patterns.EMAIL_ADDRESS.matcher(email.value.toString()).matches() -> {
                 message = "email не соответзтвует"
                 toast.value = message
+                user.value = null
+                false
+            }
+            else -> true
+        }
+    }
+
+    private fun checkForClickUserName(): Boolean {
+        return when {
+            userName.value.isNullOrEmpty() -> {
+                toast.value = "имя пользователя не заполнено"
                 user.value = null
                 false
             }

@@ -48,7 +48,7 @@
             android:layout_marginHorizontal="16dp"
             app:endIconMode="clear_text"
             app:errorEnabled="true"
-            app:layout_constraintBottom_toTopOf="@+id/etPassword"
+            app:layout_constraintBottom_toTopOf="@+id/etUserName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvProposeToLogin"
@@ -66,6 +66,31 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etUserName"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/etLogin"
+            app:layout_constraintBottom_toTopOf="@id/etPassword"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:startIconDrawable="@drawable/ic_name_id"
+            app:startIconContentDescription="User name">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEditUserName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/user_name"
+                android:inputType="textEmailAddress"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/etPassword"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
@@ -75,7 +100,7 @@
             app:layout_constraintBottom_toTopOf="@+id/etConfirmPassword"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etLogin"
+            app:layout_constraintTop_toBottomOf="@id/etUserName"
             app:passwordToggleEnabled="true"
             app:startIconContentDescription="@string/password"
             app:startIconDrawable="@drawable/ic_password_icon">
