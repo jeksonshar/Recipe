@@ -74,9 +74,9 @@ class RecipeSearchListFragment : Fragment(R.layout.fragment_recipe_list) {
             auth = Firebase.auth
             val navController = findNavController()
             val appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
-            binding.titleOfList.setupWithNavController(navController, appBarConfiguration)
-            val header = navView.getHeaderView(0)
+            titleOfList.setupWithNavController(navController, appBarConfiguration)
 
+            val header = navView.getHeaderView(0)
             header.findViewById<TextView>(R.id.headerTitle).text = auth.currentUser?.displayName
             header.findViewById<TextView>(R.id.headerText).text = auth.currentUser?.email
 
@@ -119,7 +119,7 @@ class RecipeSearchListFragment : Fragment(R.layout.fragment_recipe_list) {
 
             bottomNavigation.selectedItemId = R.id.recipeSearchListFragment
 
-//            bottomNavigation.setupWithNavController(findNavController()) // при нажатии назад selectedItem остается на предидущем значении
+//            bottomNavigation.setupWithNavController(findNavController())          // при нажатии назад selectedItem остается на предидущем значении
             bottomNavigation.setOnItemSelectedListener {
                 when (it.itemId) {
                     R.id.favoriteListFragment -> {
@@ -134,6 +134,7 @@ class RecipeSearchListFragment : Fragment(R.layout.fragment_recipe_list) {
                 when(it.itemId) {
                     R.id.favoriteListFragment -> {
                         findNavController().navigate(R.id.action_recipeSearchListFragment_to_favoriteListFragment)
+                        drawerLayout.close()
                         false
                     }
                     R.id.recipeSearchListFragment -> {

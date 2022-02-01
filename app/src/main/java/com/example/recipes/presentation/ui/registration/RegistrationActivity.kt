@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import com.example.recipes.R
 import com.example.recipes.databinding.ActivityRegistrationBinding
@@ -124,6 +125,8 @@ class RegistrationActivity : AppCompatActivity() {
 
         binding.btnSignIn.setOnClickListener {
             // запустить прогресс бар
+            binding.progressSinging.visibility = View.VISIBLE
+            binding.btnSignIn.visibility = View.INVISIBLE
 
             when (viewModel.signUpOrLogIn.value) {
                 RegistrationViewModel.SIGN_UP -> viewModel.signUp(auth)
@@ -160,9 +163,13 @@ class RegistrationActivity : AppCompatActivity() {
 
     private fun openRecipeByUser(user: FirebaseUser?) {
         // если запущен прогресс бар - прячем его
+        binding.progressSinging.visibility = View.INVISIBLE
+        binding.btnSignIn.visibility = View.VISIBLE
+
         if (user != null) {
             startActivity(Intent(this, RecipesActivity::class.java))
             viewModel.setFirebaseUser(user)
+            finish()
         }
     }
 

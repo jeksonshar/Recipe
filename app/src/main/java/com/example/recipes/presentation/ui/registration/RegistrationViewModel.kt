@@ -20,7 +20,7 @@ class RegistrationViewModel : ViewModel() {
     private val password = MutableLiveData<Editable>()
     private val confirmPassword = MutableLiveData<Editable>()
 
-    val user = MutableLiveData<FirebaseUser>()
+    val user = MutableLiveData<FirebaseUser?>()
     val toast = MutableLiveData<String>()
 
     fun changeConfirmPasswordVisibility(value: Int) {
@@ -73,6 +73,7 @@ class RegistrationViewModel : ViewModel() {
         when (task.exception) {
             is Exception -> {
                 task.exception?.localizedMessage?.let { message -> toast.value = message }
+                user.value = null
             }
         }
     }
@@ -84,6 +85,7 @@ class RegistrationViewModel : ViewModel() {
             }
             task.exception is Exception -> {
                 task.exception?.localizedMessage?.let { message -> toast.value = message }
+                user.value = null
             }
         }
     }
@@ -104,14 +106,17 @@ class RegistrationViewModel : ViewModel() {
         return when {
             password.value.isNullOrEmpty() || confirmPassword.value.isNullOrEmpty() -> {
                 toast.value = "Пароли не заполнены"
+                user.value = null
                 false
             }
             password.value!!.length < 8 -> {
                 toast.value = "Длина пароля должна быть не менее 8 символов"
+                user.value = null
                 false
             }
             password.value.toString() != confirmPassword.value.toString() -> {
                 toast.value = "Пароли не совпадают"
+                user.value = null
                 false
             }
             else -> true
@@ -122,10 +127,12 @@ class RegistrationViewModel : ViewModel() {
         return when {
             password.value.isNullOrEmpty() -> {
                 toast.value = "Пароль не заполнен"
+                user.value = null
                 false
             }
             password.value!!.length < 8 -> {
                 toast.value = "Длина пароля должна быть не менее 8 символов"
+                user.value = null
                 false
             }
             else -> true
@@ -138,11 +145,13 @@ class RegistrationViewModel : ViewModel() {
             email.value.isNullOrEmpty() -> {
                 message = "email не заполнен"
                 toast.value = message
+                user.value = null
                 false
             }
             !Patterns.EMAIL_ADDRESS.matcher(email.value.toString()).matches() -> {
                 message = "email не соответзтвует"
                 toast.value = message
+                user.value = null
                 false
             }
             else -> true

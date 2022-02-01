@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -56,9 +57,15 @@ class FavoriteListFragment : Fragment(R.layout.fragment_recipe_list) {
         _binding = FragmentRecipeListBinding.inflate(inflater, container, false)
         binding.apply {
 
+            val auth = Firebase.auth
+
             val navController = findNavController()
             val appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
             binding.titleOfList.setupWithNavController(navController, appBarConfiguration)
+
+            val header = navView.getHeaderView(0)
+            header.findViewById<TextView>(R.id.headerTitle).text = auth.currentUser?.displayName
+            header.findViewById<TextView>(R.id.headerText).text = auth.currentUser?.email
 
             recyclerRecipe.layoutManager = GridLayoutManager(requireContext(), 2)
             recyclerRecipe.adapter = adapter
