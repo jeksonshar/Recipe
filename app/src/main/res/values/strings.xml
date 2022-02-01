@@ -40,5 +40,10 @@
     <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
     <string name="facebook_application_id" translatable="false">308378624662427</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb308378624662427</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="settings">Settings</string>
+    <string name="profile">Profile</string>
+    <string name="header_title">Header title</string>
+    <string name="header_text">Header text</string>
 
 </resources>

@@ -70,7 +70,6 @@ class RegistrationActivity : AppCompatActivity() {
                 setValuesDependingConfirmIsVisible()
             }
             viewModel.changeConfirmPasswordVisibility(binding.etConfirmPassword.visibility)
-            binding.etLogin.editText?.text?.let { email -> viewModel.setEmail(email) }
         }
 
         /** Альтеранативная doAfterTextChanged {..} реализация живого listener-a, более тяжелая и более функцинальная

@@ -1,6 +1,7 @@
 package com.example.recipes.presentation.ui.recipes.favoritelist
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,11 +10,16 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.recipes.R
 import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.databinding.FragmentRecipeListBinding
 import com.example.recipes.presentation.ui.recipes.RecipeClickListener
+import com.example.recipes.presentation.ui.registration.RegistrationActivity
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -49,6 +55,11 @@ class FavoriteListFragment : Fragment(R.layout.fragment_recipe_list) {
     ): View {
         _binding = FragmentRecipeListBinding.inflate(inflater, container, false)
         binding.apply {
+
+            val navController = findNavController()
+            val appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
+            binding.titleOfList.setupWithNavController(navController, appBarConfiguration)
+
             recyclerRecipe.layoutManager = GridLayoutManager(requireContext(), 2)
             recyclerRecipe.adapter = adapter
 
@@ -70,6 +81,26 @@ class FavoriteListFragment : Fragment(R.layout.fragment_recipe_list) {
             }
 
             viewModelFavorite.getFavoriteRecipes()
+
+            navView.setNavigationItemSelectedListener {
+                when(it.itemId) {
+                    R.id.favoriteListFragment -> {
+                        drawerLayout.close()
+                        false
+                    }
+                    R.id.recipeSearchListFragment -> {
+                        findNavController().navigate(R.id.action_favoriteListFragment_to_recipeSearchListFragment)
+                        false
+                    }
+                    R.id.signOut -> {
+                        Firebase.auth.signOut()
+                        startActivity(Intent(requireContext(), RegistrationActivity::class.java))
+                        requireActivity().finish()
+                        false
+                    }
+                    else -> false
+                }
+            }
         }
         return binding.root
     }

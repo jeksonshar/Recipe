@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import java.lang.Exception
 
 class RegistrationViewModel : ViewModel() {
@@ -42,7 +43,8 @@ class RegistrationViewModel : ViewModel() {
         if (checkForClickPasswordsSingUp() && checkForClickEmail()) {
             auth.createUserWithEmailAndPassword(email.value.toString(), password.value.toString())          // перенести в юзкейс
                 .addOnCompleteListener { task ->
-                    taskResult(task, auth)
+                    taskResultSingUp(task)
+                    setName(auth)
                 }
         }
     }
@@ -51,12 +53,31 @@ class RegistrationViewModel : ViewModel() {
         if (checkForClickEmail() && checkForClickPasswordSingIn()) {
             auth.signInWithEmailAndPassword(email.value.toString(), password.value.toString())              // перенести в юзкейс
                 .addOnCompleteListener { task ->
-                    taskResult(task, auth)
+                    taskResultLogIn(task, auth)
                 }
         }
     }
 
-    private fun taskResult(task: Task<AuthResult>, auth: FirebaseAuth) {
+    private fun setName(auth: FirebaseAuth) {
+        auth.currentUser?.updateProfile(userProfileChangeRequest {                                           // для пробы, потом изменить
+            displayName = "Jekson"
+        })?.addOnCompleteListener {
+            if (it.isSuccessful) {
+                user.value = auth.currentUser
+            }
+        }
+
+    }
+
+    private fun taskResultSingUp(task: Task<AuthResult>) {
+        when (task.exception) {
+            is Exception -> {
+                task.exception?.localizedMessage?.let { message -> toast.value = message }
+            }
+        }
+    }
+
+    private fun taskResultLogIn(task: Task<AuthResult>, auth: FirebaseAuth) {
         when {
             task.isSuccessful -> {
                 user.value = auth.currentUser
