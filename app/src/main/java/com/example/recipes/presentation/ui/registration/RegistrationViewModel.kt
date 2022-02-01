@@ -71,7 +71,6 @@ class RegistrationViewModel : ViewModel() {
                 user.value = auth.currentUser
             }
         }
-
     }
 
     private fun taskResultSingUp(task: Task<AuthResult>) {

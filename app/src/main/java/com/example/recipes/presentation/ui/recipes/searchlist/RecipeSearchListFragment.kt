@@ -144,6 +144,7 @@ class RecipeSearchListFragment : Fragment(R.layout.fragment_recipe_list) {
                     R.id.signOut -> {
                         auth.signOut()
                         startActivity(Intent(requireContext(), RegistrationActivity::class.java))
+                        viewModelSearch.resetLastQuery()
                         requireActivity().finish()
                         false
                     }
@@ -178,7 +179,7 @@ class RecipeSearchListFragment : Fragment(R.layout.fragment_recipe_list) {
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModelSearch.queryHandler.collect {
-                if (it != null) {
+                if (!it.isNullOrEmpty()) {
                     if (BackPressedSingleton.isBackPressClick == null) {
                         lifecycleScope.launch {
                             viewModelSearch.recipes(it)?.collectLatest { pagingData ->

@@ -31,7 +31,7 @@ class RecipeSearchListViewModel @Inject constructor(
     private var newPagingSource: PagingSource<*, *>? = null
 
     fun recipes(query: String?): Flow<PagingData<Recipe>>? {
-        return if (query != null) {
+        return if (!query.isNullOrEmpty()) {
             queryHandler
                 .map(::newPager)
                 .flatMapLatest { pager -> pager!!.flow }
@@ -57,7 +57,7 @@ class RecipeSearchListViewModel @Inject constructor(
         if (query != null && query.isNotEmpty()) {
             if (query[query.length - 1] == ' ' && query.length > 2) {
                 viewModelScope.launch {
-                    recipeDataStore.setLastQuery(query.toString())
+                    setQueryToDatastore(query.toString())
                 }
             }
         }
@@ -67,10 +67,20 @@ class RecipeSearchListViewModel @Inject constructor(
         if (query != null && query.isNotEmpty()) {
             if (query.length > 1) {
                 viewModelScope.launch {
-                    recipeDataStore.setLastQuery(query.toString())
+                    setQueryToDatastore(query.toString())
                 }
             }
         }
+    }
+
+    fun resetLastQuery() {
+        viewModelScope.launch {
+            setQueryToDatastore("")
+        }
+    }
+
+    private suspend fun setQueryToDatastore(query: String) {
+        recipeDataStore.setLastQuery(query)
     }
 
     fun changeSearchIsOpenedValue(currentVisibility: Int) {
