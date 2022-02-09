@@ -22,7 +22,7 @@ class RegistrationViewModel : ViewModel() {
     private val confirmPassword = MutableLiveData<Editable>()
 
     val user = MutableLiveData<FirebaseUser?>()
-    val toast = MutableLiveData<String>()
+    val messageForUser = MutableLiveData<String>(null)
 
     fun changeConfirmPasswordVisibility(value: Int) {
         signUpOrLogIn.value = value
@@ -63,6 +63,21 @@ class RegistrationViewModel : ViewModel() {
         }
     }
 
+    fun sendPasswordResetEmail(auth: FirebaseAuth) {
+        if (checkForClickEmail()) {
+            auth.sendPasswordResetEmail(email.value.toString())
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        messageForUser.value = "На указанную почту было что-то отправлено"
+                    } else {
+                        task.exception?.localizedMessage?.let { message ->
+                            messageForUser.value = message
+                        }
+                    }
+                }
+        }
+    }
+
     private fun setName(auth: FirebaseAuth) {
         auth.currentUser?.updateProfile(userProfileChangeRequest {                                           // перенести в юзкейс
             displayName = userName.value.toString()
@@ -76,7 +91,7 @@ class RegistrationViewModel : ViewModel() {
     private fun taskResultSingUp(task: Task<AuthResult>) {
         when (task.exception) {
             is Exception -> {
-                task.exception?.localizedMessage?.let { message -> toast.value = message }
+                task.exception?.localizedMessage?.let { message -> messageForUser.value = message }
                 user.value = null
             }
         }
@@ -88,7 +103,7 @@ class RegistrationViewModel : ViewModel() {
                 user.value = auth.currentUser
             }
             task.exception is Exception -> {
-                task.exception?.localizedMessage?.let { message -> toast.value = message }
+                task.exception?.localizedMessage?.let { message -> messageForUser.value = message }
                 user.value = null
             }
         }
@@ -113,17 +128,17 @@ class RegistrationViewModel : ViewModel() {
     private fun checkForClickPasswordsSingUp(): Boolean {
         return when {
             password.value.isNullOrEmpty() || confirmPassword.value.isNullOrEmpty() -> {
-                toast.value = "Пароли не заполнены"
+                messageForUser.value = "Пароли не заполнены"
                 user.value = null
                 false
             }
             password.value!!.length < 8 -> {
-                toast.value = "Длина пароля должна быть не менее 8 символов"
+                messageForUser.value = "Длина пароля должна быть не менее 8 символов"
                 user.value = null
                 false
             }
             password.value.toString() != confirmPassword.value.toString() -> {
-                toast.value = "Пароли не совпадают"
+                messageForUser.value = "Пароли не совпадают"
                 user.value = null
                 false
             }
@@ -134,12 +149,12 @@ class RegistrationViewModel : ViewModel() {
     private fun checkForClickPasswordSingIn(): Boolean {
         return when {
             password.value.isNullOrEmpty() -> {
-                toast.value = "Пароль не заполнен"
+                messageForUser.value = "Пароль не заполнен"
                 user.value = null
                 false
             }
             password.value!!.length < 8 -> {
-                toast.value = "Длина пароля должна быть не менее 8 символов"
+                messageForUser.value = "Длина пароля должна быть не менее 8 символов"
                 user.value = null
                 false
             }
@@ -152,13 +167,13 @@ class RegistrationViewModel : ViewModel() {
         return when {
             email.value.isNullOrEmpty() -> {
                 message = "email не заполнен"
-                toast.value = message
+                messageForUser.value = message
                 user.value = null
                 false
             }
             !Patterns.EMAIL_ADDRESS.matcher(email.value.toString()).matches() -> {
                 message = "email не соответзтвует"
-                toast.value = message
+                messageForUser.value = message
                 user.value = null
                 false
             }
@@ -169,7 +184,7 @@ class RegistrationViewModel : ViewModel() {
     private fun checkForClickUserName(): Boolean {
         return when {
             userName.value.isNullOrEmpty() -> {
-                toast.value = "имя пользователя не заполнено"
+                messageForUser.value = "имя пользователя не заполнено"
                 user.value = null
                 false
             }

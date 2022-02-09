@@ -9,10 +9,8 @@
     <string name="recipes">Recipes</string>
     <string name="name_of_recipe">Name of recipe</string>
     <string name="type_your_query">Type your query for searching</string>
-    <string name="retry">Retry</string>
     <string name="error_message">Error message</string>
     <string name="no_internet_connection_message">You need internet connection to load.</string>
-    <string name="ok">OK</string>
     <string name="name_recipe">Name recipe</string>
     <string name="ingredients">Ingredients:</string>
     <string name="test_text">Test text</string>
@@ -38,14 +36,17 @@
     <string name="value_not_match_password">значение не соответствует паролю</string>
     <string name="or_use_social_networks">or use social networks</string>
 
-    <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
     <string name="facebook_application_id" translatable="false">308378624662427</string>
+    <!-- Facebook Application ID, prefixed by 'fb'. Enables Chrome Custom tabs. -->
     <string name="facebook_login_protocol_scheme" translatable="false">fb308378624662427</string>
+
     <string name="sign_out">Sign Out</string>
     <string name="settings">Settings</string>
     <string name="profile">Profile</string>
     <string name="header_title">Header title</string>
     <string name="header_text">Header text</string>
     <string name="user_name">user name</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="description_actions_at_forget_password">On your email address will send email for reset password</string>
 
 </resources>

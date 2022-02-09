@@ -201,18 +201,18 @@ class RecipeSearchListFragment : Fragment(R.layout.fragment_recipe_list) {
             }
         }
 
-        viewModelSearch.searchIsOpened.observe(viewLifecycleOwner, {
+        viewModelSearch.searchIsOpened.observe(viewLifecycleOwner) {
             binding.etSearch.visibility = it
             if (it == RecipeSearchListViewModel.VIEW_VISIBLE) {
                 binding.ivOpenSearchET.setImageResource(R.drawable.up_arrow)
             } else {
                 binding.ivOpenSearchET.setImageResource(R.drawable.search)
             }
-        })
+        }
 
-        pagingAdapter?.loadStateFlow?.asLiveData()?.observe(viewLifecycleOwner, {
+        pagingAdapter?.loadStateFlow?.asLiveData()?.observe(viewLifecycleOwner) {
             binding.progressBarPaging.isVisible = it.append is LoadState.Loading
-        })
+        }
     }
 
     override fun onDestroyView() {
