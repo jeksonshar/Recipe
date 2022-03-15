@@ -3,6 +3,7 @@ package com.example.recipes.presentation.ui.registration
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -219,6 +220,7 @@ class RegistrationActivity : AppCompatActivity(), ConfirmationListener {
 
     private fun onSignInWithSocialResult(result: FirebaseAuthUIAuthenticationResult) {
         val response = result.idpResponse
+        Log.d("TAG", "onSignInWithSocialResult: ${result.resultCode}")
         if (result.resultCode == RESULT_OK) {
             moveToRecipeActivity()
         } else {

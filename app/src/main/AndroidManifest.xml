@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.recipes">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -12,10 +13,34 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/recipe_launcher_round"
         android:supportsRtl="true">
+
+        <!-- See at https://firebase.google.com/docs/auth/android/firebaseui
+                <meta-data
+                    android:name="com.facebook.sdk.ApplicationId"
+                    android:value="@string/facebook_application_id"
+                    tools:replace="android:value" />
+
+                <activity
+                    android:name="com.facebook.FacebookActivity"
+                    android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />
+                <activity
+                    android:name="com.facebook.CustomTabActivity"
+                    android:exported="true">
+                    <intent-filter>
+                        <action android:name="android.intent.action.VIEW" />
+
+                        <category android:name="android.intent.category.DEFAULT" />
+                        <category android:name="android.intent.category.BROWSABLE" />
+
+                        <data android:scheme="@string/facebook_login_protocol_scheme" />
+                    </intent-filter>
+                </activity>
+        -->
+
         <activity
             android:name=".presentation.ui.SplashActivity"
-            android:theme="@style/SplashTheme"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,14 +48,17 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".presentation.ui.viewpager.ViewPagerActivity"
-            android:theme="@style/Theme.Recipes"/>
+        <activity
+            android:name=".presentation.ui.viewpager.ViewPagerActivity"
+            android:theme="@style/Theme.Recipes" />
 
-        <activity android:name=".presentation.ui.recipes.RecipesActivity"
-            android:theme="@style/Theme.Recipes"/>
+        <activity
+            android:name=".presentation.ui.recipes.RecipesActivity"
+            android:theme="@style/Theme.Recipes" />
 
-        <activity android:name=".presentation.ui.registration.RegistrationActivity"
-            android:theme="@style/Theme.Recipes"/>
+        <activity
+            android:name=".presentation.ui.registration.RegistrationActivity"
+            android:theme="@style/Theme.Recipes" />
     </application>
 
 </manifest>
