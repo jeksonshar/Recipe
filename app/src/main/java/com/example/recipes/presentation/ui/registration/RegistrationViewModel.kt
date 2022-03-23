@@ -3,6 +3,7 @@ package com.example.recipes.presentation.ui.registration
 import android.text.Editable
 import android.util.Patterns
 import android.view.View
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.recipes.business.domain.singletons.FirebaseUserSingleton
@@ -15,7 +16,9 @@ import java.lang.Exception
 
 class RegistrationViewModel : ViewModel() {
 
-    val signUpOrLogIn = MutableLiveData(LOG_IN)
+    private val _signUpOrLogIn = MutableLiveData(LOG_IN)
+    val signUpOrLogIn: LiveData<Int> = _signUpOrLogIn
+
     private val email = MutableLiveData<Editable>()
     private val userName = MutableLiveData<Editable>()
     private val password = MutableLiveData<Editable>()
@@ -25,7 +28,7 @@ class RegistrationViewModel : ViewModel() {
     val messageForUser = MutableLiveData<String>(null)
 
     fun changeConfirmPasswordVisibility(value: Int) {
-        signUpOrLogIn.value = value
+        _signUpOrLogIn.value = value
     }
 
     fun setEmail(value: Editable?) {
