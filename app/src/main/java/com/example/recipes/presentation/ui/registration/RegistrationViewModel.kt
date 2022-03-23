@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import java.lang.Exception
 
+//test remote удалить
 class RegistrationViewModel : ViewModel() {
 
     private val _signUpOrLogIn = MutableLiveData(LOG_IN)
