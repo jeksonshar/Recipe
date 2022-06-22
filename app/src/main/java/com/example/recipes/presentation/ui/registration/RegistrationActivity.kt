@@ -1,15 +1,13 @@
 package com.example.recipes.presentation.ui.registration
 
-import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
+import androidx.databinding.DataBindingUtil
 import com.example.recipes.R
 import com.example.recipes.databinding.ActivityRegistrationBinding
 import com.example.recipes.presentation.ui.recipes.RecipesActivity
@@ -26,8 +24,8 @@ import com.google.firebase.ktx.Firebase
 
 class RegistrationActivity : AppCompatActivity(), ConfirmationListener {
 
-    private var _binding: ActivityRegistrationBinding? = null
-    private val binding get() = _binding!!
+//    private var _binding: ActivityRegistrationBinding? = null
+//    private val binding get() = _binding!!
 
     private lateinit var auth: FirebaseAuth
 
@@ -39,19 +37,26 @@ class RegistrationActivity : AppCompatActivity(), ConfirmationListener {
 
     val viewModel: RegistrationViewModel by viewModels()
 
+    lateinit var binding: ActivityRegistrationBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivityRegistrationBinding.inflate(layoutInflater)
+//        _binding = ActivityRegistrationBinding.inflate(layoutInflater)
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_registration)
+        binding.lifecycleOwner = this
+        binding.vm = viewModel
 
         auth = Firebase.auth
 
-        binding.apply {
-            etConfirmPassword.visibility = viewModel.signUpOrLogIn.value!!
-            etUserName.visibility = viewModel.signUpOrLogIn.value!!
-            tvForgotPassword.isVisible = viewModel.signUpOrLogIn.value!! == RegistrationViewModel.LOG_IN
-        }
+//        binding.apply {
+////            etConfirmPassword.visibility = viewModel.signUpOrLogIn.value!!
+////            etUserName.visibility = viewModel.signUpOrLogIn.value!!
+////            tvForgotPassword.isVisible = viewModel.signUpOrLogIn.value!! == RegistrationViewModel.LOG_IN
+////            tvForgotPassword.isVisible = !viewModel.isSignInPage.value!!
+//        }
 
-        setContentView(binding.root)
+//        setContentView(binding.root)
 
 //        val test = TestData.DATA_1
 //        when(test) {
@@ -67,11 +72,11 @@ class RegistrationActivity : AppCompatActivity(), ConfirmationListener {
 
         if (auth.currentUser != null) moveToRecipeActivity()
 
-        if (binding.etConfirmPassword.visibility == View.VISIBLE) {
-            setValuesDependingConfirmIsVisible()
-        } else {
-            setValuesDependingConfirmIsGone()
-        }
+//        if (binding.etConfirmPassword.visibility == View.VISIBLE) {
+//            setValuesDependingConfirmIsVisible()
+//        } else {
+//            setValuesDependingConfirmIsGone()
+//        }
 
         binding.apply {
 
@@ -81,20 +86,21 @@ class RegistrationActivity : AppCompatActivity(), ConfirmationListener {
                 showConfirmationDialog()
             }
 
-            tvSwitchLogReg.setOnClickListener {
-                if (etConfirmPassword.visibility == View.VISIBLE) {         // перенести
-                    etConfirmPassword.visibility = View.GONE
-                    etUserName.visibility = View.GONE
-                    tvForgotPassword.visibility = View.VISIBLE
-                    setValuesDependingConfirmIsGone()
-                } else {
-                    etConfirmPassword.visibility = View.VISIBLE
-                    etUserName.visibility = View.VISIBLE
-                    tvForgotPassword.visibility = View.GONE
-                    setValuesDependingConfirmIsVisible()
-                }
-                viewModel.changeConfirmPasswordVisibility(etConfirmPassword.visibility)
-            }
+//            tvSwitchLogReg.setOnClickListener {
+//                if (etConfirmPassword.visibility == View.VISIBLE) {         // перенести
+//                    etConfirmPassword.visibility = View.GONE
+//                    etUserName.visibility = View.GONE
+//                    tvForgotPassword.visibility = View.VISIBLE
+////                    setValuesDependingConfirmIsGone()
+//                } else {
+//                    etConfirmPassword.visibility = View.VISIBLE
+//                    etUserName.visibility = View.VISIBLE
+//                    tvForgotPassword.visibility = View.GONE
+////                    setValuesDependingConfirmIsVisible()
+//                }
+////                viewModel.changeConfirmPasswordVisibility(etConfirmPassword.visibility)
+//                viewModel.isSignUpPage.value = !viewModel.isSignUpPage.value!!
+//            }
         }
 
         /** Альтеранативная doAfterTextChanged {..} реализация живого listener-a, более тяжелая и более функцинальная
@@ -237,22 +243,22 @@ class RegistrationActivity : AppCompatActivity(), ConfirmationListener {
         startActivity(Intent(this, RecipesActivity::class.java))
         finish()
     }
-
-    private fun setValuesDependingConfirmIsVisible() {
-        binding.apply {
-            tvProposeToLogin.setText(R.string.sign_up_to_continue)
-            btnSignIn.setText(R.string.sign_up)
-            tvSwitchLogReg.setText(R.string.log_in)
-        }
-    }
-
-    private fun setValuesDependingConfirmIsGone() {
-        binding.apply {
-            tvProposeToLogin.setText(R.string.log_in_to_continue)
-            btnSignIn.setText(R.string.sign_in)
-            tvSwitchLogReg.setText(R.string.sign_up)
-        }
-    }
+//
+//    private fun setValuesDependingConfirmIsVisible() {
+//        binding.apply {
+//            tvProposeToLogin.setText(R.string.sign_up_to_continue)
+//            btnSignIn.setText(R.string.sign_up)
+//            tvSwitchLogReg.setText(R.string.log_in)
+//        }
+//    }
+//
+//    private fun setValuesDependingConfirmIsGone() {
+//        binding.apply {
+//            tvProposeToLogin.setText(R.string.log_in_to_continue)
+//            btnSignIn.setText(R.string.sign_in)
+//            tvSwitchLogReg.setText(R.string.sign_up)
+//        }
+//    }
 
     private fun openRecipeByUser(user: FirebaseUser?) {
         // если запущен прогресс бар - прячем его
@@ -268,9 +274,9 @@ class RegistrationActivity : AppCompatActivity(), ConfirmationListener {
         }
     }
 
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-    }
+//    private fun showToast(message: String) {
+//        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+//    }
 
     private fun showSnackBar(message: String) {
         val mySnackBar = Snackbar

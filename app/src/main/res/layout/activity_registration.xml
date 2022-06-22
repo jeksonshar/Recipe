@@ -1,218 +1,233 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/green_light"
-    tools:context=".presentation.ui.registration.RegistrationActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="vm"
+            type="com.example.recipes.presentation.ui.registration.RegistrationViewModel" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:animateLayoutChanges="true"
-        android:padding="4dp">
+        style="@style/Theme.Recipes"
+        tools:context=".presentation.ui.registration.RegistrationActivity">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivRecipeLogo"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_marginTop="24dp"
-            android:src="@drawable/chef_hat"
-            app:layout_constraintBottom_toTopOf="@id/tvProposeToLogin"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvProposeToLogin"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="24dp"
-            android:gravity="center"
-            android:textColor="@color/purple_700"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@id/etLogin"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivRecipeLogo"
-            app:layout_constraintVertical_chainStyle="packed"
-            tools:text="@string/sign_up_to_continue" />
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
+            android:padding="4dp">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/etLogin"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            app:endIconMode="clear_text"
-            app:errorEnabled="true"
-            app:layout_constraintBottom_toTopOf="@+id/etUserName"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvProposeToLogin"
-            app:layout_constraintVertical_chainStyle="packed"
-            app:startIconContentDescription="@string/login"
-            app:startIconDrawable="@drawable/ic_login_icon">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivRecipeLogo"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="24dp"
+                android:src="@drawable/chef_hat"
+                app:layout_constraintBottom_toTopOf="@id/tvProposeToLogin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etEditLogin"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvProposeToLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/email"
-                android:inputType="textEmailAddress" />
+                android:layout_margin="24dp"
+                android:gravity="center"
+                android:textColor="@color/blue_dark"
+                android:textSize="18sp"
+                tools:text="@string/sign_up_to_continue"
+                android:text="@{vm.isSignUpPage() ? @string/sign_up_to_continue : @string/log_in_to_continue}"
+                app:layout_constraintBottom_toTopOf="@id/etLogin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ivRecipeLogo"
+                app:layout_constraintVertical_chainStyle="packed" />
 
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/etUserName"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            app:endIconMode="clear_text"
-            app:errorEnabled="true"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/etLogin"
-            app:layout_constraintBottom_toTopOf="@id/etPassword"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:startIconDrawable="@drawable/ic_name_id"
-            app:startIconContentDescription="User name">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etEditUserName"
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etLogin"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/user_name"
-                android:inputType="textEmailAddress"/>
+                android:layout_marginHorizontal="16dp"
+                app:endIconMode="clear_text"
+                app:errorEnabled="true"
+                app:layout_constraintBottom_toTopOf="@+id/etUserName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvProposeToLogin"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:startIconContentDescription="@string/login"
+                app:startIconDrawable="@drawable/ic_login_icon">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etEditLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/email"
+                    android:inputType="textEmailAddress" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/etPassword"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            app:errorEnabled="true"
-            app:layout_constraintBottom_toTopOf="@+id/etConfirmPassword"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etUserName"
-            app:passwordToggleEnabled="true"
-            app:startIconContentDescription="@string/password"
-            app:startIconDrawable="@drawable/ic_password_icon">
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etEditPassword"
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etUserName"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/password"
-                android:inputType="textPassword" />
+                android:layout_marginHorizontal="16dp"
+                android:visibility="@{vm.isSignUpPage ? View.VISIBLE : View.GONE}"
+                app:endIconMode="clear_text"
+                app:errorEnabled="true"
+                app:layout_constraintBottom_toTopOf="@id/etPassword"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etLogin"
+                app:startIconContentDescription="User name"
+                app:startIconDrawable="@drawable/ic_name_id">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etEditUserName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/user_name"
+                    android:inputType="textEmailAddress" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/etConfirmPassword"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:visibility="gone"
-            app:errorEnabled="true"
-            app:layout_constraintBottom_toTopOf="@+id/tvForgotPassword"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etPassword"
-            app:passwordToggleEnabled="true"
-            app:startIconContentDescription="@string/confirm_password"
-            app:startIconDrawable="@drawable/ic_confirm_password_icon">
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etEditConfirmPassword"
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etPassword"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/confirm_password"
-                android:inputType="textPassword" />
+                android:layout_marginHorizontal="16dp"
+                app:errorEnabled="true"
+                app:layout_constraintBottom_toTopOf="@+id/etConfirmPassword"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etUserName"
+                app:passwordToggleEnabled="true"
+                app:startIconContentDescription="@string/password"
+                app:startIconDrawable="@drawable/ic_password_icon">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etEditPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/password"
+                    android:inputType="textPassword" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvForgotPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:gravity="end"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="4dp"
-            android:text="@string/forgot_password"
-            android:textSize="12sp"
-            android:textStyle="italic"
-            app:layout_constraintBottom_toTopOf="@+id/btnSignIn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etConfirmPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnSignIn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="8dp"
-            android:textAllCaps="false"
-            app:layout_constraintBottom_toTopOf="@id/tvSwitchLogReg"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvForgotPassword"
-            tools:text="@string/sign_up" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etConfirmPassword"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:visibility="@{vm.isSignUpPage ? View.VISIBLE : View.GONE}"
+                app:errorEnabled="true"
+                app:layout_constraintBottom_toTopOf="@+id/tvForgotPassword"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etPassword"
+                app:passwordToggleEnabled="true"
+                app:startIconContentDescription="@string/confirm_password"
+                app:startIconDrawable="@drawable/ic_confirm_password_icon">
 
-        <ProgressBar
-            android:id="@+id/progressSinging"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="@+id/btnSignIn"
-            app:layout_constraintEnd_toEndOf="@+id/btnSignIn"
-            app:layout_constraintStart_toStartOf="@+id/btnSignIn"
-            app:layout_constraintTop_toTopOf="@+id/btnSignIn" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etEditConfirmPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/confirm_password"
+                    android:inputType="textPassword" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvSwitchLogReg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
-            tools:text="@string/sign_in"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/ibtnGoogle"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnSignIn" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/ibtnGoogle"
-            style="@style/ImageButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_google_logo"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/ibtnFacebook"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvSwitchLogReg" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvForgotPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:gravity="end"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="4dp"
+                android:text="@string/forgot_password"
+                android:textSize="12sp"
+                android:textStyle="italic"
+                android:visibility="@{vm.isSignUpPage ? View.GONE : View.VISIBLE}"
+                app:layout_constraintBottom_toTopOf="@+id/btnSignIn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etConfirmPassword" />
 
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/ibtnFacebook"
-            style="@style/ImageButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_facebook_icon"
-            app:layout_constraintBottom_toBottomOf="@+id/ibtnGoogle"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/ibtnGoogle"
-            app:layout_constraintTop_toTopOf="@+id/ibtnGoogle" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnSignIn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
+                android:textAllCaps="false"
+                tools:text="@string/sign_up"
+                android:text="@{vm.isSignUpPage() ? @string/sign_up : @string/sign_in}"
+                app:layout_constraintBottom_toTopOf="@id/tvSwitchLogReg"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvForgotPassword"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <ProgressBar
+                android:id="@+id/progressSinging"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/btnSignIn"
+                app:layout_constraintEnd_toEndOf="@+id/btnSignIn"
+                app:layout_constraintStart_toStartOf="@+id/btnSignIn"
+                app:layout_constraintTop_toTopOf="@+id/btnSignIn" />
 
-</androidx.core.widget.NestedScrollView>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvSwitchLogReg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"
+                android:onClick="@{() -> vm.switchLogReg()}"
+                android:textStyle="bold"
+                tools:text="@string/sign_in"
+                android:text="@{vm.isSignUpPage() ? @string/log_in : @string/sign_up}"
+                app:layout_constraintBottom_toTopOf="@id/ibtnGoogle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnSignIn"/>
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ibtnGoogle"
+                style="@style/ImageButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_google_logo"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/ibtnFacebook"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvSwitchLogReg" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ibtnFacebook"
+                style="@style/ImageButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_facebook_icon"
+                app:layout_constraintBottom_toBottomOf="@+id/ibtnGoogle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ibtnGoogle"
+                app:layout_constraintTop_toTopOf="@+id/ibtnGoogle" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</layout>

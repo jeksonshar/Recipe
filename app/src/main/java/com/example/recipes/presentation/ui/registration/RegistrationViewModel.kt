@@ -3,6 +3,7 @@ package com.example.recipes.presentation.ui.registration
 import android.text.Editable
 import android.util.Patterns
 import android.view.View
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,27 +17,35 @@ import java.lang.Exception
 
 class RegistrationViewModel : ViewModel() {
 
+    val isSignUpPage = MutableLiveData(false)
+
     private val _signUpOrLogIn = MutableLiveData(LOG_IN)
     val signUpOrLogIn: LiveData<Int> = _signUpOrLogIn
+
+    private val _user = MutableLiveData<FirebaseUser?>()
+    val user: LiveData<FirebaseUser?> = _user
+
+    val messageForUser = MutableLiveData<String>(null)
 
     private val email = MutableLiveData<Editable>()
     private val userName = MutableLiveData<Editable>()
     private val password = MutableLiveData<Editable>()
     private val confirmPassword = MutableLiveData<Editable>()
 
-    val user = MutableLiveData<FirebaseUser?>()
-    val messageForUser = MutableLiveData<String>(null)
-
-    fun changeConfirmPasswordVisibility(value: Int) {
-        _signUpOrLogIn.value = value
-    }
+//    fun changeConfirmPasswordVisibility(value: Int) {
+//        _signUpOrLogIn.value = value
+//    }
 
     fun setEmail(value: Editable?) {
         value?.let { email.value = it }
     }
 
     fun setUserName(value: Editable?) {
-        value.let { userName.value = it }
+        value.let {
+            if (it?.toString() != "") {
+                userName.value = it
+            }
+        }
     }
 
     fun setPassword(value: Editable?) {
@@ -66,6 +75,10 @@ class RegistrationViewModel : ViewModel() {
         }
     }
 
+    fun switchLogReg() {
+        isSignUpPage.value = !isSignUpPage.value!!
+    }
+
     fun sendPasswordResetEmail(auth: FirebaseAuth) {
         if (checkForClickEmail()) {
             auth.sendPasswordResetEmail(email.value.toString())
@@ -86,7 +99,7 @@ class RegistrationViewModel : ViewModel() {
             displayName = userName.value.toString()
         })?.addOnCompleteListener {
             if (it.isSuccessful) {
-                user.value = auth.currentUser
+                _user.value = auth.currentUser
             }
         }
     }
@@ -94,8 +107,10 @@ class RegistrationViewModel : ViewModel() {
     private fun taskResultSingUp(task: Task<AuthResult>) {
         when (task.exception) {
             is Exception -> {
-                task.exception?.localizedMessage?.let { message -> messageForUser.value = message }
-                user.value = null
+                task.exception?.localizedMessage?.let { message ->
+                    messageForUser.value = message
+                }
+                _user.value = null
             }
         }
     }
@@ -103,11 +118,13 @@ class RegistrationViewModel : ViewModel() {
     private fun taskResultLogIn(task: Task<AuthResult>, auth: FirebaseAuth) {
         when {
             task.isSuccessful -> {
-                user.value = auth.currentUser
+                _user.value = auth.currentUser
             }
             task.exception is Exception -> {
-                task.exception?.localizedMessage?.let { message -> messageForUser.value = message }
-                user.value = null
+                task.exception?.localizedMessage?.let { message ->
+                    messageForUser.value = message
+                }
+                _user.value = null
             }
         }
     }
@@ -132,17 +149,17 @@ class RegistrationViewModel : ViewModel() {
         return when {
             password.value.isNullOrEmpty() || confirmPassword.value.isNullOrEmpty() -> {
                 messageForUser.value = "Пароли не заполнены"
-                user.value = null
+                _user.value = null
                 false
             }
             password.value!!.length < 8 -> {
                 messageForUser.value = "Длина пароля должна быть не менее 8 символов"
-                user.value = null
+                _user.value = null
                 false
             }
             password.value.toString() != confirmPassword.value.toString() -> {
                 messageForUser.value = "Пароли не совпадают"
-                user.value = null
+                _user.value = null
                 false
             }
             else -> true
@@ -153,12 +170,12 @@ class RegistrationViewModel : ViewModel() {
         return when {
             password.value.isNullOrEmpty() -> {
                 messageForUser.value = "Пароль не заполнен"
-                user.value = null
+                _user.value = null
                 false
             }
             password.value!!.length < 8 -> {
                 messageForUser.value = "Длина пароля должна быть не менее 8 символов"
-                user.value = null
+                _user.value = null
                 false
             }
             else -> true
@@ -171,13 +188,13 @@ class RegistrationViewModel : ViewModel() {
             email.value.isNullOrEmpty() -> {
                 message = "email не заполнен"
                 messageForUser.value = message
-                user.value = null
+                _user.value = null
                 false
             }
             !Patterns.EMAIL_ADDRESS.matcher(email.value.toString()).matches() -> {
                 message = "email не соответзтвует"
                 messageForUser.value = message
-                user.value = null
+                _user.value = null
                 false
             }
             else -> true
@@ -188,7 +205,7 @@ class RegistrationViewModel : ViewModel() {
         return when {
             userName.value.isNullOrEmpty() -> {
                 messageForUser.value = "имя пользователя не заполнено"
-                user.value = null
+                _user.value = null
                 false
             }
             else -> true
