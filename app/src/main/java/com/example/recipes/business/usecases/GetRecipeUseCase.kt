@@ -4,8 +4,11 @@ import android.util.Log
 import com.example.recipes.business.ResponseStatus
 import com.example.recipes.datasouce.network.RecipesApiService
 import com.example.recipes.datasouce.network.entities.RecipeEntity
+import javax.inject.Inject
 
-class GetRecipeUseCase(private val apiService: RecipesApiService) {
+class GetRecipeUseCase @Inject constructor(
+    private val apiService: RecipesApiService
+) {
 
     suspend fun getRecipe(id: String): ResponseStatus<RecipeEntity> {
         Log.d("TAG", "Recipe ID in getQuery: $id")

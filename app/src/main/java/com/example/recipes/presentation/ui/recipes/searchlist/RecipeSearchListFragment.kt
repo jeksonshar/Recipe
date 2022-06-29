@@ -20,6 +20,7 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.recipes.R
 import com.example.recipes.business.domain.models.Recipe
+import com.example.recipes.business.domain.singletons.FirebaseUserSingleton
 import com.example.recipes.business.utils.CheckConnectionUtils
 import com.example.recipes.databinding.FragmentRecipeListBinding
 import com.example.recipes.presentation.ui.recipes.BackPressedSingleton
@@ -131,7 +132,7 @@ class RecipeSearchListFragment : Fragment(R.layout.fragment_recipe_list) {
             }
 
             navView.setNavigationItemSelectedListener {
-                when(it.itemId) {
+                when (it.itemId) {
                     R.id.favoriteListFragment -> {
                         findNavController().navigate(R.id.action_recipeSearchListFragment_to_favoriteListFragment)
                         drawerLayout.close()
@@ -142,11 +143,11 @@ class RecipeSearchListFragment : Fragment(R.layout.fragment_recipe_list) {
                         false
                     }
                     R.id.signOut -> {
-                        auth.signOut()
-                        startActivity(Intent(requireContext(), RegistrationActivity::class.java))
-                        viewModelSearch.resetLastQuery()
-                        requireActivity().finish()
-                        false
+                        signOutUser()
+                    }
+                    R.id.delete -> {
+                        auth.currentUser?.delete()
+                        signOutUser()
                     }
                     else -> false
                 }
@@ -161,14 +162,16 @@ class RecipeSearchListFragment : Fragment(R.layout.fragment_recipe_list) {
         lifecycleScope.launch {
             pagingAdapter?.loadStateFlow?.collectLatest { loadState ->
                 binding.progressBarWhileListEmpty.isVisible = loadState.refresh is LoadState.Loading
-                binding.buttonRetry.isVisible = loadState.refresh !is LoadState.Loading && loadState.append is LoadState.Error
+                binding.buttonRetry.isVisible =
+                    loadState.refresh !is LoadState.Loading && loadState.append is LoadState.Error
                 binding.tvErrorLoading.text =
                     if (loadState.source.toString().contains("429")) {
                         "Да не торопись ты так\nЖди минуту!"
                     } else {
                         loadState.source.toString()
                     }
-                binding.tvErrorLoading.isVisible = loadState.refresh !is LoadState.Loading && loadState.append is LoadState.Error
+                binding.tvErrorLoading.isVisible =
+                    loadState.refresh !is LoadState.Loading && loadState.append is LoadState.Error
             }
         }
 
@@ -213,6 +216,14 @@ class RecipeSearchListFragment : Fragment(R.layout.fragment_recipe_list) {
         pagingAdapter?.loadStateFlow?.asLiveData()?.observe(viewLifecycleOwner) {
             binding.progressBarPaging.isVisible = it.append is LoadState.Loading
         }
+    }
+
+    private fun signOutUser(): Boolean {
+        auth.signOut()
+        startActivity(Intent(requireContext(), RegistrationActivity::class.java))
+        viewModelSearch.resetLastQuery()
+        requireActivity().finish()
+        return false
     }
 
     override fun onDestroyView() {

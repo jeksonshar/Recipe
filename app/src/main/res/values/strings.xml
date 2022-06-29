@@ -41,12 +41,22 @@
     <string name="facebook_login_protocol_scheme" translatable="false">fb308378624662427</string>
 
     <string name="sign_out">Sign Out</string>
+    <string name="delete">Delete user</string>
     <string name="settings">Settings</string>
     <string name="profile">Profile</string>
     <string name="header_title">Header title</string>
     <string name="header_text">Header text</string>
     <string name="user_name">user name</string>
+    <string name="user_name_not_filled">имя пользователя не заполнено</string>
     <string name="forgot_password">Forgot password?</string>
+    <string name="passwords_not_filled">Пароли не заполнены</string>
+    <string name="email_not_filled">Email не заполнен</string>
+    <string name="passwords_does_not_match">Пароли не совпадают</string>
+    <string name="email_does_not_match">email не соответзтвует форме</string>
+    <string name="password_length_eight">Длина пароля должна быть не менее 8 символов</string>
+    <string name="send_something_on_email">На указанную почту было что-то отправлено</string>
+    <string name="cancel_user_registration">Регистрация отменена пользователем</string>
+    <string name="cancel_reset_password">Сброс пароля отменен пользователем</string>
     <string name="description_actions_at_forget_password">On your email address will send email for reset password</string>
 
 </resources>

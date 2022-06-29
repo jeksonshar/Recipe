@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <import type="android.view.View" />
+
         <variable
             name="vm"
             type="com.example.recipes.presentation.ui.registration.RegistrationViewModel" />
     </data>
 
     <androidx.core.widget.NestedScrollView
+        style="@style/Theme.Recipes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        style="@style/Theme.Recipes"
         tools:context=".presentation.ui.registration.RegistrationActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -40,15 +41,15 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="24dp"
                 android:gravity="center"
+                android:text="@{vm.isSignUpPage() ? @string/sign_up_to_continue : @string/log_in_to_continue}"
                 android:textColor="@color/blue_dark"
                 android:textSize="18sp"
-                tools:text="@string/sign_up_to_continue"
-                android:text="@{vm.isSignUpPage() ? @string/sign_up_to_continue : @string/log_in_to_continue}"
                 app:layout_constraintBottom_toTopOf="@id/etLogin"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/ivRecipeLogo"
-                app:layout_constraintVertical_chainStyle="packed" />
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:text="@string/sign_up_to_continue" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/etLogin"
@@ -57,6 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 app:endIconMode="clear_text"
+                app:error="@{vm.etLoginError}"
                 app:errorEnabled="true"
                 app:layout_constraintBottom_toTopOf="@+id/etUserName"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -71,7 +73,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/email"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textEmailAddress"
+                    android:onTextChanged="@{(text, start, before, count) -> vm.onLoginTextChanged(text)}" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -83,6 +86,7 @@
                 android:layout_marginHorizontal="16dp"
                 android:visibility="@{vm.isSignUpPage ? View.VISIBLE : View.GONE}"
                 app:endIconMode="clear_text"
+                app:error="@{vm.etUserNameError}"
                 app:errorEnabled="true"
                 app:layout_constraintBottom_toTopOf="@id/etPassword"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -96,7 +100,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/user_name"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textEmailAddress"
+                    android:onTextChanged="@{(text, start, before, count) -> vm.onNameTextChanged(text)}" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -106,6 +111,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
+                app:error="@{vm.etPasswordError}"
                 app:errorEnabled="true"
                 app:layout_constraintBottom_toTopOf="@+id/etConfirmPassword"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -120,7 +126,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/password"
-                    android:inputType="textPassword" />
+                    android:inputType="textPassword"
+                    android:onTextChanged="@{(text, start, before, count) -> vm.etPasswordTextChanged(text)}" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -131,6 +138,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:visibility="@{vm.isSignUpPage ? View.VISIBLE : View.GONE}"
+                app:error="@{vm.etConfirmPasswordError}"
                 app:errorEnabled="true"
                 app:layout_constraintBottom_toTopOf="@+id/tvForgotPassword"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -145,7 +153,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/confirm_password"
-                    android:inputType="textPassword" />
+                    android:inputType="textPassword"
+                    android:onTextChanged="@{(text, start, before, count) -> vm.etConfirmPasswordTextChanged(text)}" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -172,19 +181,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="8dp"
+                android:onClick="@{() -> vm.chooseEnter()}"
+                android:text="@{vm.isSignUpPage ? @string/sign_up : @string/sign_in}"
                 android:textAllCaps="false"
-                tools:text="@string/sign_up"
-                android:text="@{vm.isSignUpPage() ? @string/sign_up : @string/sign_in}"
+                android:visibility="@{vm.btnSignInVisibility ? View.VISIBLE : View.INVISIBLE}"
                 app:layout_constraintBottom_toTopOf="@id/tvSwitchLogReg"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvForgotPassword"/>
+                app:layout_constraintTop_toBottomOf="@+id/tvForgotPassword"
+                tools:text="@string/sign_up" />
 
             <ProgressBar
                 android:id="@+id/progressSinging"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="invisible"
+                android:visibility="@{vm.progressSingingVisibility ? View.VISIBLE : View.INVISIBLE}"
                 app:layout_constraintBottom_toBottomOf="@+id/btnSignIn"
                 app:layout_constraintEnd_toEndOf="@+id/btnSignIn"
                 app:layout_constraintStart_toStartOf="@+id/btnSignIn"
@@ -196,13 +207,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="32dp"
                 android:onClick="@{() -> vm.switchLogReg()}"
-                android:textStyle="bold"
-                tools:text="@string/sign_in"
                 android:text="@{vm.isSignUpPage() ? @string/log_in : @string/sign_up}"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@id/ibtnGoogle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btnSignIn"/>
+                app:layout_constraintTop_toBottomOf="@id/btnSignIn"
+                tools:text="@string/sign_in" />
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/ibtnGoogle"

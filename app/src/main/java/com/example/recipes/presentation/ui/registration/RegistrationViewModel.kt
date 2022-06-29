@@ -1,46 +1,50 @@
 package com.example.recipes.presentation.ui.registration
 
-import android.text.Editable
+import android.app.Application
 import android.util.Patterns
-import android.view.View
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.example.recipes.R
 import com.example.recipes.business.domain.singletons.FirebaseUserSingleton
+import com.example.recipes.presentation.base.BaseViewModel
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
-import java.lang.Exception
+import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class RegistrationViewModel : ViewModel() {
+@HiltViewModel
+class RegistrationViewModel @Inject constructor(application: Application) : BaseViewModel(application) {
 
     val isSignUpPage = MutableLiveData(false)
-
-    private val _signUpOrLogIn = MutableLiveData(LOG_IN)
-    val signUpOrLogIn: LiveData<Int> = _signUpOrLogIn
 
     private val _user = MutableLiveData<FirebaseUser?>()
     val user: LiveData<FirebaseUser?> = _user
 
     val messageForUser = MutableLiveData<String>(null)
 
-    private val email = MutableLiveData<Editable>()
-    private val userName = MutableLiveData<Editable>()
-    private val password = MutableLiveData<Editable>()
-    private val confirmPassword = MutableLiveData<Editable>()
+    val etLoginError = MutableLiveData<String?>(null)
+    val etUserNameError = MutableLiveData<String?>(null)
+    val etPasswordError = MutableLiveData<String?>(null)
+    val etConfirmPasswordError = MutableLiveData<String?>(null)
 
-//    fun changeConfirmPasswordVisibility(value: Int) {
-//        _signUpOrLogIn.value = value
-//    }
+    private val email = MutableLiveData<CharSequence>()
+    private val userName = MutableLiveData<CharSequence>()
+    private val password = MutableLiveData<CharSequence>()
+    private val confirmPassword = MutableLiveData<CharSequence>()
 
-    fun setEmail(value: Editable?) {
+    val progressSingingVisibility = MutableLiveData(false)
+    val btnSignInVisibility = MutableLiveData(true)
+
+    private fun setEmail(value: CharSequence?) {
         value?.let { email.value = it }
     }
 
-    fun setUserName(value: Editable?) {
+    private fun setUserName(value: CharSequence?) {
         value.let {
             if (it?.toString() != "") {
                 userName.value = it
@@ -48,28 +52,82 @@ class RegistrationViewModel : ViewModel() {
         }
     }
 
-    fun setPassword(value: Editable?) {
+    private fun setPassword(value: CharSequence?) {
         value?.let { password.value = it }
     }
 
-    fun setConfirmPassword(value: Editable?) {
+    private fun setConfirmPassword(value: CharSequence?) {
         value?.let { confirmPassword.value = it }
     }
 
-    fun signUp(auth: FirebaseAuth) {
+    fun chooseEnter() {
+        val auth = Firebase.auth
+        if (isSignUpPage.value == true) signUp(auth)
+        else logIn(auth)
+    }
+
+    fun onLoginTextChanged(it: CharSequence) {
+        if (checkForWatcherEmail(it.toString())) {
+            etLoginError.value = null
+        } else {
+            etLoginError.value = context.getString(R.string.value_not_email)
+        }
+        setEmail(it)
+    }
+
+    fun onNameTextChanged(it: CharSequence) {
+        if (checkForWatcherUserName(it.toString())) {
+            etUserNameError.value = null
+        } else {
+            etUserNameError.value = context.getString(R.string.user_name_not_set)
+        }
+        setUserName(it)
+    }
+
+    fun etPasswordTextChanged(it: CharSequence) {
+        if (checkForWatcherPassword(it.toString())) {
+            etPasswordError.value = null
+        } else {
+            etPasswordError.value = context.getString(R.string.min_length_password)
+        }
+        setPassword(it)
+    }
+
+    fun etConfirmPasswordTextChanged(it: CharSequence) {
+        if (checkForWatcherConfirmPassword(password.value.toString(), it.toString())) {
+            etConfirmPasswordError.value = null
+        } else {
+            etConfirmPasswordError.value = context.getString(R.string.value_not_match_password)
+        }
+        setConfirmPassword(it)
+    }
+
+    private fun signUp(auth: FirebaseAuth) {
         if (checkForClickPasswordsSingUp() && checkForClickEmail() && checkForClickUserName()) {
-            auth.createUserWithEmailAndPassword(email.value.toString(), password.value.toString())          // перенести в юзкейс
+            auth.createUserWithEmailAndPassword(
+                email.value.toString(),
+                password.value.toString()
+            )  // перенести в юзкейс
                 .addOnCompleteListener { task ->
+                    // запустить прогресс бар
+                    changeVisibilityAtProgress()
+
                     taskResultSingUp(task)
                     setName(auth)
                 }
         }
     }
 
-    fun logIn(auth: FirebaseAuth) {
+    private fun logIn(auth: FirebaseAuth) {
         if (checkForClickEmail() && checkForClickPasswordSingIn()) {
-            auth.signInWithEmailAndPassword(email.value.toString(), password.value.toString())              // перенести в юзкейс
+            auth.signInWithEmailAndPassword(
+                email.value.toString(),
+                password.value.toString()
+            )      // перенести в юзкейс
                 .addOnCompleteListener { task ->
+                    // запустить прогресс бар
+                    changeVisibilityAtProgress()
+
                     taskResultLogIn(task, auth)
                 }
         }
@@ -84,7 +142,7 @@ class RegistrationViewModel : ViewModel() {
             auth.sendPasswordResetEmail(email.value.toString())
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        messageForUser.value = "На указанную почту было что-то отправлено"
+                        messageForUser.value = context.getString(R.string.send_something_on_email)
                     } else {
                         task.exception?.localizedMessage?.let { message ->
                             messageForUser.value = message
@@ -95,7 +153,7 @@ class RegistrationViewModel : ViewModel() {
     }
 
     private fun setName(auth: FirebaseAuth) {
-        auth.currentUser?.updateProfile(userProfileChangeRequest {                                           // перенести в юзкейс
+        auth.currentUser?.updateProfile(userProfileChangeRequest {                                  // перенести в юзкейс
             displayName = userName.value.toString()
         })?.addOnCompleteListener {
             if (it.isSuccessful) {
@@ -129,36 +187,36 @@ class RegistrationViewModel : ViewModel() {
         }
     }
 
-    fun checkForWatcherEmail(email: String): Boolean {
+    private fun checkForWatcherEmail(email: String): Boolean {
         return email.isEmpty() || Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
-    fun checkForWatcherUserName(userName: String): Boolean {
+    private fun checkForWatcherUserName(userName: String): Boolean {
         return userName.isNotEmpty()
     }
 
-    fun checkForWatcherPassword(password: String): Boolean {
+    private fun checkForWatcherPassword(password: String): Boolean {
         return password.isEmpty() || password.length > 7
     }
 
-    fun checkForWatcherConfirmPassword(password: String, confirmPassword: String): Boolean {
+    private fun checkForWatcherConfirmPassword(password: String, confirmPassword: String): Boolean {
         return password == confirmPassword
     }
 
     private fun checkForClickPasswordsSingUp(): Boolean {
         return when {
             password.value.isNullOrEmpty() || confirmPassword.value.isNullOrEmpty() -> {
-                messageForUser.value = "Пароли не заполнены"
+                messageForUser.value = context.getString(R.string.passwords_not_filled)
                 _user.value = null
                 false
             }
             password.value!!.length < 8 -> {
-                messageForUser.value = "Длина пароля должна быть не менее 8 символов"
+                messageForUser.value = context.getString(R.string.password_length_eight)
                 _user.value = null
                 false
             }
             password.value.toString() != confirmPassword.value.toString() -> {
-                messageForUser.value = "Пароли не совпадают"
+                messageForUser.value = context.getString(R.string.passwords_does_not_match)
                 _user.value = null
                 false
             }
@@ -169,12 +227,12 @@ class RegistrationViewModel : ViewModel() {
     private fun checkForClickPasswordSingIn(): Boolean {
         return when {
             password.value.isNullOrEmpty() -> {
-                messageForUser.value = "Пароль не заполнен"
+                messageForUser.value = context.getString(R.string.passwords_not_filled)
                 _user.value = null
                 false
             }
             password.value!!.length < 8 -> {
-                messageForUser.value = "Длина пароля должна быть не менее 8 символов"
+                messageForUser.value = context.getString(R.string.password_length_eight)
                 _user.value = null
                 false
             }
@@ -186,13 +244,13 @@ class RegistrationViewModel : ViewModel() {
         val message: String
         return when {
             email.value.isNullOrEmpty() -> {
-                message = "email не заполнен"
+                message = context.getString(R.string.email_not_filled)
                 messageForUser.value = message
                 _user.value = null
                 false
             }
             !Patterns.EMAIL_ADDRESS.matcher(email.value.toString()).matches() -> {
-                message = "email не соответзтвует"
+                message = context.getString(R.string.email_does_not_match)
                 messageForUser.value = message
                 _user.value = null
                 false
@@ -204,7 +262,7 @@ class RegistrationViewModel : ViewModel() {
     private fun checkForClickUserName(): Boolean {
         return when {
             userName.value.isNullOrEmpty() -> {
-                messageForUser.value = "имя пользователя не заполнено"
+                messageForUser.value = context.getString(R.string.user_name_not_filled)
                 _user.value = null
                 false
             }
@@ -212,13 +270,13 @@ class RegistrationViewModel : ViewModel() {
         }
     }
 
-    fun setFirebaseUser(user: FirebaseUser) {
-        FirebaseUserSingleton.user = user                                                                   // перенести в юзкейс
+    fun changeVisibilityAtProgress() {
+        progressSingingVisibility.postValue(!progressSingingVisibility.value!!)
+        btnSignInVisibility.postValue(!btnSignInVisibility.value!!)
     }
 
-    companion object {
-        const val SIGN_UP = View.VISIBLE
-        const val LOG_IN = View.GONE
+    fun setFirebaseUser(user: FirebaseUser) {
+        FirebaseUserSingleton.user = user                                                           // перенести в юзкейс
     }
 
 }
