@@ -2,6 +2,7 @@ package com.example.recipes.presentation.base
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import com.google.android.material.internal.ContextUtils.getActivity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -9,4 +10,6 @@ import javax.inject.Inject
 open class BaseViewModel @Inject constructor(application: Application) : AndroidViewModel(application) {
     protected val context
         get() = getApplication<Application>()
+    protected val activity
+        get() = getActivity(context)
 }

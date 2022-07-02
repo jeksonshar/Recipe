@@ -46,7 +46,6 @@ class RegistrationActivity : AppCompatActivity(), ConfirmationListener {
 
         auth = Firebase.auth
 
-        setContentView(binding.root)
     }
 
     override fun onStart() {
