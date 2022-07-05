@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.recipes.databinding.ActivityViewPagerBinding
 import com.example.recipes.presentation.ui.registration.RegistrationActivity
-import com.example.recipes.presentation.ui.viewpager.ViewPagerViewModel.Companion.slides
 import com.example.recipes.presentation.ui.viewpager.transfotmers.HorizontalFlipTransformation
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -18,8 +17,6 @@ class ViewPagerActivity : AppCompatActivity() {
 
     private val viewModelPager: ViewPagerViewModel by viewModels()
 
-    private val adapter by lazy { ViewPagerAdapter(slides) }
-
     private val pageChangeCallback: ViewPager2.OnPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
@@ -29,19 +26,15 @@ class ViewPagerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityViewPagerBinding.inflate(layoutInflater)
         binding.lifecycleOwner = this
         binding.vm = viewModelPager
         setContentView(binding.root)
-
-
     }
 
     override fun onStart() {
         super.onStart()
         binding.apply {
-            viewPager.adapter = adapter
             viewPager.registerOnPageChangeCallback(pageChangeCallback)
             viewPager.setPageTransformer(HorizontalFlipTransformation())
         }

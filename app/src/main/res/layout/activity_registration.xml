@@ -74,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/email"
                     android:inputType="textEmailAddress"
-                    android:onTextChanged="@{(text, start, before, count) -> vm.onLoginTextChanged(text)}" />
+                    android:afterTextChanged="@{(text) -> vm.onLoginTextChanged(text)}" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -101,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/user_name"
                     android:inputType="textEmailAddress"
-                    android:onTextChanged="@{(text, start, before, count) -> vm.onNameTextChanged(text)}" />
+                    android:afterTextChanged="@{(text) -> vm.onNameTextChanged(text)}" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -127,7 +127,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/password"
                     android:inputType="textPassword"
-                    android:onTextChanged="@{(text, start, before, count) -> vm.etPasswordTextChanged(text)}" />
+                    android:afterTextChanged="@{(text) -> vm.etPasswordTextChanged(text)}" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -154,7 +154,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/confirm_password"
                     android:inputType="textPassword"
-                    android:onTextChanged="@{(text, start, before, count) -> vm.etConfirmPasswordTextChanged(text)}" />
+                    android:afterTextChanged="@{(text) -> vm.etConfirmPasswordTextChanged(text)}" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

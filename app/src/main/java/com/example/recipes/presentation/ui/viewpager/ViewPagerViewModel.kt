@@ -52,8 +52,12 @@ class ViewPagerViewModel @Inject constructor(
         }
     }
 
-    private fun moveToRecipe() {
+    fun moveToRecipe() {
         isMovingToRecipe.value = true
+    }
+
+    fun setViewPagerAdapter(): ViewPagerAdapter { // так норм или лучше через @BindingAdapter? Не разберусь как сделать
+        return ViewPagerAdapter(slides)
     }
 
 }

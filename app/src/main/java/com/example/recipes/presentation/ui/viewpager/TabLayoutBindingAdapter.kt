@@ -8,7 +8,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 object TabLayoutBindingAdapter {
 
     @JvmStatic
-    @BindingAdapter("viewPager")
+    @BindingAdapter("setViewPager")
     fun TabLayout.setViewPager(viewPager: ViewPager2) {
         viewPager.viewTreeObserver?.addOnGlobalLayoutListener {
             TabLayoutMediator(this@setViewPager, viewPager) { _, _ ->
