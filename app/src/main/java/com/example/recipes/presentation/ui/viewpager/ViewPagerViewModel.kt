@@ -43,20 +43,20 @@ class ViewPagerViewModel @Inject constructor(
         moveToRecipe()
     }
 
-    fun onNextPageClick(viewPager: ViewPager2) {
-        val nextPage = viewPager.currentItem + 1
-        if (nextPage < slides.size) {
-            viewPager.currentItem = nextPage
-        } else {
-            moveToRecipe()
-        }
-    }
+//    fun onNextPageClick(viewPager: ViewPager2) {
+//        val nextPage = viewPager.currentItem + 1
+//        if (nextPage < slides.size) {
+//            viewPager.currentItem = nextPage
+//        } else {
+//            moveToRecipe()
+//        }
+//    }
 
     fun moveToRecipe() {
         isMovingToRecipe.value = true
     }
 
-    fun setViewPagerAdapter(): ViewPagerAdapter { // так норм или лучше через @BindingAdapter? Не разберусь как сделать
+    fun setViewPagerAdapter(): ViewPagerAdapter {   //так норм или лучше через @BindingAdapter? Не разберусь как сделать
         return ViewPagerAdapter(slides)
     }
 

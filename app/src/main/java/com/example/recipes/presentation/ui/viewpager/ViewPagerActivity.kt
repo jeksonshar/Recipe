@@ -7,7 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.recipes.databinding.ActivityViewPagerBinding
 import com.example.recipes.presentation.ui.registration.RegistrationActivity
+import com.example.recipes.presentation.ui.viewpager.TabLayoutBindingAdapter.setViewPager
 import com.example.recipes.presentation.ui.viewpager.transfotmers.HorizontalFlipTransformation
+import com.example.recipes.presentation.utils.NextViewPageUtil.onNextPageClick
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,7 +36,7 @@ class ViewPagerActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        binding.apply {
+        binding.apply {                     //  в onCreate послесворачивания и открытия не происходит регистрации
             viewPager.registerOnPageChangeCallback(pageChangeCallback)
             viewPager.setPageTransformer(HorizontalFlipTransformation())
         }
@@ -42,6 +44,14 @@ class ViewPagerActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+
+        binding.apply {
+            btnNext.setOnClickListener {
+                viewPager.onNextPageClick(ViewPagerViewModel.slides.size) {
+                    viewModelPager.moveToRecipe()
+                }
+            }
+        }
         viewModelPager.isMovingToRecipe.observe(this) {
             if (it) {
                 viewModelPager.setNotFirstLaunch()
@@ -52,8 +62,8 @@ class ViewPagerActivity : AppCompatActivity() {
     }
 
     override fun onStop() {
-        super.onStop()
         binding.viewPager.unregisterOnPageChangeCallback(pageChangeCallback)
+        super.onStop()
     }
 
 }
