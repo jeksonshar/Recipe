@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/drawable/background_favorite.xml" value="0.13" />
+        <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/drawable/background_splash.xml" value="0.13" />
+        <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/drawable/background_views_slider.xml" value="0.13" />
         <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/drawable/ic_confirm_password_icon.xml" value="0.1125" />
         <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/drawable/ic_facebook_icon.xml" value="0.1125" />
         <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/drawable/ic_favorite_icon.xml" value="0.1125" />
@@ -23,7 +26,7 @@
         <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/activity_splash_screen.xml" value="0.2421875" />
         <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/activity_view_pager.xml" value="0.2421875" />
         <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/fragment_detail_recipe.xml" value="0.2421875" />
-        <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/fragment_detail_recipe_item.xml" value="0.12135416666666667" />
+        <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/fragment_detail_recipe_item.xml" value="0.176" />
         <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/fragment_recipe_list.xml" value="0.2421875" />
         <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/fragment_recipe_list_item.xml" value="0.10104166666666667" />
         <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/fragment_recipe_search_list.xml" value="0.19907407407407407" />

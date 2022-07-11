@@ -1,9 +1,10 @@
 package com.example.recipes.presentation.ui.viewpager
 
 import android.app.Application
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.viewpager2.widget.ViewPager2
 import com.example.recipes.R
 import com.example.recipes.datasouce.local.datastore.RecipeDataStore
 import com.example.recipes.presentation.base.BaseViewModel
@@ -14,8 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ViewPagerViewModel @Inject constructor(
     private val recipeDataStore: RecipeDataStore,
-    application: Application
-) : BaseViewModel(application) {
+) : ViewModel() {
 
     companion object {
         val slides = intArrayOf(
@@ -26,11 +26,14 @@ class ViewPagerViewModel @Inject constructor(
         )
     }
 
-    val isLastDotPosition = MutableLiveData(false)
-    val isMovingToRecipe = MutableLiveData(false)
+    private val _isLastDotPosition = MutableLiveData(false)
+    val isLastDotPosition: LiveData<Boolean> = _isLastDotPosition
+
+    private val _isMovingToRecipe = MutableLiveData(false)
+    val isMovingToRecipe: LiveData<Boolean> = _isMovingToRecipe
 
     fun setVisibility(position: Int) {
-        isLastDotPosition.value = position == slides.size - 1
+        _isLastDotPosition.value = position == slides.size - 1
     }
 
     fun setNotFirstLaunch() {
@@ -43,20 +46,11 @@ class ViewPagerViewModel @Inject constructor(
         moveToRecipe()
     }
 
-//    fun onNextPageClick(viewPager: ViewPager2) {
-//        val nextPage = viewPager.currentItem + 1
-//        if (nextPage < slides.size) {
-//            viewPager.currentItem = nextPage
-//        } else {
-//            moveToRecipe()
-//        }
-//    }
-
     fun moveToRecipe() {
-        isMovingToRecipe.value = true
+        _isMovingToRecipe.value = true
     }
 
-    fun setViewPagerAdapter(): ViewPagerAdapter {   //так норм или лучше через @BindingAdapter? Не разберусь как сделать
+    fun setViewPagerAdapter(): ViewPagerAdapter {   // лучше тут или через @BindingAdapter?
         return ViewPagerAdapter(slides)
     }
 

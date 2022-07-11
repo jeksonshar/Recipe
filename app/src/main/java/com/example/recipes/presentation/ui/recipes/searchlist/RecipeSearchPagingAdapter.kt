@@ -1,14 +1,10 @@
 package com.example.recipes.presentation.ui.recipes.searchlist
 
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import by.kirich1409.viewbindingdelegate.viewBinding
 import androidx.recyclerview.widget.RecyclerView
-import com.example.recipes.R
 import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.databinding.FragmentRecipeListItemBinding
 import com.example.recipes.presentation.ui.recipes.RecipeClickListener
@@ -19,16 +15,12 @@ class RecipePagingAdapter(
 ) : PagingDataAdapter<Recipe, RecipePagingViewHolder>(RecipePagingComparator) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipePagingViewHolder {
-        return RecipePagingViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.fragment_recipe_list_item, parent, false)
-        )
+        return RecipePagingViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: RecipePagingViewHolder, position: Int) {
-        Log.d("TAG", "onBindViewHolder:")
         getItem(position)?.let { recipe ->
-            Log.d("TAG", "onBindViewHolder: $recipe")
-            holder.onBind(recipe)
+            holder.bind(recipe)
             holder.itemView.setOnClickListener {
                 clickListener.openRecipeDetailsFragment(recipe)
             }
@@ -36,18 +28,26 @@ class RecipePagingAdapter(
     }
 }
 
-class RecipePagingViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+class RecipePagingViewHolder private constructor(
+    private val binding: FragmentRecipeListItemBinding,
+) : RecyclerView.ViewHolder(binding.root) {
 
-    private val viewBinding by viewBinding(FragmentRecipeListItemBinding::bind)
+    fun bind(recipe: Recipe) {
+        binding.let {
+            ImagesUtil.setImage(recipe.image, it.ivItemRecipeList)
+            it.tvNameRecipe.text = recipe.label
+        }
+    }
 
-    fun onBind(recipe: Recipe) {
-
-        Log.d("TAG", "onBind Recipe: $recipe")
-        with(viewBinding) {
-
-            ImagesUtil.setImage(recipe.image, ivItemRecipeList)
-
-            tvNameRecipe.text = recipe.label
+    companion object {
+        fun from(parent: ViewGroup): RecipePagingViewHolder {
+            val inflater = LayoutInflater.from(parent.context)
+            val binding = FragmentRecipeListItemBinding.inflate(
+                inflater,
+                parent,
+                false
+            )
+            return RecipePagingViewHolder(binding)
         }
     }
 }

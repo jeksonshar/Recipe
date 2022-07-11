@@ -13,8 +13,7 @@ object TabLayoutBindingAdapter {
     fun TabLayout.setViewPager(viewPager: ViewPager2) {
 //        viewPager.viewTreeObserver?.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
 //            override fun onGlobalLayout() {
-//                TabLayoutMediator(this@setViewPager, viewPager) { _, _ ->
-//                }.attach()
+//                TabLayoutMediator(this@setViewPager, viewPager) { _, _ -> }.attach()
 //                viewPager.viewTreeObserver?.removeOnGlobalLayoutListener(this)
 //            }
 //        })

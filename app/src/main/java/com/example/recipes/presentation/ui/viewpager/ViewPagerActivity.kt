@@ -4,12 +4,15 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.viewpager2.widget.ViewPager2
+import com.example.recipes.R
 import com.example.recipes.databinding.ActivityViewPagerBinding
 import com.example.recipes.presentation.ui.registration.RegistrationActivity
 import com.example.recipes.presentation.ui.viewpager.TabLayoutBindingAdapter.setViewPager
 import com.example.recipes.presentation.ui.viewpager.transfotmers.HorizontalFlipTransformation
 import com.example.recipes.presentation.utils.NextViewPageUtil.onNextPageClick
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,10 +31,9 @@ class ViewPagerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityViewPagerBinding.inflate(layoutInflater)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_view_pager)
         binding.lifecycleOwner = this
         binding.vm = viewModelPager
-        setContentView(binding.root)
     }
 
     override fun onStart() {
@@ -51,7 +53,9 @@ class ViewPagerActivity : AppCompatActivity() {
                     viewModelPager.moveToRecipe()
                 }
             }
+//            TabLayoutMediator(tabLayoutDots, viewPager) { _, _ -> }.attach() // тут или в layout через BindingAdapter?
         }
+
         viewModelPager.isMovingToRecipe.observe(this) {
             if (it) {
                 viewModelPager.setNotFirstLaunch()

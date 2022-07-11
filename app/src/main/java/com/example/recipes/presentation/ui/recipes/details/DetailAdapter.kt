@@ -1,19 +1,16 @@
 package com.example.recipes.presentation.ui.recipes.details
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import by.kirich1409.viewbindingdelegate.viewBinding
-import com.example.recipes.R
 import com.example.recipes.business.domain.models.Ingredient
 import com.example.recipes.databinding.FragmentDetailRecipeItemBinding
 
 class DetailAdapter : ListAdapter<Ingredient, DetailViewHolder>(IngredientsComparator()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailViewHolder {
-        return DetailViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.fragment_detail_recipe_item, parent, false))
+        return DetailViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: DetailViewHolder, position: Int) {
@@ -21,13 +18,19 @@ class DetailAdapter : ListAdapter<Ingredient, DetailViewHolder>(IngredientsCompa
     }
 }
 
-class DetailViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-
-    private val viewBinding by viewBinding(FragmentDetailRecipeItemBinding::bind)
+class DetailViewHolder private constructor(
+    private val binding: FragmentDetailRecipeItemBinding
+) : RecyclerView.ViewHolder(binding.root) {
 
     fun onBind(ingredient: Ingredient) {
-        viewBinding.apply {
-            tvDetailItem.text = ingredient.text
+        binding.tvDetailItem.text = ingredient.text
+    }
+
+    companion object {
+        fun from(parent: ViewGroup): DetailViewHolder {
+            val inflater = LayoutInflater.from(parent.context)
+            val binding = FragmentDetailRecipeItemBinding.inflate(inflater, parent, false)
+            return DetailViewHolder(binding)
         }
     }
 }

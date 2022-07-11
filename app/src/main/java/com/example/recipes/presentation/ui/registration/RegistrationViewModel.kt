@@ -20,25 +20,36 @@ import javax.inject.Inject
 @HiltViewModel
 class RegistrationViewModel @Inject constructor(application: Application) : BaseViewModel(application) {
 
-    val isSignUpPage = MutableLiveData(false)
-
-    private val _user = MutableLiveData<FirebaseUser?>()
-    val user: LiveData<FirebaseUser?> = _user
-
-    val messageForUser = MutableLiveData<String>(null)
-
-    val etLoginError = MutableLiveData<String?>(null)
-    val etUserNameError = MutableLiveData<String?>(null)
-    val etPasswordError = MutableLiveData<String?>(null)
-    val etConfirmPasswordError = MutableLiveData<String?>(null)
+    val messageForUser = MutableLiveData<String?>()
 
     private val email = MutableLiveData<CharSequence>()
     private val userName = MutableLiveData<CharSequence>()
     private val password = MutableLiveData<CharSequence>()
     private val confirmPassword = MutableLiveData<CharSequence>()
 
-    val progressSingingVisibility = MutableLiveData(false)
-    val btnSignInVisibility = MutableLiveData(true)
+    private val _isSignUpPage = MutableLiveData(false)
+    val isSignUpPage: LiveData<Boolean> = _isSignUpPage
+
+    private val _user = MutableLiveData<FirebaseUser?>()
+    val user: LiveData<FirebaseUser?> = _user
+
+    private val _isETLoginError = MutableLiveData<Boolean?>()
+    val isETLoginError: LiveData<Boolean?> = _isETLoginError
+
+    private val _isETUserNameError = MutableLiveData<Boolean?>()
+    val isETUserNameError: LiveData<Boolean?> = _isETUserNameError
+
+    private val _etPasswordError = MutableLiveData<Boolean?>()
+    val etPasswordError: LiveData<Boolean?> = _etPasswordError
+
+    private val _etConfirmPasswordError = MutableLiveData<Boolean?>()
+    val etConfirmPasswordError: LiveData<Boolean?> = _etConfirmPasswordError
+
+    private val _progressSingingVisibility = MutableLiveData(false)
+    val progressSingingVisibility: LiveData<Boolean> = _progressSingingVisibility
+
+    private val _btnSignInVisibility = MutableLiveData(true)
+    val btnSignInVisibility: LiveData<Boolean> = _btnSignInVisibility
 
     private fun setEmail(value: CharSequence?) {
         value?.let { email.value = it }
@@ -68,42 +79,42 @@ class RegistrationViewModel @Inject constructor(application: Application) : Base
 
     fun onLoginTextChanged(it: CharSequence) {
         if (checkForWatcherEmail(it.toString())) {
-            etLoginError.value = null
+            _isETLoginError.value = null
         } else {
-            etLoginError.value = context.getString(R.string.value_not_email)
+            _isETLoginError.value = true
         }
         setEmail(it)
     }
 
     fun onNameTextChanged(it: CharSequence) {
         if (checkForWatcherUserName(it.toString())) {
-            etUserNameError.value = null
+            _isETUserNameError.value = null
         } else {
-            etUserNameError.value = context.getString(R.string.user_name_not_set)
+            _isETUserNameError.value = true
         }
         setUserName(it)
     }
 
     fun etPasswordTextChanged(it: CharSequence) {
         if (checkForWatcherPassword(it.toString())) {
-            etPasswordError.value = null
+            _etPasswordError.value = null
         } else {
-            etPasswordError.value = context.getString(R.string.min_length_password)
+            _etPasswordError.value = true
         }
         setPassword(it)
     }
 
     fun etConfirmPasswordTextChanged(it: CharSequence) {
         if (checkForWatcherConfirmPassword(password.value.toString(), it.toString())) {
-            etConfirmPasswordError.value = null
+            _etConfirmPasswordError.value = null
         } else {
-            etConfirmPasswordError.value = context.getString(R.string.value_not_match_password)
+            _etConfirmPasswordError.value = true
         }
         setConfirmPassword(it)
     }
 
     private fun signUp(auth: FirebaseAuth) {
-        if (checkForClickPasswordsSingUp() && checkForClickEmail() && checkForClickUserName()) {
+        if (checkForClickEmail() && checkForClickPasswordsSingUp() && checkForClickUserName()) {
             auth.createUserWithEmailAndPassword(
                 email.value.toString(),
                 password.value.toString()
@@ -134,7 +145,7 @@ class RegistrationViewModel @Inject constructor(application: Application) : Base
     }
 
     fun switchLogReg() {
-        isSignUpPage.value = !isSignUpPage.value!!
+        _isSignUpPage.value = !isSignUpPage.value!!
     }
 
     fun sendPasswordResetEmail(auth: FirebaseAuth) {
@@ -153,7 +164,7 @@ class RegistrationViewModel @Inject constructor(application: Application) : Base
     }
 
     private fun setName(auth: FirebaseAuth) {
-        auth.currentUser?.updateProfile(userProfileChangeRequest {                                  // перенести в юзкейс
+        auth.currentUser?.updateProfile(userProfileChangeRequest {                                 // перенести в юзкейс
             displayName = userName.value.toString()
         })?.addOnCompleteListener {
             if (it.isSuccessful) {
@@ -192,7 +203,7 @@ class RegistrationViewModel @Inject constructor(application: Application) : Base
     }
 
     private fun checkForWatcherUserName(userName: String): Boolean {
-        return userName.isNotEmpty()
+        return userName.isEmpty()
     }
 
     private fun checkForWatcherPassword(password: String): Boolean {
@@ -271,8 +282,8 @@ class RegistrationViewModel @Inject constructor(application: Application) : Base
     }
 
     fun changeVisibilityAtProgress() {
-        progressSingingVisibility.postValue(!progressSingingVisibility.value!!)
-        btnSignInVisibility.postValue(!btnSignInVisibility.value!!)
+        _progressSingingVisibility.postValue(!progressSingingVisibility.value!!)
+        _btnSignInVisibility.postValue(!btnSignInVisibility.value!!)
     }
 
     fun setFirebaseUser(user: FirebaseUser) {

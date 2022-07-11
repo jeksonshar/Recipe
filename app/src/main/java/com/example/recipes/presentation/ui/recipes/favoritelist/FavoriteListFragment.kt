@@ -74,6 +74,7 @@ class FavoriteListFragment : Fragment(R.layout.fragment_recipe_list) {
             tvErrorLoading.isVisible = false
             progressBarPaging.isVisible = false
             progressBarWhileListEmpty.isVisible = false
+            ivOpenSearchET.isVisible = false
 
             bottomNavigation.selectedItemId = R.id.favoriteListFragment
 //            bottomNavigation.setupWithNavController(findNavController()) // при нажатии назад selectedItem остается на предидущем значении
@@ -118,7 +119,7 @@ class FavoriteListFragment : Fragment(R.layout.fragment_recipe_list) {
         viewModelFavorite.favoriteRecipes.observe(viewLifecycleOwner, {
             adapter?.submitList(it)
             if (it.isEmpty()) {
-                binding.ivEmptyList.setImageResource(R.drawable.empty_favorite_list)
+                binding.ivEmptyList.setImageResource(R.drawable.empty_favorite_list_removebg_preview)
                 binding.ivEmptyList.visibility = View.VISIBLE
             } else {
                 binding.ivEmptyList.visibility = View.GONE

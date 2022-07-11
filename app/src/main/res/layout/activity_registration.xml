@@ -16,6 +16,7 @@
         style="@style/Theme.Recipes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:overScrollMode="never"
         tools:context=".presentation.ui.registration.RegistrationActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -58,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 app:endIconMode="clear_text"
-                app:error="@{vm.etLoginError}"
+                app:error='@{vm.isETLoginError ? @string/value_not_email : ""}'
                 app:errorEnabled="true"
                 app:layout_constraintBottom_toTopOf="@+id/etUserName"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -86,7 +87,7 @@
                 android:layout_marginHorizontal="16dp"
                 android:visibility="@{vm.isSignUpPage ? View.VISIBLE : View.GONE}"
                 app:endIconMode="clear_text"
-                app:error="@{vm.etUserNameError}"
+                app:error='@{vm.isETUserNameError ? @string/user_name_not_set : ""}'
                 app:errorEnabled="true"
                 app:layout_constraintBottom_toTopOf="@id/etPassword"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -111,7 +112,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                app:error="@{vm.etPasswordError}"
+                app:error='@{vm.etPasswordError ? @string/min_length_password : ""}'
                 app:errorEnabled="true"
                 app:layout_constraintBottom_toTopOf="@+id/etConfirmPassword"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -138,7 +139,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:visibility="@{vm.isSignUpPage ? View.VISIBLE : View.GONE}"
-                app:error="@{vm.etConfirmPasswordError}"
+                app:error='@{vm.etConfirmPasswordError ? @string/value_not_match_password : ""}'
                 app:errorEnabled="true"
                 app:layout_constraintBottom_toTopOf="@+id/tvForgotPassword"
                 app:layout_constraintEnd_toEndOf="parent"
