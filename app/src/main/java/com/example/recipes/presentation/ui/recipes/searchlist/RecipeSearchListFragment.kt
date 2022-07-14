@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.isVisible
-import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
@@ -17,10 +16,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.paging.LoadState
-import androidx.recyclerview.widget.GridLayoutManager
 import com.example.recipes.R
 import com.example.recipes.business.domain.models.Recipe
-import com.example.recipes.business.domain.singletons.FirebaseUserSingleton
 import com.example.recipes.business.utils.CheckConnectionUtils
 import com.example.recipes.databinding.FragmentRecipeListBinding
 import com.example.recipes.presentation.ui.recipes.BackPressedSingleton
@@ -30,19 +27,18 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class RecipeSearchListFragment : Fragment(R.layout.fragment_recipe_list) {
+class RecipeSearchListFragment : Fragment() {
 
     private var _binding: FragmentRecipeListBinding? = null
     private val binding get() = _binding!!
 
     private val viewModelSearch: RecipeSearchListViewModel by viewModels()
 
-    private lateinit var auth: FirebaseAuth
+    private var auth: FirebaseAuth? = null
 
     private var clickListener: RecipeClickListener? = object : RecipeClickListener {
         override fun openRecipeDetailsFragment(recipe: Recipe) {
@@ -70,40 +66,22 @@ class RecipeSearchListFragment : Fragment(R.layout.fragment_recipe_list) {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentRecipeListBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
+        binding.vm = viewModelSearch
+
+        auth = Firebase.auth
+
         binding.apply {
 
-            auth = Firebase.auth
             val navController = findNavController()
             val appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
             titleOfList.setupWithNavController(navController, appBarConfiguration)
 
             val header = navView.getHeaderView(0)
-            header.findViewById<TextView>(R.id.headerTitle).text = auth.currentUser?.displayName
-            header.findViewById<TextView>(R.id.headerText).text = auth.currentUser?.email
+            header.findViewById<TextView>(R.id.headerTitle).text = auth.let { it?.currentUser?.displayName }
+            header.findViewById<TextView>(R.id.headerText).text = auth.let { it?.currentUser?.email }
 
-            recyclerRecipe.layoutManager = GridLayoutManager(requireContext(), 2)
             recyclerRecipe.adapter = pagingAdapter
-
-            etSearch.doAfterTextChanged {
-                viewModelSearch.liveSearchByQuery(it)
-            }
-
-            /**
-            Альтеранативная doAfterTextChanged {..} реализация живого поиска, более тяжелая и более функцинальная
-
-            binding?.etSearch?.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-            viewModel.liveSearchByQuery(s)
-            }
-            })
-             */
-
 
             ivOpenSearchET.setOnClickListener {
                 viewModelSearch.changeSearchIsOpenedValue(etSearch.visibility)
@@ -114,8 +92,7 @@ class RecipeSearchListFragment : Fragment(R.layout.fragment_recipe_list) {
             }
 
             etSearch.setOnClickListener {
-                val text = etSearch.text
-                viewModelSearch.searchByTouch(text)
+                viewModelSearch.searchByTouch(etSearch.text)
             }
 
             bottomNavigation.selectedItemId = R.id.recipeSearchListFragment
@@ -146,7 +123,7 @@ class RecipeSearchListFragment : Fragment(R.layout.fragment_recipe_list) {
                         signOutUser()
                     }
                     R.id.delete -> {
-                        auth.currentUser?.delete()
+                        auth?.currentUser?.delete()
                         signOutUser()
                     }
                     else -> false
@@ -175,20 +152,15 @@ class RecipeSearchListFragment : Fragment(R.layout.fragment_recipe_list) {
             }
         }
 
-        if (!CheckConnectionUtils.isNetConnected(requireContext())) {
-//            NoConnectionDialogFragment().show(requireActivity().supportFragmentManager, null) // не подходит по логике работы диалога
-            findNavController().navigate(R.id.action_recipeSearchListFragment_to_noConnectionDialogFragment)
-        }
-
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModelSearch.queryHandler.collect {
+                // много ифов, нужно сделать красиво и понятно!!! LoadingRecipesSingleton - на костыль похоже
                 if (!it.isNullOrEmpty()) {
-                    if (BackPressedSingleton.isBackPressClick == null) {
-                        lifecycleScope.launch {
-                            viewModelSearch.recipes(it)?.collectLatest { pagingData ->
-                                binding.ivEmptyList.visibility = View.GONE
-                                pagingAdapter?.submitData(pagingData)
-                            }
+                    if (BackPressedSingleton.isBackPressClick == null) { // нажата назад - не скачиваем данные, а берем имеющиеся значения
+                        loadRecipes(it)
+                    } else {
+                        if (LoadingRecipesSingleton.isDataLoaded == null) { // если имеющихся значений нет - скачиваем
+                            loadRecipes(it)
                         }
                     }
                 } else {
@@ -218,8 +190,20 @@ class RecipeSearchListFragment : Fragment(R.layout.fragment_recipe_list) {
         }
     }
 
+    private suspend fun loadRecipes(query: String) {
+        if (!CheckConnectionUtils.isNetConnected(requireContext())) {
+            findNavController().navigate(R.id.action_recipeSearchListFragment_to_noConnectionDialogFragment)
+        } else {
+                viewModelSearch.recipes(query)?.collectLatest { pagingData ->
+                    LoadingRecipesSingleton.isDataLoaded = true
+                    binding.ivEmptyList.visibility = View.GONE
+                    pagingAdapter?.submitData(pagingData)
+                }
+        }
+    }
+
     private fun signOutUser(): Boolean {
-        auth.signOut()
+        auth?.signOut()
         startActivity(Intent(requireContext(), RegistrationActivity::class.java))
         viewModelSearch.resetLastQuery()
         requireActivity().finish()

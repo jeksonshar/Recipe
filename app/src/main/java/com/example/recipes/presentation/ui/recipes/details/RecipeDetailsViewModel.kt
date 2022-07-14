@@ -18,11 +18,12 @@ class RecipeDetailsViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    //    private val id = savedStateHandle.get<String>(RECIPE_KEY)
     private var _currentRecipe = MutableLiveData<Recipe>()
     val currentRecipe: LiveData<Recipe> = _currentRecipe
+
     private val _currentRecipeIngredients = MutableLiveData<List<Ingredient>>()
     val currentRecipeIngredients: LiveData<List<Ingredient>> = _currentRecipeIngredients
+
     val progressVisibilityLiveData = MutableLiveData<Boolean>()
     val errorMassageLiveData = MutableLiveData<String?>()
     val retryVisibilityLiveData = MutableLiveData<Boolean>()
@@ -33,7 +34,7 @@ class RecipeDetailsViewModel @Inject constructor(
         _currentRecipe.value = RecipeSingleton.recipe
         _currentRecipeIngredients.value = recipe?.ingredients
         progressVisibilityLiveData.value = false
-        errorMassageLiveData.value = ""
+        errorMassageLiveData.value = null
         retryVisibilityLiveData.value = false
     }
 

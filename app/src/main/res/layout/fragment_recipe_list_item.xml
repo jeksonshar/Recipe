@@ -34,7 +34,7 @@
             android:maxLines="2"
             android:padding="8dp"
             android:text="@string/name_of_recipe"
-            android:textColor="#6e1e05"
+            android:textColor="@color/recipe_list_item_text"
             android:textSize="16sp"
             android:textStyle="bold|italic"
             app:layout_constraintBottom_toBottomOf="parent"

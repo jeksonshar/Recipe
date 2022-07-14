@@ -8,8 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 class ViewPagerAdapter(private val layouts: IntArray) : RecyclerView.Adapter<SliderViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SliderViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
-        return SliderViewHolder(view)
+        return SliderViewHolder.from(parent, viewType)
     }
 
     override fun onBindViewHolder(holder: SliderViewHolder, position: Int) {
@@ -24,4 +23,16 @@ class ViewPagerAdapter(private val layouts: IntArray) : RecyclerView.Adapter<Sli
     }
 }
 
-class SliderViewHolder(view: View) : RecyclerView.ViewHolder(view)
+class SliderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    companion object {
+        fun from(parent: ViewGroup, viewType: Int): SliderViewHolder {
+            val inflater = LayoutInflater.from(parent.context)
+            val view = inflater.inflate(
+                viewType,
+                parent,
+                false
+            )
+            return SliderViewHolder(view)
+        }
+    }
+}

@@ -35,4 +35,10 @@
     <style name="ImageButtonStyle" parent="@style/Widget.AppCompat.Button.Borderless.Colored">
         <item name="colorOnBackground">@color/green_light</item>
     </style>
+
+    <style name="BackgroundForSearchEditText" parent="Theme.AppCompat">
+        <item name="android:background">@drawable/background_edit_text_light</item>
+        <item name="android:textColorHint">@color/olive</item>
+        <item name="android:textColor">@color/gray_dark</item>
+    </style>
 </resources>

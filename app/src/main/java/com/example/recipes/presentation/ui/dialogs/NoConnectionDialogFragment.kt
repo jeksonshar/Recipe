@@ -8,23 +8,25 @@ import androidx.fragment.app.DialogFragment
 import com.example.recipes.R
 import com.example.recipes.databinding.DialogNoConnectionBinding
 import com.example.recipes.business.utils.CheckConnectionUtils
+import com.example.recipes.presentation.ui.recipes.BackPressedSingleton
 
-class NoConnectionDialogFragment : DialogFragment(R.layout.dialog_no_connection) {
+class NoConnectionDialogFragment : DialogFragment() {
 
     private var _binding: DialogNoConnectionBinding? = null
-    private val binding get() = _binding
+    private val binding get() = _binding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = DialogNoConnectionBinding.inflate(inflater, container, false)
-        return binding?.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding?.okButton?.setOnClickListener {
+        binding.okButton.setOnClickListener {
             if (CheckConnectionUtils.isNetConnected(requireContext())) {
                 requireActivity().onBackPressed()
+                BackPressedSingleton.clear()
             }
         }
     }

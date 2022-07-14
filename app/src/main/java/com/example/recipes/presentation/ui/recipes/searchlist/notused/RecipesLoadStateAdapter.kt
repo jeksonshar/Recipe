@@ -1,4 +1,4 @@
-package com.example.recipes.presentation.ui.recipes.searchlist
+package com.example.recipes.presentation.ui.recipes.searchlist.notused
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

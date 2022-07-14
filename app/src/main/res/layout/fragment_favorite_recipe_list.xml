@@ -9,14 +9,14 @@
 
         <variable
             name="vm"
-            type="com.example.recipes.presentation.ui.recipes.searchlist.RecipeSearchListViewModel" />
+            type="com.example.recipes.presentation.ui.recipes.favoritelist.FavoriteListViewModel" />
     </data>
 
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.ui.recipes.searchlist.RecipeSearchListFragment">
+        tools:context=".presentation.ui.recipes.favoritelist.FavoriteListFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/navHostFragmentContainer"
@@ -34,7 +34,7 @@
                 android:gravity="center_vertical"
                 app:contentInsetStartWithNavigation="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:titleMarginStart="0dp">
@@ -52,44 +52,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:text="@string/recipes"
+                    android:text="@string/favorite_recipes"
                     android:textColor="#191A19"
                     android:textSize="18sp"
                     android:textStyle="italic" />
 
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="match_parent"
-                    android:layout_height="32dp"
-                    android:layout_marginEnd="16dp"
-                    android:gravity="end">
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/ivOpenSearchET"
-                        android:layout_width="20dp"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/search" />
-                </androidx.appcompat.widget.LinearLayoutCompat>
-
             </androidx.appcompat.widget.Toolbar>
-
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/etSearch"
-                style="@style/BackgroundForSearchEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="4dp"
-                android:afterTextChanged="@{(text) -> vm.liveSearchByQuery(text)}"
-                android:drawableEnd="@android:drawable/ic_search_category_default"
-                android:hint="@string/type_your_query"
-                android:imeOptions="actionSearch"
-                android:inputType="text"
-                android:maxLines="1"
-                android:paddingHorizontal="4dp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@+id/coordinatorRecipeList"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/titleOfList" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/ivEmptyList"
@@ -99,30 +67,17 @@
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/etSearch"
+                app:layout_constraintTop_toBottomOf="@id/titleOfList"
                 app:srcCompat="@drawable/empty_list_removebg_preview" />
-
-            <com.google.android.material.progressindicator.LinearProgressIndicator
-                android:id="@+id/progressBarPaging"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:indeterminate="true"
-                android:paddingTop="2dp"
-                android:paddingBottom="2dp"
-                android:visibility="visible"
-                app:layout_constraintBottom_toTopOf="@id/tvErrorLoading"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/coordinatorRecipeList" />
 
             <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:id="@+id/coordinatorRecipeList"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:layout_constraintBottom_toTopOf="@id/progressBarPaging"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etSearch">
+                app:layout_constraintTop_toBottomOf="@id/titleOfList">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerRecipe"
@@ -130,8 +85,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:layout_marginEnd="4dp"
-                    app:spanCount="2"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager" />
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="2"/>
 
                 <com.google.android.material.bottomnavigation.BottomNavigationView
                     android:id="@+id/bottom_navigation"
@@ -149,33 +104,11 @@
                 android:id="@+id/progressBarWhileListEmpty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/titleOfList" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvErrorLoading"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="@string/error_message"
-                android:textColor="@color/gray"
-                app:layout_constraintBottom_toTopOf="@id/buttonRetry"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/progressBarPaging" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/buttonRetry"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/retry"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvErrorLoading" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -8,7 +8,6 @@
     <fragment
         android:id="@+id/recipeSearchListFragment"
         android:name="com.example.recipes.presentation.ui.recipes.searchlist.RecipeSearchListFragment"
-        android:label="fragment_recipe_search_list"
         tools:layout="@layout/fragment_recipe_list" >
         <action
             android:id="@+id/action_recipeSearchListFragment_to_recipeDetailsFragment"
@@ -35,7 +34,7 @@
     <fragment
         android:id="@+id/favoriteListFragment"
         android:name="com.example.recipes.presentation.ui.recipes.favoritelist.FavoriteListFragment"
-        android:label="FavoriteListFragment" >
+        tools:layout="@layout/fragment_favorite_recipe_list">
         <action
             android:id="@+id/action_favoriteListFragment_to_recipeSearchListFragment"
             app:destination="@id/recipeSearchListFragment"

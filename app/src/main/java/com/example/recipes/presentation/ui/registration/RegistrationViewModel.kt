@@ -18,7 +18,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class RegistrationViewModel @Inject constructor(application: Application) : BaseViewModel(application) {
+class RegistrationViewModel @Inject constructor(
+    application: Application       // как без application выполнять логику VM в которой приходится обращаться к строкам?
+) : BaseViewModel(application) {
 
     val messageForUser = MutableLiveData<String?>()
 

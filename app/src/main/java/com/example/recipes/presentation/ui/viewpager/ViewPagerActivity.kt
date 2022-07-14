@@ -9,7 +9,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.recipes.R
 import com.example.recipes.databinding.ActivityViewPagerBinding
 import com.example.recipes.presentation.ui.registration.RegistrationActivity
-import com.example.recipes.presentation.ui.viewpager.TabLayoutBindingAdapter.setViewPager
 import com.example.recipes.presentation.ui.viewpager.transfotmers.HorizontalFlipTransformation
 import com.example.recipes.presentation.utils.NextViewPageUtil.onNextPageClick
 import com.google.android.material.tabs.TabLayoutMediator
@@ -18,7 +17,9 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ViewPagerActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityViewPagerBinding
+    private var _binding: ActivityViewPagerBinding? = null
+    private val binding: ActivityViewPagerBinding
+        get() = _binding!!
 
     private val viewModelPager: ViewPagerViewModel by viewModels()
 
@@ -31,14 +32,14 @@ class ViewPagerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_view_pager)
+        _binding = DataBindingUtil.setContentView(this, R.layout.activity_view_pager)
         binding.lifecycleOwner = this
         binding.vm = viewModelPager
     }
 
     override fun onStart() {
         super.onStart()
-        binding.apply {                     //  в onCreate послесворачивания и открытия не происходит регистрации
+        binding.apply {                        //  в onCreate послесворачивания и открытия не происходит регистрации
             viewPager.registerOnPageChangeCallback(pageChangeCallback)
             viewPager.setPageTransformer(HorizontalFlipTransformation())
         }
@@ -53,7 +54,7 @@ class ViewPagerActivity : AppCompatActivity() {
                     viewModelPager.moveToRecipe()
                 }
             }
-//            TabLayoutMediator(tabLayoutDots, viewPager) { _, _ -> }.attach() // тут или в layout через BindingAdapter?
+//            TabLayoutMediator(tabLayoutDots, viewPager) { _, _ -> }.attach()  // тут или в layout через BindingAdapter?
         }
 
         viewModelPager.isMovingToRecipe.observe(this) {

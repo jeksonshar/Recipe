@@ -73,9 +73,9 @@
                     android:id="@+id/etEditLogin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:afterTextChanged="@{(text) -> vm.onLoginTextChanged(text)}"
                     android:hint="@string/email"
-                    android:inputType="textEmailAddress"
-                    android:afterTextChanged="@{(text) -> vm.onLoginTextChanged(text)}" />
+                    android:inputType="textEmailAddress" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -100,9 +100,9 @@
                     android:id="@+id/etEditUserName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:afterTextChanged="@{(text) -> vm.onNameTextChanged(text)}"
                     android:hint="@string/user_name"
-                    android:inputType="textEmailAddress"
-                    android:afterTextChanged="@{(text) -> vm.onNameTextChanged(text)}" />
+                    android:inputType="textEmailAddress" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -126,9 +126,9 @@
                     android:id="@+id/etEditPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:afterTextChanged="@{(text) -> vm.etPasswordTextChanged(text)}"
                     android:hint="@string/password"
-                    android:inputType="textPassword"
-                    android:afterTextChanged="@{(text) -> vm.etPasswordTextChanged(text)}" />
+                    android:inputType="textPassword" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -153,9 +153,9 @@
                     android:id="@+id/etEditConfirmPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:afterTextChanged="@{(text) -> vm.etConfirmPasswordTextChanged(text)}"
                     android:hint="@string/confirm_password"
-                    android:inputType="textPassword"
-                    android:afterTextChanged="@{(text) -> vm.etConfirmPasswordTextChanged(text)}" />
+                    android:inputType="textPassword" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

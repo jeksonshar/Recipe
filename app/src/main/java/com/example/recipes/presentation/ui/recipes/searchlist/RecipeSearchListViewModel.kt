@@ -96,8 +96,8 @@ class RecipeSearchListViewModel @Inject constructor(
     }
 
     override fun onCleared() {
-        BackPressedSingleton.clear()
         super.onCleared()
+        BackPressedSingleton.clear()
     }
 
     companion object {

@@ -1,15 +1,12 @@
 package com.example.recipes.presentation.ui.recipes.favoritelist
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.AppCompatImageView
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.recipes.R
 import com.example.recipes.business.domain.models.Recipe
+import com.example.recipes.databinding.FragmentRecipeListItemBinding
 import com.example.recipes.presentation.ui.recipes.RecipeClickListener
 import com.example.recipes.presentation.utils.ImagesUtil
 
@@ -18,14 +15,12 @@ class FavoriteListAdapter(
 ) : ListAdapter<Recipe, FavoriteListViewHolder>(FavoriteRecipesComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteListViewHolder {
-        return FavoriteListViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.fragment_recipe_list_item, parent, false)
-        )
+        return FavoriteListViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: FavoriteListViewHolder, position: Int) {
         getItem(position).let { recipe ->
-            holder.onBind(recipe)
+            holder.bind(recipe)
             holder.itemView.setOnClickListener {
                 clickListener.openRecipeDetailsFragment(recipe)
             }
@@ -33,15 +28,27 @@ class FavoriteListAdapter(
     }
 }
 
-class FavoriteListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+class FavoriteListViewHolder(
+    private val binding: FragmentRecipeListItemBinding
+) : RecyclerView.ViewHolder(binding.root) {
 
-    private val recipeImageView = view.findViewById<AppCompatImageView>(R.id.ivItemRecipeList)
-    private val recipeName = view.findViewById<AppCompatTextView>(R.id.tvNameRecipe)
+    fun bind(recipe: Recipe) {
+        binding.apply {
+            ImagesUtil.setImage(recipe.image, ivItemRecipeList)
+            tvNameRecipe.text = recipe.label
+        }
+    }
 
-    fun onBind(recipe: Recipe) {
-
-        ImagesUtil.setImage(recipe.image, recipeImageView)
-        recipeName.text = recipe.label
+    companion object {
+        fun from(parent: ViewGroup): FavoriteListViewHolder {
+            val inflater = LayoutInflater.from(parent.context)
+            val binding = FragmentRecipeListItemBinding.inflate(
+                inflater,
+                parent,
+                false
+            )
+            return FavoriteListViewHolder(binding)
+        }
     }
 }
 

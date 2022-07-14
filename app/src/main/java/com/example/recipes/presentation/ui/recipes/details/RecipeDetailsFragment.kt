@@ -12,12 +12,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipes.R
 import com.example.recipes.databinding.FragmentDetailRecipeBinding
+import com.example.recipes.presentation.ui.recipes.BackPressedSingleton
 import com.example.recipes.presentation.utils.ImagesUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class RecipeDetailsFragment : Fragment(R.layout.fragment_detail_recipe) {
+class RecipeDetailsFragment : Fragment() {
 
     private var _binding: FragmentDetailRecipeBinding? = null
     private val binding get() = _binding!!
@@ -57,7 +58,7 @@ class RecipeDetailsFragment : Fragment(R.layout.fragment_detail_recipe) {
         super.onViewCreated(view, savedInstanceState)
 
 
-        viewModel.currentRecipe.observe(viewLifecycleOwner, { recipe ->
+        viewModel.currentRecipe.observe(viewLifecycleOwner) { recipe ->
             Log.d("TAG", "onViewCreated: Recipe = ${recipe.label} ")
             binding.apply {
                 ivRecipeDetail.let {
@@ -66,43 +67,41 @@ class RecipeDetailsFragment : Fragment(R.layout.fragment_detail_recipe) {
                 tvDetailRecipeName.text = recipe.label
                 viewModel.recipeIsFavorite(recipe.uri)
             }
-        })
+        }
 
-        viewModel.currentRecipeIsFavorite.observe(viewLifecycleOwner, {
+        viewModel.currentRecipeIsFavorite.observe(viewLifecycleOwner) {
             if (it) {
                 binding.favoriteImage.setImageResource(R.drawable.like_on)
             } else {
                 binding.favoriteImage.setImageResource(R.drawable.like_off)
             }
-        })
+        }
 
-        viewModel.currentRecipeIngredients.observe(viewLifecycleOwner, {
+        viewModel.currentRecipeIngredients.observe(viewLifecycleOwner) {
             adapter.submitList(it)
-        })
+        }
 
-        viewModel.progressVisibilityLiveData.observe(viewLifecycleOwner, {
+        viewModel.progressVisibilityLiveData.observe(viewLifecycleOwner) {
             binding.progressBarDetail.isVisible = it
-        })
+        }
 
-        viewModel.errorMassageLiveData.observe(viewLifecycleOwner, {
-            if (!it.isNullOrEmpty()) {
-                binding.apply {
+        viewModel.errorMassageLiveData.observe(viewLifecycleOwner) {
+            binding.apply {
+                if (!it.isNullOrEmpty()) {
                     tvErrorDetail.text = it
                     tvErrorDetail.isVisible = true
                     buttonRetryDetail.isVisible = true
-                }
-            } else {
-                binding.apply {
+                } else {
                     tvErrorDetail.isVisible = false
                     buttonRetryDetail.isVisible = false
                     tvDetailIngredient.isVisible = true
                 }
             }
-        })
+        }
 
-        viewModel.retryVisibilityLiveData.observe(viewLifecycleOwner, {
+        viewModel.retryVisibilityLiveData.observe(viewLifecycleOwner) {
             binding.buttonRetryDetail.isVisible = it
-        })
+        }
     }
 
     override fun onDestroyView() {

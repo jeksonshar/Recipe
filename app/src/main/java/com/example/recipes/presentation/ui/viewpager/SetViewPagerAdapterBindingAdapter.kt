@@ -1,6 +1,5 @@
 package com.example.recipes.presentation.ui.viewpager
 
-import android.view.View
 import androidx.databinding.BindingAdapter
 import androidx.viewpager2.widget.ViewPager2
 

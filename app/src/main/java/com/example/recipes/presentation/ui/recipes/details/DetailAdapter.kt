@@ -9,6 +9,7 @@ import com.example.recipes.business.domain.models.Ingredient
 import com.example.recipes.databinding.FragmentDetailRecipeItemBinding
 
 class DetailAdapter : ListAdapter<Ingredient, DetailViewHolder>(IngredientsComparator()) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailViewHolder {
         return DetailViewHolder.from(parent)
     }

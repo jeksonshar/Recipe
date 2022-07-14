@@ -7,7 +7,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
 import com.example.recipes.R
+import com.example.recipes.business.utils.CheckConnectionUtils
 import com.example.recipes.databinding.ActivityRegistrationBinding
 import com.example.recipes.presentation.ui.recipes.RecipesActivity
 import com.firebase.ui.auth.AuthUI
@@ -25,7 +27,11 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class RegistrationActivity : AppCompatActivity(), ConfirmationListener {
 
-    private lateinit var auth: FirebaseAuth
+    private var _binding: ActivityRegistrationBinding? = null
+    private val binding: ActivityRegistrationBinding
+        get() = _binding!!
+
+    private var auth: FirebaseAuth? = null
 
     private val signInLauncher = registerForActivityResult(
         FirebaseAuthUIActivityResultContract()
@@ -33,14 +39,12 @@ class RegistrationActivity : AppCompatActivity(), ConfirmationListener {
         this.onSignInWithSocialResult(it)
     }
 
-    val viewModel: RegistrationViewModel by viewModels()
-
-    private lateinit var binding: ActivityRegistrationBinding
+    private val viewModel: RegistrationViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_registration)
+        _binding = DataBindingUtil.setContentView(this, R.layout.activity_registration)
         binding.lifecycleOwner = this
         binding.vm = viewModel
 
@@ -51,7 +55,7 @@ class RegistrationActivity : AppCompatActivity(), ConfirmationListener {
     override fun onStart() {
         super.onStart()
 
-        if (auth.currentUser != null) moveToRecipeActivity()
+        if (auth?.currentUser != null) moveToRecipeActivity()
 
         binding.apply {
             tvForgotPassword.setOnClickListener {
@@ -62,13 +66,17 @@ class RegistrationActivity : AppCompatActivity(), ConfirmationListener {
         binding.apply {
 
             ibtnGoogle.setOnClickListener {
-                val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
-                signInWithSocial(providers)
+                if (isConnected()) {
+                    val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
+                    signInWithSocial(providers)
+                }
             }
 
             ibtnFacebook.setOnClickListener {
-                val providers = arrayListOf(AuthUI.IdpConfig.FacebookBuilder().build())
-                signInWithSocial(providers)
+                if (isConnected()) {
+                    val providers = arrayListOf(AuthUI.IdpConfig.FacebookBuilder().build())
+                    signInWithSocial(providers)
+                }
             }
         }
 
@@ -90,11 +98,18 @@ class RegistrationActivity : AppCompatActivity(), ConfirmationListener {
     }
 
     override fun confirmButtonClicked() {
-        viewModel.sendPasswordResetEmail(auth)
+        auth?.let { viewModel.sendPasswordResetEmail(it) }
     }
 
     override fun cancelButtonClicked() {
         showSnackBar(applicationContext.getString(R.string.cancel_reset_password))
+    }
+
+    private fun isConnected(): Boolean {
+        return if (!CheckConnectionUtils.isNetConnected(applicationContext)) {
+            showSnackBar("No internet connection")
+            false
+        } else true
     }
 
     private fun signInWithSocial(providers: ArrayList<AuthUI.IdpConfig>) {
@@ -139,7 +154,7 @@ class RegistrationActivity : AppCompatActivity(), ConfirmationListener {
             .make(binding.root, message, Snackbar.LENGTH_INDEFINITE)
 
         mySnackBar.setAction("Ok") {
-            if(!binding.btnSignIn.isVisible) {
+            if (!binding.btnSignIn.isVisible) {
                 viewModel.changeVisibilityAtProgress()
             }
             mySnackBar.dismiss()
@@ -182,5 +197,5 @@ class RegistrationActivity : AppCompatActivity(), ConfirmationListener {
 //            TestData.DATA_3 -> {}
 //            TestData.DATA_4 -> {}
 //        }.exclusive
-//val <T> T.exclusive: T
-//    get() = this
+//        val <T> T.exclusive: T
+//            get() = this

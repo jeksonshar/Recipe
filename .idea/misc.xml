@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/drawable/background_edit_text.xml" value="0.1" />
+        <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/drawable/background_edit_text_light.xml" value="0.1365" />
+        <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/drawable/background_edit_text_night.xml" value="0.1365" />
         <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/drawable/background_favorite.xml" value="0.13" />
         <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/drawable/background_splash.xml" value="0.13" />
         <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/drawable/background_views_slider.xml" value="0.13" />
@@ -22,21 +25,24 @@
         <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/drawable/selected_dot.xml" value="0.137" />
         <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/drawable/tab_selector.xml" value="0.137" />
         <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/activity_recipes.xml" value="0.19907407407407407" />
-        <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/activity_registration.xml" value="0.2421875" />
+        <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/activity_registration.xml" value="0.1" />
         <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/activity_splash_screen.xml" value="0.2421875" />
         <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/activity_view_pager.xml" value="0.2421875" />
+        <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/dialog_no_connection.xml" value="0.2421875" />
         <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/fragment_detail_recipe.xml" value="0.2421875" />
         <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/fragment_detail_recipe_item.xml" value="0.176" />
-        <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/fragment_recipe_list.xml" value="0.2421875" />
+        <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/fragment_favorite_recipe_list.xml" value="0.2421875" />
+        <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/fragment_recipe_list.xml" value="0.16" />
         <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/fragment_recipe_list_item.xml" value="0.10104166666666667" />
         <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/fragment_recipe_search_list.xml" value="0.19907407407407407" />
         <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/fragment_recipe_search_list_item.xml" value="0.2421875" />
         <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/fragment_splash.xml" value="0.12135416666666667" />
-        <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/header_nav_drawer.xml" value="0.4" />
-        <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/item_error.xml" value="0.12135416666666667" />
+        <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/header_nav_drawer.xml" value="0.264" />
+        <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/item_error.xml" value="0.2" />
         <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/slide_four.xml" value="0.12135416666666667" />
         <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/slide_one.xml" value="0.12135416666666667" />
-        <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/slide_three.xml" value="0.12135416666666667" />
+        <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/slide_three.xml" value="0.2" />
+        <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/layout/slide_two.xml" value="0.2421875" />
         <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/menu/menu_bottom_navigation.xml" value="0.19907407407407407" />
         <entry key="..\:/AndroidProjects/recipe-app-eugene/app/src/main/res/menu/menu_drawer.xml" value="0.2" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Recipes/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.21354166666666666" />
