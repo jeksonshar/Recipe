@@ -20,7 +20,8 @@ import com.example.recipes.R
 import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.business.utils.CheckConnectionUtils
 import com.example.recipes.databinding.FragmentRecipeListBinding
-import com.example.recipes.presentation.ui.recipes.BackPressedSingleton
+import com.example.recipes.business.domain.singletons.BackPressedSingleton
+import com.example.recipes.business.domain.singletons.LoadedRecipesSingleton
 import com.example.recipes.presentation.ui.recipes.RecipeClickListener
 import com.example.recipes.presentation.ui.registration.RegistrationActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -159,7 +160,7 @@ class RecipeSearchListFragment : Fragment() {
                     if (BackPressedSingleton.isBackPressClick == null) { // нажата назад - не скачиваем данные, а берем имеющиеся значения
                         loadRecipes(it)
                     } else {
-                        if (LoadingRecipesSingleton.isDataLoaded == null) { // если имеющихся значений нет - скачиваем
+                        if (LoadedRecipesSingleton.isDataLoaded == null) { // если имеющихся значений нет - скачиваем
                             loadRecipes(it)
                         }
                     }
@@ -195,7 +196,7 @@ class RecipeSearchListFragment : Fragment() {
             findNavController().navigate(R.id.action_recipeSearchListFragment_to_noConnectionDialogFragment)
         } else {
                 viewModelSearch.recipes(query)?.collectLatest { pagingData ->
-                    LoadingRecipesSingleton.isDataLoaded = true
+                    LoadedRecipesSingleton.isDataLoaded = true
                     binding.ivEmptyList.visibility = View.GONE
                     pagingAdapter?.submitData(pagingData)
                 }

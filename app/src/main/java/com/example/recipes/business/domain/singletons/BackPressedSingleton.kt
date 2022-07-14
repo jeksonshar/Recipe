@@ -1,4 +1,4 @@
-package com.example.recipes.presentation.ui.recipes
+package com.example.recipes.business.domain.singletons
 
 object BackPressedSingleton {
 

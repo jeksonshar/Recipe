@@ -12,7 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipes.R
 import com.example.recipes.databinding.FragmentDetailRecipeBinding
-import com.example.recipes.presentation.ui.recipes.BackPressedSingleton
 import com.example.recipes.presentation.utils.ImagesUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
