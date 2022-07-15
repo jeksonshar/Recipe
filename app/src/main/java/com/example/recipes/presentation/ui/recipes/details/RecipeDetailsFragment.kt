@@ -41,8 +41,9 @@ class RecipeDetailsFragment : Fragment() {
     ): View {
         _binding = FragmentDetailRecipeBinding.inflate(inflater, container, false)
         binding.apply {
-            rvIngredients.layoutManager = LinearLayoutManager(requireContext())
+
             rvIngredients.adapter = adapter
+
             isFavorite.setOnClickListener {
                 lifecycleScope.launch {
                     viewModel.currentRecipeIsFavorite.value = !viewModel.currentRecipeIsFavorite.value!!
