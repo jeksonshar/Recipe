@@ -25,7 +25,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class FavoriteListFragment : Fragment() {
 
     private var _binding: FragmentFavoriteRecipeListBinding? = null
-    private val binding get() = _binding!!
+    private val binding: FragmentFavoriteRecipeListBinding
+        get() = _binding!!
 
     private val viewModelFavorite: FavoriteListViewModel by viewModels()
 

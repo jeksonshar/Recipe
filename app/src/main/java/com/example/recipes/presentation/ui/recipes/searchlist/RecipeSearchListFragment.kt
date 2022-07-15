@@ -35,7 +35,8 @@ import kotlinx.coroutines.launch
 class RecipeSearchListFragment : Fragment() {
 
     private var _binding: FragmentRecipeListBinding? = null
-    private val binding get() = _binding!!
+    private val binding: FragmentRecipeListBinding
+        get() = _binding!!
 
     private val viewModelSearch: RecipeSearchListViewModel by viewModels()
 
@@ -195,11 +196,11 @@ class RecipeSearchListFragment : Fragment() {
         if (!CheckConnectionUtils.isNetConnected(requireContext())) {
             findNavController().navigate(R.id.action_recipeSearchListFragment_to_noConnectionDialogFragment)
         } else {
-                viewModelSearch.recipes(query)?.collectLatest { pagingData ->
-                    LoadedRecipesSingleton.isDataLoaded = true
-                    binding.ivEmptyList.visibility = View.GONE
-                    pagingAdapter?.submitData(pagingData)
-                }
+            viewModelSearch.recipes(query)?.collectLatest { pagingData ->
+                LoadedRecipesSingleton.isDataLoaded = true
+                binding.ivEmptyList.visibility = View.GONE
+                pagingAdapter?.submitData(pagingData)
+            }
         }
     }
 

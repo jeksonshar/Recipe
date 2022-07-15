@@ -48,6 +48,7 @@ class RecipeDetailsViewModel @Inject constructor(
     }
 
     fun saveOrDeleteRecipeToFavorite() {
+        currentRecipeIsFavorite.postValue(!currentRecipeIsFavorite.value!!)
         viewModelScope.launch {
             currentRecipe.value?.let { manageFavoriteRecipeUseCase.manageRecipe(it) }
         }
