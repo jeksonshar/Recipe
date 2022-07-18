@@ -48,8 +48,8 @@ class ViewPagerViewModel @Inject constructor(
         _isMovingToRecipe.value = true
     }
 
-    fun setViewPagerAdapter(): ViewPagerAdapter {                           //     лучше тут или через @BindingAdapter?
-        return ViewPagerAdapter(slides)
-    }
+//    fun setViewPagerAdapter(): ViewPagerAdapter {
+//        return ViewPagerAdapter(slides)
+//    }
 
 }

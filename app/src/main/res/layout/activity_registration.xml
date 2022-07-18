@@ -7,6 +7,8 @@
 
         <import type="android.view.View" />
 
+        <import type="com.example.recipes.presentation.ui.registration.RegistrationUIModel" />
+
         <variable
             name="vm"
             type="com.example.recipes.presentation.ui.registration.RegistrationViewModel" />
@@ -182,7 +184,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="8dp"
-                android:onClick="@{() -> vm.chooseEnter()}"
+                android:onClick="@{() -> RegistrationUIModel.chooseEnter(context, vm)}"
                 android:text="@{vm.isSignUpPage ? @string/sign_up : @string/sign_in}"
                 android:textAllCaps="false"
                 android:visibility="@{vm.btnSignInVisibility ? View.VISIBLE : View.INVISIBLE}"

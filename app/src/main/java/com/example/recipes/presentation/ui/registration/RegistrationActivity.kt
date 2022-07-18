@@ -7,7 +7,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.fragment.findNavController
 import com.example.recipes.R
 import com.example.recipes.business.utils.CheckConnectionUtils
 import com.example.recipes.databinding.ActivityRegistrationBinding
@@ -98,7 +97,7 @@ class RegistrationActivity : AppCompatActivity(), ConfirmationListener {
     }
 
     override fun confirmButtonClicked() {
-        auth?.let { viewModel.sendPasswordResetEmail(it) }
+        RegistrationUIModel.sendPasswordResetEmail(applicationContext, viewModel)
     }
 
     override fun cancelButtonClicked() {

@@ -23,6 +23,8 @@ class ViewPagerActivity : AppCompatActivity() {
 
     private val viewModelPager: ViewPagerViewModel by viewModels()
 
+    private val adapter by lazy { ViewPagerAdapter(ViewPagerViewModel.slides) }
+
     private val pageChangeCallback: ViewPager2.OnPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
@@ -35,6 +37,8 @@ class ViewPagerActivity : AppCompatActivity() {
         _binding = DataBindingUtil.setContentView(this, R.layout.activity_view_pager)
         binding.lifecycleOwner = this
         binding.vm = viewModelPager
+//            viewPager.adapter = vm.setViewPagerAdapter()        // или так (через VM) или ниже (без VM)
+        binding.viewPager.adapter = adapter
     }
 
     override fun onStart() {
@@ -54,7 +58,7 @@ class ViewPagerActivity : AppCompatActivity() {
                     viewModelPager.moveToRecipe()
                 }
             }
-//            TabLayoutMediator(tabLayoutDots, viewPager) { _, _ -> }.attach()  // тут или в layout через BindingAdapter?
+            TabLayoutMediator(tabLayoutDots, viewPager) { _, _ -> }.attach()
         }
 
         viewModelPager.isMovingToRecipe.observe(this) {
