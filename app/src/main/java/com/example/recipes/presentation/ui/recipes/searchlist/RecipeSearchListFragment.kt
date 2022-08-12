@@ -163,9 +163,6 @@ isProgressBarPagingVisible не активируется при скролинг
                             stateAppend.error is PagingSourceException.Response429Exception -> {
                                 viewModelSearch.loadState.value = loadState
                             }
-                            stateAppend.error is HttpException -> {
-                                viewModelSearch.loadState.value = loadState
-                            }
                             loadState.prepend.endOfPaginationReached -> {
                                 viewModelSearch.isProgressBarPagingVisible.value = false
                             }
