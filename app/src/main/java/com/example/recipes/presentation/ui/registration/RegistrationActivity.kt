@@ -84,10 +84,17 @@ class RegistrationActivity : AppCompatActivity(), ConfirmationListener {
     override fun onResume() {
         super.onResume()
 
-        viewModel.messageForUser.observe(this) {
+        viewModel.exceptionMessageForUser.observe(this) {
             if (!it.isNullOrEmpty()) {
                 showSnackBar(it)
-                viewModel.messageForUser.value = null
+                viewModel.exceptionMessageForUser.value = null
+            }
+        }
+
+        viewModel.resMessageForUser.observe(this) {
+            if (it != null){
+                showSnackBar(applicationContext.getString(it))
+                viewModel.resMessageForUser.value = null
             }
         }
 
@@ -97,7 +104,7 @@ class RegistrationActivity : AppCompatActivity(), ConfirmationListener {
     }
 
     override fun confirmButtonClicked() {
-        RegistrationUIModel.sendPasswordResetEmail(applicationContext, viewModel)
+        viewModel.sendPasswordResetEmail()
     }
 
     override fun cancelButtonClicked() {

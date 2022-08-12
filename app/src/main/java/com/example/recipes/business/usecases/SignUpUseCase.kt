@@ -14,34 +14,34 @@ class SignUpUseCase @Inject constructor(
     private val vm: RegistrationViewModel
 ) {
 
-    fun signUp(email: String, password: String, userName: String) {
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener {
-                taskResultSingUp(it)
-                setName(userName)
-            }
-    }
+//    fun signUp(email: String, password: String, userName: String) {
+//        auth.createUserWithEmailAndPassword(email, password)
+//            .addOnCompleteListener {
+//                taskResultSingUp(it)
+//                setName(userName)
+//            }
+//    }
 
-    private fun taskResultSingUp(task: Task<AuthResult>) {
-        when (task.exception) {
-            is Exception -> {
-                task.exception?.localizedMessage?.let { message ->
-                    vm.messageForUser.value = message
-                }
-//                _user.value = null
-            }
-        }
-    }
+//    private fun taskResultSingUp(task: Task<AuthResult>) {
+//        when (task.exception) {
+//            is Exception -> {
+//                task.exception?.localizedMessage?.let { message ->
+//                    vm.messageForUser.value = message
+//                }
+////                _user.value = null
+//            }
+//        }
+//    }
 
-    private fun setName(userName: String) {
-        auth.currentUser?.updateProfile(userProfileChangeRequest {
-            displayName = userName
-        })?.addOnCompleteListener {
-            if (it.isSuccessful) {
-//                _user.value = auth.currentUser
-            }
-        }
-    }
+//    private fun setName(userName: String) {
+//        auth.currentUser?.updateProfile(userProfileChangeRequest {
+//            displayName = userName
+//        })?.addOnCompleteListener {
+//            if (it.isSuccessful) {
+////                _user.value = auth.currentUser
+//            }
+//        }
+//    }
 
 
 }

@@ -59,5 +59,6 @@
     <string name="cancel_user_registration">Регистрация отменена пользователем</string>
     <string name="cancel_reset_password">Сброс пароля отменен пользователем</string>
     <string name="description_actions_at_forget_password">On your email address will send email for reset password</string>
+    <string name="too_fast">Да не торопись ты так\nЖди минуту!</string>
 
 </resources>

@@ -1,76 +1,63 @@
 package com.example.recipes.presentation.ui.recipes.searchlist
 
 import android.text.Editable
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.paging.*
 import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.business.domain.singletons.RecipeSingleton
 import com.example.recipes.business.usecases.GetRecipesBySearchUseCase
 import com.example.recipes.datasouce.local.datastore.RecipeDataStore
 import com.example.recipes.business.domain.singletons.BackPressedSingleton
+import com.example.recipes.datasouce.network.RecipesApiService
+import com.example.recipes.presentation.ui.recipes.searchlist.paging.RecipesPagingSource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class RecipeSearchListViewModel @Inject constructor(
-    private val getRecipesBySearchUseCase: GetRecipesBySearchUseCase,
+//    private val getRecipesBySearchUseCase: GetRecipesBySearchUseCase,
+    private val apiService: RecipesApiService,
     private val recipeDataStore: RecipeDataStore,
     val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    val searchIsOpened = MutableLiveData<Int>()
+    val queryHandler = recipeDataStore.getLastQuery().asLiveData()
 
-    val queryHandler = recipeDataStore.getLastQuery()
-    private var newPagingSource: PagingSource<*, *>? = null
+    val loadState = MutableLiveData<CombinedLoadStates>()
+    val searchIsOpened = MutableLiveData<Boolean>()
 
-    fun recipes(query: String?): Flow<PagingData<Recipe>>? {
-        return if (!query.isNullOrEmpty()) {
-            queryHandler
-                .map(::newPager)
-                .flatMapLatest { pager -> pager!!.flow }
-                .cachedIn(viewModelScope)
-        } else {
-            null
-        }
+    val isEmptyListImageViewVisible = MutableLiveData<Boolean>()
+    val isProgressBarWhileListEmptyVisible = MutableLiveData<Boolean>()
+    val isErrorLoadingVisible = MutableLiveData<Boolean>()
+    val isButtonRetryVisible = MutableLiveData<Boolean>()
+    val isProgressBarPagingVisible = MutableLiveData<Boolean>()
+    val loadingError = MutableLiveData<String>()
+
+    suspend fun loadRecipes(query: String?): Flow<PagingData<Recipe>> {
+        setQueryToDatastore(query)
+        return newPager().flow.cachedIn(viewModelScope)
     }
 
-    private fun newPager(query: String?): Pager<String, Recipe>? {
-        return if (query != null) {
-            Pager(PagingConfig(pageSize = 3)) {
-                getRecipesBySearchUseCase.invoke(query).also {
-                    newPagingSource = it
-                }
+    private fun newPager(): Pager<String, Recipe> {
+        val pagingConfig = PagingConfig(
+            pageSize = 3,
+//            enablePlaceholders = true,
+        )
+        return Pager(
+            pagingConfig,
+            pagingSourceFactory = {
+                RecipesPagingSource(
+                    apiService,
+                    fetchQuery = { queryHandler.value ?: "" }
+                )
             }
-        } else {
-            null
-        }
-    }
-
-    fun liveSearchByQuery(query: Editable?) {
-        if (query != null && query.isNotEmpty()) {
-            if (query[query.length - 1] == ' ' && query.length > 2) {
-                viewModelScope.launch {
-                    setQueryToDatastore(query.toString())
-                }
-            }
-        }
-    }
-
-    fun searchByTouch(query: Editable?) {
-        if (query != null && query.isNotEmpty()) {
-            if (query.length > 1) {
-                viewModelScope.launch {
-                    setQueryToDatastore(query.toString())
-                }
-            }
-        }
+        )
     }
 
     fun resetLastQuery() {
@@ -79,16 +66,12 @@ class RecipeSearchListViewModel @Inject constructor(
         }
     }
 
-    private suspend fun setQueryToDatastore(query: String) {
-        recipeDataStore.setLastQuery(query)
+    private suspend fun setQueryToDatastore(query: String?) {
+        recipeDataStore.setLastQuery(query ?: "")
     }
 
-    fun changeSearchIsOpenedValue(currentVisibility: Int) {
-        if (currentVisibility == VIEW_VISIBLE) {
-            searchIsOpened.value = VIEW_GONE
-        } else {
-            searchIsOpened.value = VIEW_VISIBLE
-        }
+    fun changeSearchIsOpenedValue() {
+        searchIsOpened.value = searchIsOpened.value != true
     }
 
     fun setRecipeToSingleton(recipe: Recipe) {

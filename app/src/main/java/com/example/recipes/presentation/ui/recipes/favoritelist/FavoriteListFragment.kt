@@ -14,6 +14,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.recipes.R
 import com.example.recipes.business.domain.models.Recipe
+import com.example.recipes.business.domain.singletons.BackPressedSingleton
 import com.example.recipes.databinding.FragmentFavoriteRecipeListBinding
 import com.example.recipes.presentation.ui.recipes.RecipeClickListener
 import com.example.recipes.presentation.ui.registration.RegistrationActivity

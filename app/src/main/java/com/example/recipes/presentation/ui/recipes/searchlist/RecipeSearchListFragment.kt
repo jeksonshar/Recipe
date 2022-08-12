@@ -3,33 +3,34 @@ package com.example.recipes.presentation.ui.recipes.searchlist
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import androidx.paging.LoadState
+import androidx.paging.*
 import com.example.recipes.R
 import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.business.utils.CheckConnectionUtils
 import com.example.recipes.databinding.FragmentRecipeListBinding
 import com.example.recipes.business.domain.singletons.BackPressedSingleton
-import com.example.recipes.business.domain.singletons.LoadedRecipesSingleton
 import com.example.recipes.presentation.ui.recipes.RecipeClickListener
 import com.example.recipes.presentation.ui.registration.RegistrationActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 
 @AndroidEntryPoint
 class RecipeSearchListFragment : Fragment() {
@@ -85,17 +86,23 @@ class RecipeSearchListFragment : Fragment() {
 
             recyclerRecipe.adapter = pagingAdapter
 
-            ivOpenSearchET.setOnClickListener {
-                viewModelSearch.changeSearchIsOpenedValue(etSearch.visibility)
-            }
-
             buttonRetry.setOnClickListener {
                 pagingAdapter?.retry()
             }
 
             etSearch.setOnClickListener {
-                viewModelSearch.searchByTouch(etSearch.text)
+//                viewModelSearch.searchByTouch(etSearch.text)
+                lifecycleScope.launch {
+                    loadRecipes(etSearch.text.toString())
+                }
             }
+
+//            etSearch.setOnEditorActionListener { _, actionId: Int, event: KeyEvent ->
+//                if ((event.keyCode == KeyEvent.KEYCODE_ENTER) || actionId == EditorInfo.IME_ACTION_DONE) {
+//                    loadRecipes()
+//                }
+//                return@setOnEditorActionListener false
+//            }
 
             bottomNavigation.selectedItemId = R.id.recipeSearchListFragment
 
@@ -140,66 +147,88 @@ class RecipeSearchListFragment : Fragment() {
 
         lifecycleScope.launch {
             pagingAdapter?.loadStateFlow?.collectLatest { loadState ->
-                binding.progressBarWhileListEmpty.isVisible = loadState.refresh is LoadState.Loading
-                binding.buttonRetry.isVisible =
-                    loadState.refresh !is LoadState.Loading && loadState.append is LoadState.Error
-                binding.tvErrorLoading.text =
-                    if (loadState.source.toString().contains("429")) {
-                        "Да не торопись ты так\nЖди минуту!"
-                    } else {
-                        loadState.source.toString()
-                    }
-                binding.tvErrorLoading.isVisible =
-                    loadState.refresh !is LoadState.Loading && loadState.append is LoadState.Error
-            }
-        }
 
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModelSearch.queryHandler.collect {
-                // много ифов, нужно сделать красиво и понятно!!! LoadingRecipesSingleton - на костыль похоже
-                if (!it.isNullOrEmpty()) {
-                    if (BackPressedSingleton.isBackPressClick == null) { // нажата назад - не скачиваем данные, а берем имеющиеся значения
-                        loadRecipes(it)
-                    } else {
-                        if (LoadedRecipesSingleton.isDataLoaded == null) { // если имеющихся значений нет - скачиваем
-                            loadRecipes(it)
+                val stateRefresh = loadState.source.refresh
+                val stateAppend = loadState.source.append
+                when {
+/*
+почему если поставить сначала все stateRefresh а за ними все stateAppend то
+isProgressBarPagingVisible не активируется при скролинге?
+*/
+                    stateAppend is LoadState.Loading -> {
+                        viewModelSearch.loadState.value = loadState
+                    }
+                    stateAppend is LoadState.Error -> {
+                        when {
+                            stateAppend.error is PagingSourceException.Response429Exception -> {
+                                viewModelSearch.loadState.value = loadState
+                            }
+                            stateAppend.error is HttpException -> {
+                                viewModelSearch.loadState.value = loadState
+                            }
+                            loadState.prepend.endOfPaginationReached -> {
+                                viewModelSearch.isProgressBarPagingVisible.value = false
+                            }
                         }
                     }
-                } else {
-                    viewModelSearch.changeSearchIsOpenedValue(binding.etSearch.visibility)
-                    binding.apply {
-                        buttonRetry.visibility = View.GONE
-                        tvErrorLoading.visibility = View.GONE
-                        progressBarPaging.visibility = View.GONE
-                        progressBarWhileListEmpty.visibility = View.GONE
-                        ivEmptyList.visibility = View.VISIBLE
+                    stateRefresh is LoadState.Loading -> {
+                        viewModelSearch.isEmptyListImageViewVisible.value = false
+                        viewModelSearch.loadState.value = loadState
+                    }
+                    stateRefresh is LoadState.NotLoading -> {
+//      почему тут не работает setValue?
+                        viewModelSearch.isProgressBarPagingVisible.postValue(false)
+                        viewModelSearch.isProgressBarWhileListEmptyVisible.postValue(false)
+                    }
+                    stateRefresh is LoadState.Error -> {
+                        when (stateRefresh.error) {
+                            is PagingSourceException.EmptyListException -> {
+                                viewModelSearch.isEmptyListImageViewVisible.value = true
+                                pagingAdapter?.submitData(PagingData.empty())
+                            }
+                             is HttpException -> {
+                                 viewModelSearch.loadState.value = loadState
+                             }
+                        }
                     }
                 }
             }
         }
 
-        viewModelSearch.searchIsOpened.observe(viewLifecycleOwner) {
-            binding.etSearch.visibility = it
-            if (it == RecipeSearchListViewModel.VIEW_VISIBLE) {
-                binding.ivOpenSearchET.setImageResource(R.drawable.up_arrow)
+        viewModelSearch.queryHandler.observe(viewLifecycleOwner) {
+            if (!it.isNullOrEmpty()) {
+                if (BackPressedSingleton.isBackPressClick != true) {
+                    lifecycleScope.launch {
+                        loadRecipes(it)
+                    }
+                }
             } else {
-                binding.ivOpenSearchET.setImageResource(R.drawable.search)
+                viewModelSearch.isEmptyListImageViewVisible.value = true
+                viewModelSearch.searchIsOpened.value = true
             }
         }
 
-        pagingAdapter?.loadStateFlow?.asLiveData()?.observe(viewLifecycleOwner) {
-            binding.progressBarPaging.isVisible = it.append is LoadState.Loading
+        viewModelSearch.loadState.observe(viewLifecycleOwner) {
+            viewModelSearch.isProgressBarWhileListEmptyVisible.value = it.refresh is LoadState.Loading
+            viewModelSearch.isErrorLoadingVisible.value =
+                it.refresh !is LoadState.Loading && it.append is LoadState.Error
+            viewModelSearch.isButtonRetryVisible.value =
+                it.refresh !is LoadState.Loading && it.append is LoadState.Error
+            viewModelSearch.isProgressBarPagingVisible.value = it.append is LoadState.Loading
+            viewModelSearch.loadingError.value = if (it.source.toString().contains("429")) {
+                context?.getString(R.string.too_fast)
+            } else {
+                it.source.toString()
+            }
         }
     }
 
-    private suspend fun loadRecipes(query: String) {
+    private suspend fun loadRecipes(query: String?) {
         if (!CheckConnectionUtils.isNetConnected(requireContext())) {
             findNavController().navigate(R.id.action_recipeSearchListFragment_to_noConnectionDialogFragment)
         } else {
-            viewModelSearch.recipes(query)?.collectLatest { pagingData ->
-                LoadedRecipesSingleton.isDataLoaded = true
-                binding.ivEmptyList.visibility = View.GONE
-                pagingAdapter?.submitData(pagingData)
+            viewModelSearch.loadRecipes(query).collectLatest {
+                pagingAdapter?.submitData(it)
             }
         }
     }
