@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.databinding.FragmentRecipeListItemBinding
 import com.example.recipes.presentation.ui.recipes.RecipeClickListener
-import com.example.recipes.presentation.utils.ImagesUtil
 
 class RecipePagingAdapter(
     private val clickListener: RecipeClickListener
@@ -33,10 +32,7 @@ class RecipePagingViewHolder private constructor(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(recipe: Recipe) {
-        binding.let {
-            ImagesUtil.setImage(recipe.image, it.ivItemRecipeList)
-            it.tvNameRecipe.text = recipe.label
-        }
+        binding.recipe = recipe
     }
 
     companion object {

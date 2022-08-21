@@ -1,4 +1,4 @@
-package com.example.recipes.presentation.ui.registration
+package com.example.recipes.presentation.ui.auth
 
 import android.util.Patterns
 import androidx.lifecycle.LiveData
@@ -14,15 +14,15 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class RegistrationViewModel @Inject constructor() : ViewModel() {
+class AuthViewModel @Inject constructor() : ViewModel() {
 
-    val exceptionMessageForUser = MutableLiveData<String?>()
-    val resMessageForUser = MutableLiveData<Int?>()
-    val user = MutableLiveData<FirebaseUser?>()
-    val progressSingingVisibility = MutableLiveData(false)
+    val exceptionMessageForUser = MutableStateFlow<String?>(null)
+    val resMessageForUser = MutableStateFlow<Int?>(null)
+    val user = MutableStateFlow<FirebaseUser?>(null)
     val btnSignInVisibility = MutableLiveData(true)
 
     private val email = MutableLiveData<CharSequence>()
@@ -108,8 +108,7 @@ class RegistrationViewModel @Inject constructor() : ViewModel() {
     }
 
     fun changeVisibilityAtProgress() {
-        progressSingingVisibility.postValue(!progressSingingVisibility.value!!)
-        btnSignInVisibility.postValue(!btnSignInVisibility.value!!)
+        btnSignInVisibility.postValue(!(btnSignInVisibility.value ?: false))
     }
 
     fun setFirebaseUser(user: FirebaseUser) {
@@ -182,7 +181,7 @@ class RegistrationViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun setName(auth: FirebaseAuth) {
-        auth.currentUser?.updateProfile(userProfileChangeRequest {                        // перенести в юзкейс
+        auth.currentUser?.updateProfile(userProfileChangeRequest {     // перенести в юзкейс
             displayName = userName.value.toString()
         })?.addOnCompleteListener {
             if (it.isSuccessful) {

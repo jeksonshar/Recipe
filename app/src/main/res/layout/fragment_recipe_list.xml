@@ -78,7 +78,7 @@
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etSearch"
                 style="@style/BackgroundForSearchEditText"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="4dp"
                 android:drawableEnd="@android:drawable/ic_search_category_default"
@@ -96,7 +96,7 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/ivEmptyList"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:scaleType="fitStart"
                 android:visibility="@{vm.isEmptyListImageViewVisible ? View.VISIBLE : View.GONE}"
@@ -105,24 +105,11 @@
                 app:layout_constraintTop_toBottomOf="@id/etSearch"
                 app:srcCompat="@drawable/empty_list_removebg_preview" />
 
-            <com.google.android.material.progressindicator.LinearProgressIndicator
-                android:id="@+id/progressBarPaging"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:indeterminate="true"
-                android:paddingTop="2dp"
-                android:paddingBottom="2dp"
-                android:visibility="@{vm.isProgressBarPagingVisible ? View.VISIBLE : View.GONE}"
-                app:layout_constraintBottom_toTopOf="@id/tvErrorLoading"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/coordinatorRecipeList" />
-
             <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:id="@+id/coordinatorRecipeList"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:layout_constraintBottom_toTopOf="@id/progressBarPaging"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etSearch">
@@ -134,7 +121,7 @@
                     android:layout_marginStart="4dp"
                     android:layout_marginEnd="4dp"
                     app:spanCount="2"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager" />
+                    app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager" />
 
                 <com.google.android.material.bottomnavigation.BottomNavigationView
                     android:id="@+id/bottom_navigation"
@@ -156,32 +143,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/titleOfList" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvErrorLoading"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="@{vm.loadingError}"
-                android:textAlignment="center"
-                android:visibility="@{vm.isErrorLoadingVisible ? View.VISIBLE : View.GONE}"
-                android:textColor="@color/gray"
-                app:layout_constraintBottom_toTopOf="@id/buttonRetry"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/progressBarPaging" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/buttonRetry"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/retry"
-                android:visibility="@{vm.isButtonRetryVisible ? View.VISIBLE : View.GONE}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvErrorLoading" />
+                app:layout_constraintTop_toBottomOf="@id/titleOfList"
+                app:layout_constraintVertical_bias="0.35000002" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

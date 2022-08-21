@@ -57,7 +57,7 @@
             android:theme="@style/Theme.Recipes" />
 
         <activity
-            android:name=".presentation.ui.registration.RegistrationActivity"
+            android:name=".presentation.ui.auth.AuthActivity"
             android:theme="@style/Theme.Recipes" />
     </application>
 

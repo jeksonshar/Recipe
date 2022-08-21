@@ -1,6 +1,7 @@
 package com.example.recipes.presentation.ui.recipes.searchlist
 
 import android.text.Editable
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.*
 import androidx.paging.*
 import com.example.recipes.business.domain.models.Recipe
@@ -12,9 +13,7 @@ import com.example.recipes.datasouce.network.RecipesApiService
 import com.example.recipes.presentation.ui.recipes.searchlist.paging.RecipesPagingSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -29,17 +28,17 @@ class RecipeSearchListViewModel @Inject constructor(
 
     val queryHandler = recipeDataStore.getLastQuery().asLiveData()
 
-    val loadState = MutableLiveData<CombinedLoadStates>()
+    val loadState = MutableLiveData<CombinedLoadStates?>()
     val searchIsOpened = MutableLiveData<Boolean>()
 
     val isEmptyListImageViewVisible = MutableLiveData<Boolean>()
     val isProgressBarWhileListEmptyVisible = MutableLiveData<Boolean>()
-    val isErrorLoadingVisible = MutableLiveData<Boolean>()
-    val isButtonRetryVisible = MutableLiveData<Boolean>()
-    val isProgressBarPagingVisible = MutableLiveData<Boolean>()
-    val loadingError = MutableLiveData<String>()
+//    val isErrorLoadingVisible = MutableLiveData<Boolean>()
+//    val isButtonRetryVisible = MutableLiveData<Boolean>()
+//    val isProgressBarPagingVisible = MutableLiveData<Boolean>()
+//    val loadingError = MutableLiveData<String>()
 
-    suspend fun loadRecipes(query: String?): Flow<PagingData<Recipe>> {
+    fun loadRecipes(query: String?): Flow<PagingData<Recipe>> {
         setQueryToDatastore(query)
         return newPager().flow.cachedIn(viewModelScope)
     }
@@ -66,8 +65,10 @@ class RecipeSearchListViewModel @Inject constructor(
         }
     }
 
-    private suspend fun setQueryToDatastore(query: String?) {
-        recipeDataStore.setLastQuery(query ?: "")
+    private fun setQueryToDatastore(query: String?) {
+        viewModelScope.launch {
+            recipeDataStore.setLastQuery(query ?: "")
+        }
     }
 
     fun changeSearchIsOpenedValue() {

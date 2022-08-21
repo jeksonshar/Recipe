@@ -21,16 +21,14 @@ import com.example.recipes.business.utils.CheckConnectionUtils
 import com.example.recipes.databinding.FragmentRecipeListBinding
 import com.example.recipes.business.domain.singletons.BackPressedSingleton
 import com.example.recipes.presentation.ui.recipes.RecipeClickListener
-import com.example.recipes.presentation.ui.registration.RegistrationActivity
+import com.example.recipes.presentation.ui.auth.AuthActivity
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import retrofit2.HttpException
 
 @AndroidEntryPoint
 class RecipeSearchListFragment : Fragment() {
@@ -84,25 +82,14 @@ class RecipeSearchListFragment : Fragment() {
             header.findViewById<TextView>(R.id.headerTitle).text = auth.let { it?.currentUser?.displayName }
             header.findViewById<TextView>(R.id.headerText).text = auth.let { it?.currentUser?.email }
 
-            recyclerRecipe.adapter = pagingAdapter
-
-            buttonRetry.setOnClickListener {
-                pagingAdapter?.retry()
-            }
+            val loadStateAdapter = RecipeLoadStateAdapter { pagingAdapter?.retry() }
+            recyclerRecipe.adapter = pagingAdapter?.withLoadStateFooter(loadStateAdapter)
 
             etSearch.setOnClickListener {
-//                viewModelSearch.searchByTouch(etSearch.text)
                 lifecycleScope.launch {
                     loadRecipes(etSearch.text.toString())
                 }
             }
-
-//            etSearch.setOnEditorActionListener { _, actionId: Int, event: KeyEvent ->
-//                if ((event.keyCode == KeyEvent.KEYCODE_ENTER) || actionId == EditorInfo.IME_ACTION_DONE) {
-//                    loadRecipes()
-//                }
-//                return@setOnEditorActionListener false
-//            }
 
             bottomNavigation.selectedItemId = R.id.recipeSearchListFragment
 
@@ -145,97 +132,106 @@ class RecipeSearchListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        lifecycleScope.launch {
-            pagingAdapter?.loadStateFlow?.collectLatest { loadState ->
+        pagingAdapter?.addLoadStateListener { loadState ->
 
-                val stateRefresh = loadState.source.refresh
-                val stateAppend = loadState.source.append
-                when {
-/*
-почему если поставить сначала все stateRefresh а за ними все stateAppend то
-isProgressBarPagingVisible не активируется при скролинге?
-*/
-                    stateAppend is LoadState.Loading -> {
-                        viewModelSearch.loadState.value = loadState
-                    }
-                    stateAppend is LoadState.Error -> {
-                        when {
-                            stateAppend.error is PagingSourceException.Response429Exception -> {
-                                viewModelSearch.loadState.value = loadState
-                            }
-                            loadState.prepend.endOfPaginationReached -> {
-                                viewModelSearch.isProgressBarPagingVisible.value = false
-                            }
-                        }
-                    }
-                    stateRefresh is LoadState.Loading -> {
-                        viewModelSearch.isEmptyListImageViewVisible.value = false
-                        viewModelSearch.loadState.value = loadState
-                    }
-                    stateRefresh is LoadState.NotLoading -> {
-//      почему тут не работает setValue?
-                        viewModelSearch.isProgressBarPagingVisible.postValue(false)
-                        viewModelSearch.isProgressBarWhileListEmptyVisible.postValue(false)
-                    }
-                    stateRefresh is LoadState.Error -> {
-                        when (stateRefresh.error) {
-                            is PagingSourceException.EmptyListException -> {
-                                viewModelSearch.isEmptyListImageViewVisible.value = true
+            when (val stateRefresh = loadState.source.refresh) {
+                is LoadState.Loading -> {
+                    viewModelSearch.isEmptyListImageViewVisible.value = false
+                    viewModelSearch.loadState.value = loadState
+                    Log.d("TAG", "onViewCreatedException: Is not Exception")
+                }
+                is LoadState.NotLoading -> {
+                    viewModelSearch.isProgressBarWhileListEmptyVisible.value = false
+                }
+                is LoadState.Error -> {
+                    when (stateRefresh.error) {
+                        is PagingSourceException.EmptyListException -> {
+                            Log.d("TAG", "onViewCreatedException: EmptyList")
+                            viewModelSearch.isEmptyListImageViewVisible.value = true
+                            viewLifecycleOwner.lifecycleScope.launch {
                                 pagingAdapter?.submitData(PagingData.empty())
                             }
-                             is HttpException -> {
-                                 viewModelSearch.loadState.value = loadState
-                             }
+                        }
+                        is PagingSourceException.EndOfListException -> {
+                            Log.d("TAG", "onViewCreatedException: End of List")
+                        }
+                        is PagingSourceException.Response429Exception -> {
+                            Log.d("TAG", "onViewCreatedException: 429")
+                            viewModelSearch.loadState.value = loadState
+                            viewModelSearch.isProgressBarWhileListEmptyVisible.value = false
                         }
                     }
                 }
+            }
+        }
+
+        viewModelSearch.loadState.observe(viewLifecycleOwner) {
+            viewModelSearch.isProgressBarWhileListEmptyVisible.value = it?.refresh is LoadState.Loading
+            val state = it?.source?.refresh
+            if (state is LoadState.Error && state.error is PagingSourceException.Response429Exception) {
+                showSnackBar(requireContext().getString(R.string.too_fast))
             }
         }
 
         viewModelSearch.queryHandler.observe(viewLifecycleOwner) {
             if (!it.isNullOrEmpty()) {
                 if (BackPressedSingleton.isBackPressClick != true) {
-                    lifecycleScope.launch {
-                        loadRecipes(it)
-                    }
+                    loadRecipes(it)
+                } else if (pagingAdapter?.itemCount == 0) {
+                    loadRecipes(it)
+                } else {
+                    viewModelSearch.isProgressBarWhileListEmptyVisible.value = false
                 }
+// если в деталях смена конфига, после возврата - список не прогружается (else if решает)
             } else {
                 viewModelSearch.isEmptyListImageViewVisible.value = true
                 viewModelSearch.searchIsOpened.value = true
             }
         }
 
-        viewModelSearch.loadState.observe(viewLifecycleOwner) {
-            viewModelSearch.isProgressBarWhileListEmptyVisible.value = it.refresh is LoadState.Loading
-            viewModelSearch.isErrorLoadingVisible.value =
-                it.refresh !is LoadState.Loading && it.append is LoadState.Error
-            viewModelSearch.isButtonRetryVisible.value =
-                it.refresh !is LoadState.Loading && it.append is LoadState.Error
-            viewModelSearch.isProgressBarPagingVisible.value = it.append is LoadState.Loading
-            viewModelSearch.loadingError.value = if (it.source.toString().contains("429")) {
-                context?.getString(R.string.too_fast)
-            } else {
-                it.source.toString()
-            }
-        }
+//        viewModelSearch.loadState.observe(viewLifecycleOwner) {
+//            viewModelSearch.isProgressBarWhileListEmptyVisible.value = it.refresh is LoadState.Loading
+//            viewModelSearch.isErrorLoadingVisible.value =
+//                it.refresh !is LoadState.Loading && it.append is LoadState.Error
+//            viewModelSearch.isButtonRetryVisible.value =
+//                it.refresh !is LoadState.Loading && it.append is LoadState.Error
+//            viewModelSearch.isProgressBarPagingVisible.value = it.append is LoadState.Loading
+//            viewModelSearch.loadingError.value = if (it.source.toString().contains("429")) {
+//                context?.getString(R.string.too_fast)
+//            } else {
+//                it.source.toString()
+//            }
+//        }
     }
 
-    private suspend fun loadRecipes(query: String?) {
+    private fun loadRecipes(query: String?) {
         if (!CheckConnectionUtils.isNetConnected(requireContext())) {
             findNavController().navigate(R.id.action_recipeSearchListFragment_to_noConnectionDialogFragment)
         } else {
-            viewModelSearch.loadRecipes(query).collectLatest {
-                pagingAdapter?.submitData(it)
+            lifecycleScope.launchWhenStarted {
+                viewModelSearch.loadRecipes(query).collectLatest {
+                    pagingAdapter?.submitData(it)
+                }
             }
         }
     }
 
     private fun signOutUser(): Boolean {
         auth?.signOut()
-        startActivity(Intent(requireContext(), RegistrationActivity::class.java))
+        startActivity(Intent(requireContext(), AuthActivity::class.java))
         viewModelSearch.resetLastQuery()
         requireActivity().finish()
         return false
+    }
+
+    private fun showSnackBar(message: String) {
+        val mySnackBar = Snackbar
+            .make(requireContext(), binding.root, message, Snackbar.LENGTH_INDEFINITE)
+
+        mySnackBar.setAction("Ok") {
+            mySnackBar.dismiss()
+        }
+        mySnackBar.show()
     }
 
     override fun onDestroyView() {

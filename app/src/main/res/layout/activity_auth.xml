@@ -9,7 +9,7 @@
 
         <variable
             name="vm"
-            type="com.example.recipes.presentation.ui.registration.RegistrationViewModel" />
+            type="com.example.recipes.presentation.ui.auth.AuthViewModel" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never"
-        tools:context=".presentation.ui.registration.RegistrationActivity">
+        tools:context=".presentation.ui.auth.AuthActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -196,7 +196,7 @@
                 android:id="@+id/progressSinging"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="@{vm.progressSingingVisibility ? View.VISIBLE : View.INVISIBLE}"
+                android:visibility="@{vm.btnSignInVisibility ? View.INVISIBLE : View.VISIBLE}"
                 app:layout_constraintBottom_toBottomOf="@+id/btnSignIn"
                 app:layout_constraintEnd_toEndOf="@+id/btnSignIn"
                 app:layout_constraintStart_toStartOf="@+id/btnSignIn"

@@ -1,17 +1,12 @@
 package com.example.recipes.business.usecases
 
-import com.example.recipes.presentation.ui.registration.RegistrationViewModel
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
+import com.example.recipes.presentation.ui.auth.AuthViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.ktx.userProfileChangeRequest
-import java.lang.Exception
 import javax.inject.Inject
 
 class SignUpUseCase @Inject constructor(
     private val auth: FirebaseAuth,
-    private val vm: RegistrationViewModel
+    private val vm: AuthViewModel
 ) {
 
 //    fun signUp(email: String, password: String, userName: String) {

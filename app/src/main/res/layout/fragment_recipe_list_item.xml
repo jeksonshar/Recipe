@@ -1,45 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="4dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/itemRecipeList"
+    <data>
+
+        <variable
+            name="recipe"
+            type="com.example.recipes.business.domain.models.Recipe" />
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/layout_item_shape">
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/ivItemRecipeList"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="1dp"
-            app:layout_constraintBottom_toTopOf="@+id/tvNameRecipe"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearanceOverlay="@style/Theme.Recipes.MaterialCardView"
-            app:srcCompat="@drawable/dish_not_loading" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/itemRecipeList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/layout_item_shape">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvNameRecipe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:maxLines="2"
-            android:padding="8dp"
-            android:text="@string/name_of_recipe"
-            android:textColor="@color/recipe_list_item_text"
-            android:textSize="16sp"
-            android:textStyle="bold|italic"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivItemRecipeList" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/ivItemRecipeList"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="1dp"
+                app:layout_constraintBottom_toTopOf="@+id/tvNameRecipe"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/Theme.Recipes.MaterialCardView"
+                app:srcCompat="@drawable/dish_not_loading"
+                app:loadImageRecipeItem="@{recipe.image}"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvNameRecipe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:lines="2"
+                android:maxLines="2"
+                android:padding="8dp"
+                android:text="@{recipe.label}"
+                android:textColor="@color/recipe_list_item_text"
+                android:textSize="16sp"
+                android:textStyle="bold|italic"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivItemRecipeList" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

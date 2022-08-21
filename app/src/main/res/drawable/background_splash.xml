@@ -5,8 +5,8 @@
 
     <item>
         <bitmap
-            android:gravity="center"
-            android:src="@drawable/avd_anim_recipe108" />
+            android:gravity="center|fill"
+            android:src="@drawable/avd_anim_recipe124_new" />
     </item>
 
 </layer-list>

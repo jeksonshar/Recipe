@@ -1,4 +1,4 @@
-package com.example.recipes.presentation.ui.registration
+package com.example.recipes.presentation.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,9 +7,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.asLiveData
 import com.example.recipes.R
 import com.example.recipes.business.utils.CheckConnectionUtils
-import com.example.recipes.databinding.ActivityRegistrationBinding
+import com.example.recipes.databinding.ActivityAuthBinding
 import com.example.recipes.presentation.ui.recipes.RecipesActivity
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
@@ -24,10 +25,10 @@ import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class RegistrationActivity : AppCompatActivity(), ConfirmationListener {
+class AuthActivity : AppCompatActivity(), ConfirmationListener {
 
-    private var _binding: ActivityRegistrationBinding? = null
-    private val binding: ActivityRegistrationBinding
+    private var _binding: ActivityAuthBinding? = null
+    private val binding: ActivityAuthBinding
         get() = _binding!!
 
     private var auth: FirebaseAuth? = null
@@ -38,31 +39,21 @@ class RegistrationActivity : AppCompatActivity(), ConfirmationListener {
         this.onSignInWithSocialResult(it)
     }
 
-    private val viewModel: RegistrationViewModel by viewModels()
+    private val viewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        _binding = DataBindingUtil.setContentView(this, R.layout.activity_registration)
+        _binding = DataBindingUtil.setContentView(this, R.layout.activity_auth)
         binding.lifecycleOwner = this
-        binding.vm = viewModel
-
         auth = Firebase.auth
 
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        if (auth?.currentUser != null) moveToRecipeActivity()
-
         binding.apply {
+            vm = viewModel
+
             tvForgotPassword.setOnClickListener {
                 showConfirmationDialog()
             }
-        }
-
-        binding.apply {
 
             ibtnGoogle.setOnClickListener {
                 if (isConnected()) {
@@ -79,28 +70,26 @@ class RegistrationActivity : AppCompatActivity(), ConfirmationListener {
             }
         }
 
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        viewModel.exceptionMessageForUser.observe(this) {
+        viewModel.exceptionMessageForUser.asLiveData().observe(this) {
             if (!it.isNullOrEmpty()) {
                 showSnackBar(it)
                 viewModel.exceptionMessageForUser.value = null
             }
         }
 
-        viewModel.resMessageForUser.observe(this) {
-            if (it != null){
+        viewModel.resMessageForUser.asLiveData().observe(this) {
+            if (it != null) {
                 showSnackBar(applicationContext.getString(it))
                 viewModel.resMessageForUser.value = null
             }
         }
 
-        viewModel.user.observe(this) {
+        viewModel.user.asLiveData().observe(this) {
             openRecipeByUser(it)
         }
+
+        if (auth?.currentUser != null) moveToRecipeActivity()
+
     }
 
     override fun confirmButtonClicked() {

@@ -24,6 +24,7 @@ class DetailViewHolder private constructor(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun onBind(ingredient: Ingredient) {
+        // TODO через binding adapter
         binding.tvDetailItem.text = ingredient.text
     }
 

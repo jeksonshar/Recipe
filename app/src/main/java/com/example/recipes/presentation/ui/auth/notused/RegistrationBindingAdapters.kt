@@ -1,13 +1,9 @@
-package com.example.recipes.presentation.ui.registration
+package com.example.recipes.presentation.ui.auth.notused
 
-import android.app.Activity
 import android.content.Context
 import android.view.View
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.compose.ui.res.stringResource
 import androidx.databinding.BindingAdapter
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.findFragment
 import com.example.recipes.R
 
 @BindingAdapter("app:setProposeToLogin")

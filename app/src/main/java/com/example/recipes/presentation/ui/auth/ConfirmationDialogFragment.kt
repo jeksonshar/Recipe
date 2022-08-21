@@ -1,4 +1,4 @@
-package com.example.recipes.presentation.ui.registration
+package com.example.recipes.presentation.ui.auth
 
 import android.app.AlertDialog
 import android.app.Dialog

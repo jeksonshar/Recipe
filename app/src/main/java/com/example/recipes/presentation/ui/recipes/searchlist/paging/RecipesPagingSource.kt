@@ -1,7 +1,6 @@
 package com.example.recipes.presentation.ui.recipes.searchlist.paging
 
 import android.util.Log
-import androidx.paging.LoadState
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.recipes.business.domain.models.Recipe
@@ -56,12 +55,18 @@ class RecipesPagingSource(
                 )
             }
         } else {
-            if (response.raw().code == 429) {
-                LoadResult.Error(PagingSourceException.Response429Exception(response))
-            } else {
-                Log.d("TAG", "responseNOT: ${response.raw().code}")
-                Log.d("TAG", "responseHREF: ${getHref(response.body() ?: RecipeSearchEntity())}")
-                LoadResult.Error(HttpException(response))
+            when {
+                response.raw().code == 429 -> {
+                    LoadResult.Error(PagingSourceException.Response429Exception())
+                }
+                getHref(response.body() ?: RecipeSearchEntity()).isEmpty() -> {
+                    LoadResult.Error(PagingSourceException.EndOfListException())
+                }
+                else -> {
+                    Log.d("TAG", "responseNOT: ${response.raw().code}")
+                    Log.d("TAG", "responseHREF: ${getHref(response.body() ?: RecipeSearchEntity())}")
+                    LoadResult.Error(HttpException(response))
+                }
             }
         }
     }

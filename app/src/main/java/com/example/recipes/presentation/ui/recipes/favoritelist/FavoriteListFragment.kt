@@ -14,10 +14,9 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.recipes.R
 import com.example.recipes.business.domain.models.Recipe
-import com.example.recipes.business.domain.singletons.BackPressedSingleton
 import com.example.recipes.databinding.FragmentFavoriteRecipeListBinding
 import com.example.recipes.presentation.ui.recipes.RecipeClickListener
-import com.example.recipes.presentation.ui.registration.RegistrationActivity
+import com.example.recipes.presentation.ui.auth.AuthActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
@@ -95,7 +94,7 @@ class FavoriteListFragment : Fragment() {
                     }
                     R.id.signOut -> {
                         Firebase.auth.signOut()
-                        startActivity(Intent(requireContext(), RegistrationActivity::class.java))
+                        startActivity(Intent(requireContext(), AuthActivity::class.java))
                         requireActivity().finish()
                         false
                     }
