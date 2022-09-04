@@ -23,6 +23,8 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
+import com.facebook.FacebookSdk
+import com.facebook.appevents.AppEventsLogger
 
 @AndroidEntryPoint
 class AuthActivity : AppCompatActivity(), ConfirmationListener {
@@ -113,6 +115,8 @@ class AuthActivity : AppCompatActivity(), ConfirmationListener {
             .createSignInIntentBuilder()
             .setAvailableProviders(providers)
             .build()
+
+        Log.d("TAG", "signInWithSocial: $signInIntent")
 
         signInLauncher.launch(signInIntent)
     }

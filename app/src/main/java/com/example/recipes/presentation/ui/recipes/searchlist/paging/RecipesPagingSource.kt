@@ -13,6 +13,10 @@ import retrofit2.Response
 
 class RecipesPagingSource(
     private val recipesApiService: RecipesApiService,
+    private val filtersDiet: List<String>?,
+    private val filtersHealth: List<String>?,
+    private val filtersCuisineType: List<String>?,
+    private val filtersMealType: List<String>?,
     private val fetchQuery: () -> String
 ) : PagingSource<String, Recipe>() {
 
@@ -34,13 +38,21 @@ class RecipesPagingSource(
             .substringAfter("_cont=")
             .substringBefore("&")
 
+        Log.d("TAG", "load: ${params.key}")
         val href = params.key
         val response: Response<RecipeSearchEntity>
         try {
-            response = recipesApiService.getNextRecipesByQuery(fetchQuery.invoke(), href)
+            response = recipesApiService.getNextRecipesByQuery(
+                fetchQuery.invoke(),
+                href,
+                filtersDiet ?: emptyList(),
+                filtersHealth ?: emptyList(),
+                filtersCuisineType ?: emptyList(),
+                filtersMealType ?: emptyList(),
+            )
 
         } catch (e: Throwable) {
-            Log.d("TAG", "ERROR: response didn't completed")
+            Log.d("TAG", "ERROR: response didn't completed + ${e.message}")
             return LoadResult.Error(e)
         }
 

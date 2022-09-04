@@ -80,7 +80,7 @@ class FavoriteListFragment : Fragment() {
                 }
             }
 
-            viewModelFavorite.getFavoriteRecipes()
+            viewModelFavorite.getUserFavoriteRecipes()
 
             navView.setNavigationItemSelectedListener {
                 when (it.itemId) {
@@ -90,6 +90,12 @@ class FavoriteListFragment : Fragment() {
                     }
                     R.id.recipeSearchListFragment -> {
                         findNavController().navigate(R.id.action_favoriteListFragment_to_recipeSearchListFragment)
+                        drawerLayout.close()
+                        false
+                    }
+                    R.id.settings -> {
+                        findNavController().navigate(R.id.action_favoriteListFragment_to_userProfileFragment)
+                        drawerLayout.close()
                         false
                     }
                     R.id.signOut -> {

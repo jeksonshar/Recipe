@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="vm"
+            type="com.example.recipes.presentation.ui.recipes.userprofile.UserProfileViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayoutProfile"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/green_light"
+        android:theme="@style/ProfileTheme">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivHeaderProfile"
+            android:layout_width="0dp"
+            android:layout_height="160dp"
+            android:background="@color/green_for_header_nav_drawer"
+            android:elevation="6dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvProfileName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_edit_icon"
+            android:drawablePadding="8dp"
+            android:elevation="6dp"
+            android:gravity="center_vertical"
+            android:maxLines="5"
+            android:paddingHorizontal="16dp"
+            android:text="@{vm.userName}"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toBottomOf="@+id/ivHeaderProfile"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/cvProfile"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.4"
+            tools:text="Евгений Стычкин" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvProfile"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="30dp"
+            app:cardCornerRadius="60dp"
+            app:cardElevation="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.15"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivProfile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="fill"
+                app:srcCompat="@drawable/cook_book" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvEmail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="72dp"
+            android:drawableStart="@drawable/ic_email_icon"
+            android:drawablePadding="24dp"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="24dp"
+            android:text="@{vm.email}"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@id/tvFavorite"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivHeaderProfile"
+            tools:text="testemail@email.com" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvFavorite"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:drawableStart="@drawable/ic_favorite_icon"
+            android:drawablePadding="24dp"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="24dp"
+            android:text="@string/favorite_recipes"
+            app:layout_constraintBottom_toTopOf="@id/tvFavorite"
+            app:layout_constraintEnd_toStartOf="@id/tvFavoriteCount"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvEmail" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvFavoriteCount"
+            android:layout_width="24dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:gravity="center"
+            android:text="@{vm.favoriteRecipesCount.toString()}"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/tvFavorite"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tvFavorite"
+            app:layout_constraintTop_toTopOf="@id/tvFavorite" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvChangePassword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:drawableStart="@drawable/ic_password_icon"
+            android:drawableEnd="@drawable/ic_change_password_icon"
+            android:drawablePadding="24dp"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="24dp"
+            android:text="@string/change_password"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvFavorite" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabChangePhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="132dp"
+            android:layout_marginEnd="48dp"
+            android:contentDescription="@string/submit"
+            android:elevation="10dp"
+            android:padding="12dp"
+            android:src="@drawable/ic_add_photo"
+            android:theme="@style/FabTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnSignOut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginVertical="48dp"
+            android:background="@drawable/background_btn_user_profile"
+            android:drawableStart="@drawable/ic_sign_out_2"
+            android:drawablePadding="8dp"
+            android:padding="8dp"
+            android:text="@string/sign_out"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnDeleteProfile"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvChangePassword"
+            app:layout_constraintVertical_bias="0.45" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnDeleteProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:background="@drawable/background_btn_user_profile"
+            android:drawableStart="@drawable/ic_delete"
+            android:drawablePadding="8dp"
+            android:padding="8dp"
+            android:text="@string/delete"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/btnSignOut"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btnSignOut"
+            app:layout_constraintTop_toTopOf="@id/btnSignOut" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

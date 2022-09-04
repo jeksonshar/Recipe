@@ -20,6 +20,9 @@
         <action
             android:id="@+id/action_recipeSearchListFragment_to_favoriteListFragment"
             app:destination="@id/favoriteListFragment" />
+        <action
+            android:id="@+id/action_recipeSearchListFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/recipeDetailsFragment"
@@ -43,5 +46,26 @@
             android:id="@+id/action_favoriteListFragment_to_recipeDetailsFragment"
             app:destination="@id/recipeDetailsFragment"
             app:popUpTo="@id/favoriteListFragment" />
+        <action
+            android:id="@+id/action_favoriteListFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="com.example.recipes.presentation.ui.recipes.userprofile.UserProfileFragment"
+        android:label="UserProfileFragment"
+        tools:layout="@layout/fragment_user_profile">
+        <action
+            android:id="@+id/action_userProfileFragment_to_changeProfileNameDialog"
+            app:destination="@id/changeProfileNameDialog" />
+    </fragment>
+    <fragment
+        android:id="@+id/changeProfileNameDialog"
+        android:name="com.example.recipes.presentation.ui.recipes.userprofile.dialogs.ChangeProfileNameDialog"
+        android:label="ChangeProfileNameDialog"
+        tools:layout="@layout/dialog_change_profile_name">
+        <argument
+            android:name="action"
+            app:argType="com.example.recipes.presentation.ui.recipes.userprofile.Action" />
     </fragment>
 </navigation>

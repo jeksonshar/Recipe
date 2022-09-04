@@ -1,26 +1,31 @@
 package com.example.recipes.datasouce.local.room
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
+import androidx.room.*
+import androidx.room.migration.AutoMigrationSpec
 import com.example.recipes.datasouce.local.room.entities.*
 import com.example.recipes.datasouce.local.room.typeconverters.ConvertersRoom
 
 @Database(
     entities = [
-        RecipeEntity::class/*,
-        IngredientEntity::class,
-        ImagesEntity::class,
-        LargeEntity::class,
-        RegularEntity::class,
-        SmallEntity::class,
-        ThumbnailEntity::class*/
-    ], version = 2
+        RecipeEntity::class
+    ],
+//    autoMigrations = [
+//        AutoMigration(
+//            from = 2,
+//            to = 3,
+//            spec = RecipeDataBase.MyAutoMigration::class
+//        )
+//    ],
+    version = 3,
+    exportSchema = true
 )
 @TypeConverters(ConvertersRoom::class)
 abstract class RecipeDataBase : RoomDatabase() {
+
+//    @RenameTable(fromTableName = "Recipes.db", toTableName = "Recipes3.db")
+//    @DeleteColumn(tableName = "recipes", columnName = "userId")
+//    class MyAutoMigration : AutoMigrationSpec
 
     abstract fun recipesDao(): RecipesDao
 
@@ -45,7 +50,9 @@ abstract class RecipeDataBase : RoomDatabase() {
                 context.applicationContext,
                 RecipeDataBase::class.java,
                 DATABASE_NAME
-            ).build()
+            )
+                .fallbackToDestructiveMigration()
+                .build()
         }
     }
 }

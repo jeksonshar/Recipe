@@ -7,6 +7,8 @@ import com.example.recipes.business.domain.singletons.RecipeSingleton
 import com.example.recipes.business.usecases.GetFavoriteRecipeUseCase
 import com.example.recipes.business.usecases.ManageFavoriteRecipeUseCase
 import com.example.recipes.business.domain.singletons.BackPressedSingleton
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,7 +17,7 @@ import javax.inject.Inject
 class RecipeDetailsViewModel @Inject constructor(
     private val getFavoriteRecipeUseCase: GetFavoriteRecipeUseCase,
     private val manageFavoriteRecipeUseCase: ManageFavoriteRecipeUseCase,
-    private val savedStateHandle: SavedStateHandle
+//    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private var _currentRecipe = MutableLiveData<Recipe>()
@@ -29,6 +31,8 @@ class RecipeDetailsViewModel @Inject constructor(
     val retryVisibilityLiveData = MutableLiveData<Boolean>()
     var currentRecipeIsFavorite = MutableLiveData(false)
 
+    private val userId = Firebase.auth.currentUser?.uid ?: ""
+
     fun moveToRecipe() {
         val recipe = RecipeSingleton.recipe
         _currentRecipe.value = RecipeSingleton.recipe
@@ -40,7 +44,7 @@ class RecipeDetailsViewModel @Inject constructor(
 
     fun recipeIsFavorite(uri: String) {
         viewModelScope.launch {
-            val favoriteRecipe = getFavoriteRecipeUseCase.getFavoriteRecipe(uri)
+            val favoriteRecipe = getFavoriteRecipeUseCase.getFavoriteRecipe(uri, userId)
             if (favoriteRecipe != null) {
                 currentRecipeIsFavorite.value = true
             }
@@ -48,9 +52,11 @@ class RecipeDetailsViewModel @Inject constructor(
     }
 
     fun saveOrDeleteRecipeToFavorite() {
-        currentRecipeIsFavorite.postValue(!currentRecipeIsFavorite.value!!)
+        currentRecipeIsFavorite.value = !currentRecipeIsFavorite.value!!
         viewModelScope.launch {
-            currentRecipe.value?.let { manageFavoriteRecipeUseCase.manageRecipe(it) }
+            currentRecipe.value?.let {
+                manageFavoriteRecipeUseCase.manageRecipe(it, userId)
+            }
         }
     }
 

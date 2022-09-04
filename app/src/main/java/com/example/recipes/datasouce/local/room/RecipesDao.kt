@@ -11,10 +11,10 @@ import com.example.recipes.datasouce.local.room.entities.RecipeEntity
 interface RecipesDao {
 
     @Query("SELECT * FROM recipes")
-    suspend fun getAllRecipes(): List<RecipeEntity>
+    suspend fun getAllFavoriteRecipes(): List<RecipeEntity>
 
     @Query("SELECT * From recipes WHERE uri == :uri")
-    suspend fun getRecipeByUri(uri: String): RecipeEntity?
+    suspend fun getFavoriteRecipeByUri(uri: String): RecipeEntity?
 
     @Insert(onConflict = IGNORE)
     suspend fun insertRecipes(vararg recipe: RecipeEntity)

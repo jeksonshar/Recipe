@@ -15,6 +15,7 @@
     <color name="yellow">#FFC900</color>
     <color name="green">#06FF00</color>
     <color name="green_for_header_nav_drawer">#4E9F3D</color>
+    <color name="green_for_button">#B1D7B4</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 

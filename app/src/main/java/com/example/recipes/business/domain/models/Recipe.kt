@@ -23,5 +23,6 @@ data class Recipe(
     val uri: String,
     val url: String,
     val yield: Double,
-    var isFavorite: Boolean = false
+    val isFavorite: Boolean = false,
+    val userIdList: List<String> = emptyList()
 )

@@ -10,14 +10,16 @@ class GetFavoriteRecipesUseCase @Inject constructor(
     private val dataBase: RecipeDataBase?
 ) {
 
-    suspend fun getRecipesFromRoom(): List<Recipe> {
+    suspend fun getUserFavoriteRecipesFromRoom(userId: String): List<Recipe> {
         if (dataBase == null) {
             return emptyList()
         }
-        val entities = dataBase.recipesDao().getAllRecipes()
+        val entities = dataBase.recipesDao().getAllFavoriteRecipes()
         val recipes: MutableList<Recipe> = ArrayList()
         for (entity in entities) {
-            recipes.add(DataBaseEntitiesMappers.mapToRecipe(entity))
+            if (entity.userIdList.contains(userId)) {
+                recipes.add(DataBaseEntitiesMappers.mapToRecipe(entity))
+            }
         }
         return recipes
     }

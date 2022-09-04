@@ -1,5 +1,6 @@
 package com.example.recipes.datasouce.local.room.entities
 
+import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -7,7 +8,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "recipes")
 data class RecipeEntity(
     val calories: Double = 0.0,
-    val cautions: List<String> ,
+    val cautions: List<String>,
     val cuisineType: List<String>,
     val dietLabels: List<String>,
     val dishType: List<String>,
@@ -26,5 +27,7 @@ data class RecipeEntity(
     val uri: String = "",
     val url: String = "",
     val yield: Double = 0.0,
-    val isFavorite: Boolean = false
+    val isFavorite: Boolean = false,
+    @ColumnInfo(name = "userId")
+    val userIdList: List<String> = emptyList()
 )

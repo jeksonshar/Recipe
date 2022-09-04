@@ -38,8 +38,9 @@
     <string name="or_use_social_networks">or use social networks</string>
 
     <string name="facebook_application_id" translatable="false">308378624662427</string>
-    <!-- Facebook Application ID, prefixed by 'fb'. Enables Chrome Custom tabs. -->
     <string name="facebook_login_protocol_scheme" translatable="false">fb308378624662427</string>
+    <string name="facebook_client_token">59ae8e35e9c8c6be7b5a99608b1630cc</string>
+    <!-- Facebook Application ID, prefixed by 'fb'. Enables Chrome Custom tabs. -->
 
     <string name="sign_out">Sign Out</string>
     <string name="delete">Delete user</string>
@@ -60,5 +61,15 @@
     <string name="cancel_reset_password">Сброс пароля отменен пользователем</string>
     <string name="description_actions_at_forget_password">On your email address will send email for reset password</string>
     <string name="too_fast">Да не торопись ты так\nЖди минуту!</string>
+    <string name="submit">Submit</string>
+    <string name="change_password">Change password</string>
+    <string name="change_name">Change name</string>
+    <string name="enter_new_name_for_profile">Enter new name for profile</string>
+    <string name="name_for_profile">Name for profile</string>
+    <string name="enter_new_value">Enter new value</string>
+    <string name="cancel">Cancel</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
 </resources>

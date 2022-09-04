@@ -9,13 +9,13 @@ class GetFavoriteRecipeUseCase @Inject constructor(
     private val dataBase: RecipeDataBase?
 ) {
 
-    suspend fun getFavoriteRecipe(uri: String): Recipe? {
+    suspend fun getFavoriteRecipe(uri: String, userId: String): Recipe? {
         if (dataBase == null) {
             return null
         }
 
-        val recipeEntity = dataBase.recipesDao().getRecipeByUri(uri)
-        return if (recipeEntity != null) {
+        val recipeEntity = dataBase.recipesDao().getFavoriteRecipeByUri(uri)
+        return if (recipeEntity != null && recipeEntity.userIdList.contains(userId)) {
             DataBaseEntitiesMappers.mapToRecipe(recipeEntity)
         } else {
             null

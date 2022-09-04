@@ -26,7 +26,8 @@ object DataBaseEntitiesMappers {
             uri = recipe.uri,
             url = recipe.url,
             yield = recipe.yield,
-            isFavorite = recipe.isFavorite
+            isFavorite = recipe.isFavorite,
+            userIdList = recipe.userIdList
         )
     }
 
@@ -51,7 +52,8 @@ object DataBaseEntitiesMappers {
             uri = entity.uri,
             url = entity.url,
             yield = entity.yield,
-            isFavorite = entity.isFavorite
+            isFavorite = entity.isFavorite,
+            userIdList = entity.userIdList
         )
     }
 
@@ -103,6 +105,7 @@ object DataBaseEntitiesMappers {
             mapToThumbnailEntity(images.thumbnail)
         )
     }
+
     private fun mapToImages(images: ImagesEntity): Images {
         return Images(
             mapTotLarge(images.large),
@@ -120,6 +123,7 @@ object DataBaseEntitiesMappers {
             large.width
         )
     }
+
     private fun mapTotLarge(entity: LargeEntity): Large {
         return Large(
             entity.height,
@@ -136,6 +140,7 @@ object DataBaseEntitiesMappers {
             regular.width
         )
     }
+
     private fun mapToRegular(regular: RegularEntity): Regular {
         return Regular(
             regular.height,
@@ -152,6 +157,7 @@ object DataBaseEntitiesMappers {
             small.width
         )
     }
+
     private fun mapToSmall(small: SmallEntity): Small {
         return Small(
             small.height,
@@ -168,6 +174,7 @@ object DataBaseEntitiesMappers {
             thumbnail.width
         )
     }
+
     private fun mapToThumbnail(thumbnail: ThumbnailEntity): Thumbnail {
         return Thumbnail(
             thumbnail.height,

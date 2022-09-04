@@ -274,7 +274,7 @@ class AuthViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun checkForWatcherUserName(userName: String): Boolean {
-        return userName.isEmpty()
+        return userName.isNotEmpty()
     }
 
     private fun checkForWatcherPassword(password: String): Boolean {
