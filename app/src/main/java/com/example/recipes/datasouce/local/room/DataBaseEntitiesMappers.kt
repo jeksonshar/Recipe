@@ -5,8 +5,8 @@ import com.example.recipes.datasouce.local.room.entities.*
 
 object DataBaseEntitiesMappers {
 
-    fun mapToRecipeEntity(recipe: Recipe): RecipeEntity {
-        return RecipeEntity(
+    fun mapToRecipeEntity(recipe: Recipe): RecipeEntityLocal {
+        return RecipeEntityLocal(
             calories = recipe.calories,
             cautions = recipe.cautions,
             cuisineType = recipe.cuisineType,
@@ -31,7 +31,7 @@ object DataBaseEntitiesMappers {
         )
     }
 
-    fun mapToRecipe(entity: RecipeEntity): Recipe {
+    fun mapToRecipe(entity: RecipeEntityLocal): Recipe {
         return Recipe(
             calories = entity.calories,
             cautions = entity.cautions,

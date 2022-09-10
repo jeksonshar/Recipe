@@ -1,24 +1,27 @@
 package com.example.recipes.datasouce.local.room
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
+import androidx.room.*
 import androidx.room.OnConflictStrategy.*
-import androidx.room.Query
-import com.example.recipes.datasouce.local.room.entities.RecipeEntity
+import com.example.recipes.datasouce.local.room.entities.RecipeEntityLocal
 
 @Dao
 interface RecipesDao {
 
     @Query("SELECT * FROM recipes")
-    suspend fun getAllFavoriteRecipes(): List<RecipeEntity>
+    suspend fun getAllFavoriteRecipes(): List<RecipeEntityLocal>
 
     @Query("SELECT * From recipes WHERE uri == :uri")
-    suspend fun getFavoriteRecipeByUri(uri: String): RecipeEntity?
+    suspend fun getFavoriteRecipeByUri(uri: String): RecipeEntityLocal?
 
-    @Insert(onConflict = IGNORE)
-    suspend fun insertRecipes(vararg recipe: RecipeEntity)
+    @Insert(onConflict = REPLACE)
+    suspend fun insertFavoriteRecipes(vararg recipe: RecipeEntityLocal)
 
     @Delete
-    suspend fun deleteRecipeFromFavorite(recipe: RecipeEntity)
+    suspend fun deleteRecipeFromFavorite(recipe: RecipeEntityLocal)
+
+    @Query("DELETE FROM recipes")
+    suspend fun delete()
+
+    @Update
+    suspend fun updateFavoriteRecipe(recipe: RecipeEntityLocal)
 }

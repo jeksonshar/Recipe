@@ -25,6 +25,9 @@ import com.example.recipes.business.domain.singletons.BackPressedSingleton
 import com.example.recipes.presentation.ui.recipes.RecipeClickListener
 import com.example.recipes.presentation.ui.auth.AuthActivity
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -42,6 +45,7 @@ class RecipeSearchListFragment : Fragment() {
     private val viewModelSearch: RecipeSearchListViewModel by viewModels()
 
     private var auth: FirebaseAuth? = null
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     private var clickListener: RecipeClickListener? = object : RecipeClickListener {
         override fun openRecipeDetailsFragment(recipe: Recipe) {
@@ -73,6 +77,7 @@ class RecipeSearchListFragment : Fragment() {
         binding.vm = viewModelSearch
 
         auth = Firebase.auth
+        firebaseAnalytics = Firebase.analytics
 
         binding.apply {
 
@@ -354,6 +359,13 @@ class RecipeSearchListFragment : Fragment() {
             lifecycleScope.launchWhenStarted {
                 viewModelSearch.loadRecipes(query).collectLatest {
                     pagingAdapter?.submitData(it)
+                }
+            }
+            if (query != null) {
+                firebaseAnalytics.logEvent("search_clicked") {
+                    param(FirebaseAnalytics.Param.ITEM_ID, query.hashCode().toString())
+                    param(FirebaseAnalytics.Param.ITEM_NAME, query)
+                    param(FirebaseAnalytics.Param.CONTENT_TYPE, "search_clicked")
                 }
             }
         }

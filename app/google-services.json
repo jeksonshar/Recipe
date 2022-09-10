@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "406923311385",
+    "firebase_url": "https://recipes-6a321-default-rtdb.firebaseio.com",
     "project_id": "recipes-6a321",
     "storage_bucket": "recipes-6a321.appspot.com"
   },
@@ -13,6 +14,22 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "406923311385-25hgs2hqnsf41v4fesn4qafqi5ofltqr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.recipes",
+            "certificate_hash": "945573278a7ec1ce2476a30b96687f3aa459b08a"
+          }
+        },
+        {
+          "client_id": "406923311385-vv6hnh2rqe7hkk259oja563hv8ds36lo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.recipes",
+            "certificate_hash": "06b43e843b3b41229a74b7fe3970b09540e845b9"
+          }
+        },
         {
           "client_id": "406923311385-fl77fap33j46kugnrspsfgoth94r9hr7.apps.googleusercontent.com",
           "client_type": 3

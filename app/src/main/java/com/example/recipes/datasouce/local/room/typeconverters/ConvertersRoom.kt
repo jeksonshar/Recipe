@@ -25,4 +25,12 @@ object ConvertersRoom {
     fun convertStringToList(string: String?): List<String> {
         return string?.split(",") ?: emptyList()
     }
+    @TypeConverter
+    fun convertSetToString(set: Set<String>): String {
+        return set.joinToString(",")
+    }
+    @TypeConverter
+    fun converterStringToSet(string: String?): Set<String> {
+        return (string?.split(",") ?: emptyList()).toSet()
+    }
 }

@@ -2,13 +2,12 @@ package com.example.recipes.datasouce.local.room
 
 import android.content.Context
 import androidx.room.*
-import androidx.room.migration.AutoMigrationSpec
 import com.example.recipes.datasouce.local.room.entities.*
 import com.example.recipes.datasouce.local.room.typeconverters.ConvertersRoom
 
 @Database(
     entities = [
-        RecipeEntity::class
+        RecipeEntityLocal::class
     ],
 //    autoMigrations = [
 //        AutoMigration(

@@ -6,7 +6,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "recipes")
-data class RecipeEntity(
+data class RecipeEntityLocal(
     val calories: Double = 0.0,
     val cautions: List<String>,
     val cuisineType: List<String>,
