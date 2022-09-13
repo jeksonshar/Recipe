@@ -3,21 +3,18 @@ package com.example.recipes.business.usecases
 import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.datasouce.local.room.DataBaseEntitiesMappers
 import com.example.recipes.datasouce.local.room.RecipeDataBase
-import com.example.recipes.datasouce.network.NetWorkEntitiesMappers
-import com.example.recipes.datasouce.network.RecipesApiService
 import javax.inject.Inject
 
 class SynchronizeFavoriteRecipesUseCase @Inject constructor(
     private val dataBase: RecipeDataBase?,
-    private val apiService: RecipesApiService
 ) {
 
     suspend fun synchronizeFavoriteRecipesWithFirebase(
-        favorites: HashMap<String, List<String>>,
+        favorites: List<Recipe>,
         userId: String
     ): List<Recipe> {
 
-        // удалеяю любимые рецепты юзера
+        // удаляю в Room любимые рецепты юзера
         val allFavoriteRecipes = dataBase?.recipesDao()?.getAllFavoriteRecipes()
         allFavoriteRecipes?.forEach {
             if (it.userIdList.contains(userId)) {
@@ -25,30 +22,22 @@ class SynchronizeFavoriteRecipesUseCase @Inject constructor(
             }
         }
 
-        // скачиваю и сохраняю любимые рецепты юзера, отмеченные в Firebase
+        // фильтрую рецепты по пользовыателю
         val recipes: MutableList<Recipe> = ArrayList()
         if (favorites.isNotEmpty()) {
-            favorites.forEach { (s, list) ->
-                if (list.contains(userId)) {
-                    val recipeEntity = apiService.getRecipeInfo(s).body()?.recipeEntity
-                    val recipe = NetWorkEntitiesMappers.mapToRecipe(recipeEntity)
-                    val newRecipe = changeRecipeUserIdList(recipe, list)
-                    val recipeEntityLocal = DataBaseEntitiesMappers.mapToRecipeEntity(newRecipe)
+            favorites.forEach { recipe ->
+                if (recipe.userIdList.contains(userId)) {
+                    val listUserId: MutableList<String> = recipe.userIdList as MutableList<String>
+                    listUserId.add(userId)
+                    val newRecipe = changeRecipeUserIdList(recipe, listUserId)
+                    dataBase?.recipesDao()?.insertFavoriteRecipes(
+                        DataBaseEntitiesMappers.mapToRecipeEntityLocal(newRecipe)
+                    )
                     recipes.add(newRecipe)
-                    dataBase?.recipesDao()?.insertFavoriteRecipes(recipeEntityLocal)
                 }
             }
         }
         return recipes
-    }
-
-    private suspend fun deleteFromRoomRecipesByUser(userId: String) {
-        val allFavoriteRecipes = dataBase?.recipesDao()?.getAllFavoriteRecipes()
-        allFavoriteRecipes?.forEach {
-            if (it.userIdList.contains(userId)) {
-                dataBase?.recipesDao()?.deleteRecipeFromFavorite(it)
-            }
-        }
     }
 
     private fun changeRecipeUserIdList(recipe: Recipe, userIdList: List<String>): Recipe {

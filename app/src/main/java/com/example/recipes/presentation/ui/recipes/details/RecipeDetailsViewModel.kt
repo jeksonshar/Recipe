@@ -1,5 +1,6 @@
 package com.example.recipes.presentation.ui.recipes.details
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.recipes.business.domain.models.Ingredient
 import com.example.recipes.business.domain.models.Recipe
@@ -45,9 +46,7 @@ class RecipeDetailsViewModel @Inject constructor(
     fun recipeIsFavorite(uri: String) {
         viewModelScope.launch {
             val favoriteRecipe = getFavoriteRecipeUseCase.getFavoriteRecipe(uri, userId)
-            if (favoriteRecipe != null) {
-                currentRecipeIsFavorite.value = true
-            }
+            currentRecipeIsFavorite.value = favoriteRecipe != null
         }
     }
 
