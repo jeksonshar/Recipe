@@ -39,7 +39,6 @@ class ViewPagerActivity : AppCompatActivity() {
 
         binding.apply {
             vm = viewModelPager
-//            viewPager.adapter = vm.setViewPagerAdapter()        // или так (через VM) или ниже (без VM)
             viewPager.adapter = adapter
 
             viewPager.setPageTransformer(HorizontalFlipTransformation())

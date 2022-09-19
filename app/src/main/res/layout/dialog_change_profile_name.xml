@@ -17,7 +17,8 @@
         android:layout_width="260dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@drawable/bg_dialog_connection">
+        android:background="@drawable/bg_dialog_connection"
+        android:theme="@style/DialogChangeProfileTheme">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvChangeNameProfile"

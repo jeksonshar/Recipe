@@ -71,5 +71,8 @@
     <string name="are_you_sure">Are you sure?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="detail_recipe">Detail recipe</string>
+    <string name="how_to_cook">How to cook</string>
+    <string name="retry">Retry</string>
 
 </resources>

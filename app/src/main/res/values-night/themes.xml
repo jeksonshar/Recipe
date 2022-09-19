@@ -19,8 +19,13 @@
 
     <style name="DialogChangeProfileTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:colorBackground">@color/full_transparent</item>
-        <item name="android:windowBackground">@color/full_transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowCloseOnTouchOutside">true</item>
+        <item name="colorSecondary">@android:color/transparent</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
     </style>
 
     <style name="ProfileTheme" parent="Theme.AppCompat">
@@ -39,6 +44,10 @@
         <item name="cornerFamilyTopRight">rounded</item>
         <item name="cornerFamilyTopLeft">rounded</item>
         <item name="cornerSize">8dp</item>
+    </style>
+
+    <style name="DetailTheme" parent="Theme.AppCompat">
+        <item name="android:textColor">@color/gray_dark</item>
     </style>
 
     <!-- Theme Splash Android <12-->

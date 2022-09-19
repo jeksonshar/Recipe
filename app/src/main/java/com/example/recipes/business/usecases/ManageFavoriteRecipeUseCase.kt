@@ -12,6 +12,7 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import javax.inject.Inject
 
 class ManageFavoriteRecipeUseCase @Inject constructor(
@@ -42,7 +43,8 @@ class ManageFavoriteRecipeUseCase @Inject constructor(
         val newRecipe = changeRecipeUserIdList(recipe, userIdList)
         dataBase?.recipesDao()?.insertFavoriteRecipes(DataBaseEntitiesMappers.mapToRecipeEntityLocal(newRecipe))
 
-        val newRecipeString = Gson().toJson(newRecipe)
+        val gson = GsonBuilder()/*.disableHtmlEscaping()*/.create()
+        val newRecipeString = gson.toJson(newRecipe)
         favoriteFirebaseRecipesRef.child(newRecipe.label).setValue(newRecipeString)
 
         firebaseAnalytics.logEvent("add_to_favorite") {
@@ -63,7 +65,8 @@ class ManageFavoriteRecipeUseCase @Inject constructor(
             dataBase?.recipesDao()?.deleteRecipeFromFavorite(DataBaseEntitiesMappers.mapToRecipeEntityLocal(recipe))
             favoriteFirebaseRecipesRef.child(newRecipe.label).removeValue()
         } else {
-            val newRecipeString = Gson().toJson(newRecipe)
+            val gson = GsonBuilder()/*.disableHtmlEscaping()*/.create()
+            val newRecipeString = gson.toJson(newRecipe)
             favoriteFirebaseRecipesRef.child(newRecipe.label).removeValue()
             favoriteFirebaseRecipesRef.child(newRecipe.label).setValue(newRecipeString)
             dataBase?.recipesDao()?.deleteRecipeFromFavorite(DataBaseEntitiesMappers.mapToRecipeEntityLocal(recipe))

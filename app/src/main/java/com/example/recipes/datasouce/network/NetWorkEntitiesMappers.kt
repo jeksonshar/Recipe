@@ -31,7 +31,7 @@ object NetWorkEntitiesMappers {
             dishType = entity?.dishType ?: emptyList(),
             healthLabels = entity?.healthLabels ?: emptyList(),
             image = entity?.image ?: "",
-            images = mapToImages(entity?.images ?: ImagesEntity()),
+            images = mapToImages(entity?.images),
             ingredientLines = entity?.ingredientLines ?: emptyList(),
             ingredients = entity?.ingredients?.map { ingredientEntity ->
                 mapToIngredients(ingredientEntity)
@@ -48,27 +48,27 @@ object NetWorkEntitiesMappers {
         )
     }
 
-    private fun mapToImages(imagesEntity: ImagesEntity): Images {
+    private fun mapToImages(imagesEntity: ImagesEntity?): Images {
         return Images(
             large = Large(
-                imagesEntity.large?.height ?: 0,
-                imagesEntity.large?.url ?: "",
-                imagesEntity.large?.width ?: 0
+                imagesEntity?.large?.height ?: 0,
+                imagesEntity?.large?.url ?: "",
+                imagesEntity?.large?.width ?: 0
             ),
             regular = Regular(
-                imagesEntity.regular?.height ?: 0,
-                imagesEntity.regular?.url ?: "",
-                imagesEntity.regular?.width ?: 0
+                imagesEntity?.regular?.height ?: 0,
+                imagesEntity?.regular?.url ?: "",
+                imagesEntity?.regular?.width ?: 0
             ),
             small = Small(
-                imagesEntity.small?.height ?: 0,
-                imagesEntity.small?.url ?: "",
-                imagesEntity.small?.width ?: 0
+                imagesEntity?.small?.height ?: 0,
+                imagesEntity?.small?.url ?: "",
+                imagesEntity?.small?.width ?: 0
             ),
             thumbnail = Thumbnail(
-                imagesEntity.thumbnail?.height ?: 0,
-                imagesEntity.thumbnail?.url ?: "",
-                imagesEntity.thumbnail?.width ?: 0
+                imagesEntity?.thumbnail?.height ?: 0,
+                imagesEntity?.thumbnail?.url ?: "",
+                imagesEntity?.thumbnail?.width ?: 0
             )
         )
     }

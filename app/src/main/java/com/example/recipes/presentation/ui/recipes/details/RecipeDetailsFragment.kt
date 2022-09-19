@@ -1,13 +1,19 @@
 package com.example.recipes.presentation.ui.recipes.details
 
+import android.content.Intent
+import android.content.pm.verify.domain.DomainVerificationManager
+import android.content.pm.verify.domain.DomainVerificationUserState
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import com.example.recipes.R
 import com.example.recipes.databinding.FragmentDetailRecipeBinding
 import com.example.recipes.presentation.utils.ImagesUtil
@@ -26,10 +32,13 @@ class RecipeDetailsFragment : Fragment() {
         DetailAdapter()
     }
 
+    private val args: RecipeDetailsFragmentArgs by navArgs()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.moveToRecipe()
+        viewModel.moveToRecipe(args.recipeLink)
+//        checkDomainVerification()
     }
 
     override fun onCreateView(
@@ -38,12 +47,36 @@ class RecipeDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDetailRecipeBinding.inflate(inflater, container, false)
-        binding.apply {
 
+        binding.lifecycleOwner = this
+        binding.activity = requireActivity()
+        binding.vm = viewModel
+
+        binding.apply {
             rvIngredients.adapter = adapter
 
-            isFavorite.setOnClickListener {
-                viewModel.saveOrDeleteRecipeToFavorite()
+            btnShare.setOnClickListener {
+                val intent = Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain" //для URL можно использовать text/x-uri
+
+//                    putExtra(Intent.EXTRA_SUBJECT, "Recipe app")
+//                    var shareMessage = "\nLet me recommend you this recipe\n\n"
+//                    shareMessage = shareMessage + viewModel.currentRecipe.value?.shareAs + "\n\n"
+//                    putExtra(Intent.EXTRA_TEXT, shareMessage)
+
+//                    putExtra(Intent.EXTRA_TEXT, viewModel.currentRecipe.value?.uri)
+                    putExtra(Intent.EXTRA_TEXT, viewModel.currentRecipe.value?.shareAs)
+
+                }
+                val shareIntent = Intent.createChooser(intent, "Выбери месседжер:")
+                startActivity(shareIntent)
+            }
+
+            btnHowToCook.setOnClickListener {
+                val uri = Uri.parse(viewModel.currentRecipe.value?.url)
+                val intent = Intent(Intent.ACTION_VIEW, uri)
+
+                startActivity(intent)
             }
         }
         return binding.root
@@ -52,15 +85,14 @@ class RecipeDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         viewModel.currentRecipe.observe(viewLifecycleOwner) { recipe ->
-            Log.d("TAG", "onViewCreated: Recipe = ${recipe.label} ")
-            binding.apply {
-                ivRecipeDetail.let {
-                    ImagesUtil.setImage(recipe.image, it)
+            if (recipe != null) {
+                binding.apply {
+                    ivRecipeDetail.let {
+                        ImagesUtil.setImage(recipe.image, it)
+                    }
+                    viewModel.recipeIsFavorite(recipe.uri)
                 }
-                tvDetailRecipeName.text = recipe.label
-                viewModel.recipeIsFavorite(recipe.uri)
             }
         }
 
@@ -76,10 +108,6 @@ class RecipeDetailsFragment : Fragment() {
             adapter.submitList(it)
         }
 
-        viewModel.progressVisibilityLiveData.observe(viewLifecycleOwner) {
-            binding.progressBarDetail.isVisible = it
-        }
-
         viewModel.errorMassageLiveData.observe(viewLifecycleOwner) {
             binding.apply {
                 if (!it.isNullOrEmpty()) {
@@ -93,11 +121,34 @@ class RecipeDetailsFragment : Fragment() {
                 }
             }
         }
-
-        viewModel.retryVisibilityLiveData.observe(viewLifecycleOwner) {
-            binding.buttonRetryDetail.isVisible = it
-        }
     }
+
+//    private fun checkDomainVerification() {
+//        if (args.recipeLink.isNotBlank() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+//            val manager = requireContext().getSystemService(DomainVerificationManager::class.java)
+//
+//            val userState = manager?.getDomainVerificationUserState(requireContext().packageName)
+//
+//// Domains that have passed Android App Links verification.
+//            val verifiedDomains = userState?.hostToStateMap
+//                ?.filterValues { it == DomainVerificationUserState.DOMAIN_STATE_VERIFIED }
+//
+//// Domains that haven't passed Android App Links verification but that the user
+//// has associated with an app.
+//            val selectedDomains = userState?.hostToStateMap
+//                ?.filterValues { it == DomainVerificationUserState.DOMAIN_STATE_SELECTED }
+//
+//// All other domains.
+//            val unapprovedDomains = userState?.hostToStateMap
+//                ?.filterValues { it == DomainVerificationUserState.DOMAIN_STATE_NONE }
+//
+//
+//
+//            val intent = Intent(Settings.ACTION_APP_OPEN_BY_DEFAULT_SETTINGS,
+//                Uri.parse("package:${context?.packageName}"))
+//            requireActivity().startActivity(intent)
+//        }
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

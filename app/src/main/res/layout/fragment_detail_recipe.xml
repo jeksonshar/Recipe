@@ -5,127 +5,217 @@
 
     <data>
 
+        <import type="android.view.View" />
+
+        <variable
+            name="activity"
+            type="android.app.Activity"/>
+
         <variable
             name="vm"
             type="com.example.recipes.presentation.ui.recipes.details.RecipeDetailsViewModel" />
     </data>
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.ui.recipes.details.RecipeDetailsFragment">
+        android:background="@color/background_list"
+        android:theme="@style/DetailTheme">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_radius"
+            android:elevation="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/ivRecipeDetail"
-                android:layout_width="0dp"
+                android:id="@+id/btnBack"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/dish_not_loading"
-                app:layout_constraintBottom_toTopOf="@+id/tvDetailRecipeName"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:paddingVertical="16dp"
+                android:onClick="@{() -> activity.onBackPressed()}"
+                android:paddingStart="0dp"
+                android:paddingEnd="8dp"
+                android:src="@drawable/ic_arrow_back" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivTitleOfList"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginVertical="4dp"
+                android:layout_marginStart="24dp"
+                app:srcCompat="@drawable/chef_hat" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvDetailRecipeName"
-                android:layout_width="0dp"
+                android:id="@+id/tvTitleOfList"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:gravity="center"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/tvDetailIngredient"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivRecipeDetail"
-                tools:text="@string/name_recipe" />
+                android:text="@string/detail_recipe"
+                android:textColor="#191A19"
+                android:textSize="18sp"
+                android:textStyle="italic" />
 
-            <LinearLayout
-                android:id="@+id/isFavorite"
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/btnShare"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="4dp"
-                android:background="@drawable/background_favorite"
-                android:padding="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0">
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/favoriteImage"
-                    android:layout_width="24dp"
-                    android:layout_height="21dp"
-                    android:contentDescription="@string/image_view"
-                    android:src="@drawable/like_off" />
-            </LinearLayout>
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvDetailIngredient"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:gravity="start"
-                android:text="@string/ingredients"
-                android:textStyle="italic|bold"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toTopOf="@+id/rvIngredients"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvDetailRecipeName" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvIngredients"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_gravity="end"
                 android:layout_marginEnd="8dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvDetailIngredient" />
+                android:paddingHorizontal="8dp"
+                android:src="@drawable/ic_share_icon" />
+        </androidx.appcompat.widget.Toolbar>
 
-            <ProgressBar
-                android:id="@+id/progressBarDetail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@id/tvErrorDetail"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ivRecipeDetail" />
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/detailContainer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvErrorDetail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="@string/error_message"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toTopOf="@id/buttonRetryDetail"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/progressBarDetail" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/buttonRetryDetail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/retry"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvErrorDetail" />
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cvRecipeDetail"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="8dp"
+                    app:layout_constraintBottom_toTopOf="@+id/tvDetailRecipeName"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ivRecipeDetail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/dish_not_loading" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvDetailRecipeName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/tvDetailIngredient"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cvRecipeDetail"
+                    tools:text="@{vm.currentRecipe.label}" />
+
+                <LinearLayout
+                    android:id="@+id/isFavorite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/background_favorite"
+                    android:elevation="16dp"
+                    android:padding="16dp"
+                    android:onClick="@{() -> vm.saveOrDeleteRecipeToFavorite()}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/favoriteImage"
+                        android:layout_width="24dp"
+                        android:layout_height="21dp"
+                        android:contentDescription="@string/image_view"
+                        android:src="@drawable/like_off" />
+                </LinearLayout>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvDetailIngredient"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="start"
+                    android:text="@string/ingredients"
+                    android:textStyle="italic|bold"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toTopOf="@+id/rvIngredients"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvDetailRecipeName" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvIngredients"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toTopOf="@id/btnHowToCook"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvDetailIngredient" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnHowToCook"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="@string/how_to_cook"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/rvIngredients"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <ProgressBar
+                    android:id="@+id/progressBarDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{vm.progressVisibilityLiveData ? View.VISIBLE : View.INVISIBLE}"
+                    app:layout_constraintBottom_toTopOf="@id/tvErrorDetail"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cvRecipeDetail" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvErrorDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/error_message"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toTopOf="@id/buttonRetryDetail"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/progressBarDetail" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/buttonRetryDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/retry"
+                    android:visibility="@{vm.retryVisibilityLiveData ? View.VISIBLE : View.INVISIBLE}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvErrorDetail" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -28,7 +28,12 @@
         android:id="@+id/recipeDetailsFragment"
         android:name="com.example.recipes.presentation.ui.recipes.details.RecipeDetailsFragment"
         android:label="fragment_detail_recipe"
-        tools:layout="@layout/fragment_detail_recipe" />
+        tools:layout="@layout/fragment_detail_recipe" >
+        <argument
+            android:name="recipeLink"
+            app:argType="string"
+            android:defaultValue=" " />
+    </fragment>
     <fragment
         android:id="@+id/noConnectionDialogFragment"
         android:name="com.example.recipes.presentation.ui.dialogs.NoConnectionDialogFragment"

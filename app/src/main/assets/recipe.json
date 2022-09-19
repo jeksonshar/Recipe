@@ -1,0 +1,152 @@
+{
+  "calories": 955.8033313453125,
+  "cautions": [
+    "Sulfites"
+  ],
+  "cuisineType": [
+    "american"
+  ],
+  "dietLabels": [
+    "Low-Fat",
+    "Low-Sodium"
+  ],
+  "dishType": [
+    "drinks"
+  ],
+  "healthLabels": [
+    "Low Potassium",
+    "Kidney-Friendly",
+    "Vegan",
+    "Vegetarian",
+    "Pescatarian",
+    "Dairy-Free",
+    "Gluten-Free",
+    "Wheat-Free",
+    "Egg-Free",
+    "Peanut-Free",
+    "Tree-Nut-Free",
+    "Soy-Free",
+    "Fish-Free",
+    "Shellfish-Free",
+    "Pork-Free",
+    "Red-Meat-Free",
+    "Crustacean-Free",
+    "Celery-Free",
+    "Mustard-Free",
+    "Sesame-Free",
+    "Lupine-Free",
+    "Mollusk-Free",
+    "No oil added",
+    "Kosher"
+  ],
+  "image": "https://edamam-product-images.s3.amazonaws.com/web-img/2d9/2d9b274c8b78226e939906bb685771c1.jpg?X-Amz-Security-Token\u003dIQoJb3JpZ2luX2VjEGIaCXVzLWVhc3QtMSJHMEUCIQDDqHbk8rpXADVrVQ7GK9eC1RED2wLPz4wzFipk5CWClgIgfRRnikoPwvGVLcd9pJ%2Baq%2Bm%2FaPZAnbVniy3unEGNJdAq1QQI%2B%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgwxODcwMTcxNTA5ODYiDFW0SRUpZ2ztr8INsSqpBIJxfZ6F23mnRm1ASwykBpfiwpRIvJUeVRbyYlBsNoG0bdwCoPYv5gNmjOtH9PlRqY2hpiVFX8KwbEnbQzIxPzg1FCk%2B68MkkAnzWOBL02gN2yCuEZ1BlD5SeK4cPkCvmyzBdzkE3hcPUZY35XjCWjW6jDMSeOkTmpwGWE5FZL1GJl%2B5mLQtIXItZUPs5YLq7MGJm5QBgdBJ1QTL6bV6UUlTNS4Oz8ksmKR79PBi9tIhmKe4oMJUNXDJgLVYIzU2wfovJozwjnzkmOgd9rfi0a1vRbk5ITYVAHewSVFjCUk27xGPkde0xryzSCRlaJnNSchKJhE1%2F4MkCHu2NbGh7dlsE7Vkur1BK0VF7NwCjQPiGF0OYKVdN5rpNCQqhkPP9YBjBa9HZw22wB%2FNXFykQqL5rs%2FlMNub81%2FPvoY9VCQTK3wSrHW5q1fCOSF%2BuYNGCWlSrJFXg7%2BuRtZwW965K8tq6vZg7mSmbRhY0ZoGIwKm87AmwLNccabz417Iw6Dj6NQ%2F%2Ba8dJfCCkZDTeeDXg7VrP4lXvjA4bEt0lr0a8o32jS%2FRd8RV42oC9q%2BYDvIiHtW51zligy4d4%2BTj34VDOH6ffhAAc0HAeyzkLEt3zQiaLcPZgJ9ALPszKnJsYHJv3yfh4Y%2FZS%2BO2JygB4W6zblrnARiJzPhcOkYl%2BkjLLEtDQ81iDD4suXesyqif%2BUQN5JxND83g56Ofj7UHl4CSAl%2FOvcOGKk2GrPkw39GUmQY6qQF%2ByYMHKyYY3UH8zNZhRZ0UHmk2FQ0YZ27wsdDHtDNKsTj%2B1kV7ZfTmZgboJjkSYAZ2S1VPRY2Ny6sqw%2BYiD4fzFSAsQMLBIKT5CIUTUpx3%2FvhIN7drV8u%2FwEjsThhu0hCZbQp9s%2B3DJiWJRaQiFC3lpTKmCGTBSIIBO7elh4%2FnYmBhBXKehK8UKsShro1JbNS0eD%2B0MBolug61%2BGWqmhfAaY8jGR0YGhRB\u0026X-Amz-Algorithm\u003dAWS4-HMAC-SHA256\u0026X-Amz-Date\u003d20220917T024912Z\u0026X-Amz-SignedHeaders\u003dhost\u0026X-Amz-Expires\u003d3600\u0026X-Amz-Credential\u003dASIASXCYXIIFEP2G5W5S%2F20220917%2Fus-east-1%2Fs3%2Faws4_request\u0026X-Amz-Signature\u003d6f6b78a8008a33ae4d3092a585d43c88759d2b04be68b7af2d902a3288465ddb",
+  "images": {
+    "large": {
+      "height": 0,
+      "url": "",
+      "width": 0
+    },
+    "regular": {
+      "height": 300,
+      "url": "https://edamam-product-images.s3.amazonaws.com/web-img/2d9/2d9b274c8b78226e939906bb685771c1.jpg?X-Amz-Security-Token\u003dIQoJb3JpZ2luX2VjEGIaCXVzLWVhc3QtMSJHMEUCIQDDqHbk8rpXADVrVQ7GK9eC1RED2wLPz4wzFipk5CWClgIgfRRnikoPwvGVLcd9pJ%2Baq%2Bm%2FaPZAnbVniy3unEGNJdAq1QQI%2B%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgwxODcwMTcxNTA5ODYiDFW0SRUpZ2ztr8INsSqpBIJxfZ6F23mnRm1ASwykBpfiwpRIvJUeVRbyYlBsNoG0bdwCoPYv5gNmjOtH9PlRqY2hpiVFX8KwbEnbQzIxPzg1FCk%2B68MkkAnzWOBL02gN2yCuEZ1BlD5SeK4cPkCvmyzBdzkE3hcPUZY35XjCWjW6jDMSeOkTmpwGWE5FZL1GJl%2B5mLQtIXItZUPs5YLq7MGJm5QBgdBJ1QTL6bV6UUlTNS4Oz8ksmKR79PBi9tIhmKe4oMJUNXDJgLVYIzU2wfovJozwjnzkmOgd9rfi0a1vRbk5ITYVAHewSVFjCUk27xGPkde0xryzSCRlaJnNSchKJhE1%2F4MkCHu2NbGh7dlsE7Vkur1BK0VF7NwCjQPiGF0OYKVdN5rpNCQqhkPP9YBjBa9HZw22wB%2FNXFykQqL5rs%2FlMNub81%2FPvoY9VCQTK3wSrHW5q1fCOSF%2BuYNGCWlSrJFXg7%2BuRtZwW965K8tq6vZg7mSmbRhY0ZoGIwKm87AmwLNccabz417Iw6Dj6NQ%2F%2Ba8dJfCCkZDTeeDXg7VrP4lXvjA4bEt0lr0a8o32jS%2FRd8RV42oC9q%2BYDvIiHtW51zligy4d4%2BTj34VDOH6ffhAAc0HAeyzkLEt3zQiaLcPZgJ9ALPszKnJsYHJv3yfh4Y%2FZS%2BO2JygB4W6zblrnARiJzPhcOkYl%2BkjLLEtDQ81iDD4suXesyqif%2BUQN5JxND83g56Ofj7UHl4CSAl%2FOvcOGKk2GrPkw39GUmQY6qQF%2ByYMHKyYY3UH8zNZhRZ0UHmk2FQ0YZ27wsdDHtDNKsTj%2B1kV7ZfTmZgboJjkSYAZ2S1VPRY2Ny6sqw%2BYiD4fzFSAsQMLBIKT5CIUTUpx3%2FvhIN7drV8u%2FwEjsThhu0hCZbQp9s%2B3DJiWJRaQiFC3lpTKmCGTBSIIBO7elh4%2FnYmBhBXKehK8UKsShro1JbNS0eD%2B0MBolug61%2BGWqmhfAaY8jGR0YGhRB\u0026X-Amz-Algorithm\u003dAWS4-HMAC-SHA256\u0026X-Amz-Date\u003d20220917T024912Z\u0026X-Amz-SignedHeaders\u003dhost\u0026X-Amz-Expires\u003d3600\u0026X-Amz-Credential\u003dASIASXCYXIIFEP2G5W5S%2F20220917%2Fus-east-1%2Fs3%2Faws4_request\u0026X-Amz-Signature\u003d6f6b78a8008a33ae4d3092a585d43c88759d2b04be68b7af2d902a3288465ddb",
+      "width": 300
+    },
+    "small": {
+      "height": 200,
+      "url": "https://edamam-product-images.s3.amazonaws.com/web-img/2d9/2d9b274c8b78226e939906bb685771c1-m.jpg?X-Amz-Security-Token\u003dIQoJb3JpZ2luX2VjEGIaCXVzLWVhc3QtMSJHMEUCIQDDqHbk8rpXADVrVQ7GK9eC1RED2wLPz4wzFipk5CWClgIgfRRnikoPwvGVLcd9pJ%2Baq%2Bm%2FaPZAnbVniy3unEGNJdAq1QQI%2B%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgwxODcwMTcxNTA5ODYiDFW0SRUpZ2ztr8INsSqpBIJxfZ6F23mnRm1ASwykBpfiwpRIvJUeVRbyYlBsNoG0bdwCoPYv5gNmjOtH9PlRqY2hpiVFX8KwbEnbQzIxPzg1FCk%2B68MkkAnzWOBL02gN2yCuEZ1BlD5SeK4cPkCvmyzBdzkE3hcPUZY35XjCWjW6jDMSeOkTmpwGWE5FZL1GJl%2B5mLQtIXItZUPs5YLq7MGJm5QBgdBJ1QTL6bV6UUlTNS4Oz8ksmKR79PBi9tIhmKe4oMJUNXDJgLVYIzU2wfovJozwjnzkmOgd9rfi0a1vRbk5ITYVAHewSVFjCUk27xGPkde0xryzSCRlaJnNSchKJhE1%2F4MkCHu2NbGh7dlsE7Vkur1BK0VF7NwCjQPiGF0OYKVdN5rpNCQqhkPP9YBjBa9HZw22wB%2FNXFykQqL5rs%2FlMNub81%2FPvoY9VCQTK3wSrHW5q1fCOSF%2BuYNGCWlSrJFXg7%2BuRtZwW965K8tq6vZg7mSmbRhY0ZoGIwKm87AmwLNccabz417Iw6Dj6NQ%2F%2Ba8dJfCCkZDTeeDXg7VrP4lXvjA4bEt0lr0a8o32jS%2FRd8RV42oC9q%2BYDvIiHtW51zligy4d4%2BTj34VDOH6ffhAAc0HAeyzkLEt3zQiaLcPZgJ9ALPszKnJsYHJv3yfh4Y%2FZS%2BO2JygB4W6zblrnARiJzPhcOkYl%2BkjLLEtDQ81iDD4suXesyqif%2BUQN5JxND83g56Ofj7UHl4CSAl%2FOvcOGKk2GrPkw39GUmQY6qQF%2ByYMHKyYY3UH8zNZhRZ0UHmk2FQ0YZ27wsdDHtDNKsTj%2B1kV7ZfTmZgboJjkSYAZ2S1VPRY2Ny6sqw%2BYiD4fzFSAsQMLBIKT5CIUTUpx3%2FvhIN7drV8u%2FwEjsThhu0hCZbQp9s%2B3DJiWJRaQiFC3lpTKmCGTBSIIBO7elh4%2FnYmBhBXKehK8UKsShro1JbNS0eD%2B0MBolug61%2BGWqmhfAaY8jGR0YGhRB\u0026X-Amz-Algorithm\u003dAWS4-HMAC-SHA256\u0026X-Amz-Date\u003d20220917T024912Z\u0026X-Amz-SignedHeaders\u003dhost\u0026X-Amz-Expires\u003d3600\u0026X-Amz-Credential\u003dASIASXCYXIIFEP2G5W5S%2F20220917%2Fus-east-1%2Fs3%2Faws4_request\u0026X-Amz-Signature\u003d40881f6656620780f1871401ff3ab689d2361b6c5cf0bd0d6e096444ee464949",
+      "width": 200
+    },
+    "thumbnail": {
+      "height": 100,
+      "url": "https://edamam-product-images.s3.amazonaws.com/web-img/2d9/2d9b274c8b78226e939906bb685771c1-s.jpg?X-Amz-Security-Token\u003dIQoJb3JpZ2luX2VjEGIaCXVzLWVhc3QtMSJHMEUCIQDDqHbk8rpXADVrVQ7GK9eC1RED2wLPz4wzFipk5CWClgIgfRRnikoPwvGVLcd9pJ%2Baq%2Bm%2FaPZAnbVniy3unEGNJdAq1QQI%2B%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgwxODcwMTcxNTA5ODYiDFW0SRUpZ2ztr8INsSqpBIJxfZ6F23mnRm1ASwykBpfiwpRIvJUeVRbyYlBsNoG0bdwCoPYv5gNmjOtH9PlRqY2hpiVFX8KwbEnbQzIxPzg1FCk%2B68MkkAnzWOBL02gN2yCuEZ1BlD5SeK4cPkCvmyzBdzkE3hcPUZY35XjCWjW6jDMSeOkTmpwGWE5FZL1GJl%2B5mLQtIXItZUPs5YLq7MGJm5QBgdBJ1QTL6bV6UUlTNS4Oz8ksmKR79PBi9tIhmKe4oMJUNXDJgLVYIzU2wfovJozwjnzkmOgd9rfi0a1vRbk5ITYVAHewSVFjCUk27xGPkde0xryzSCRlaJnNSchKJhE1%2F4MkCHu2NbGh7dlsE7Vkur1BK0VF7NwCjQPiGF0OYKVdN5rpNCQqhkPP9YBjBa9HZw22wB%2FNXFykQqL5rs%2FlMNub81%2FPvoY9VCQTK3wSrHW5q1fCOSF%2BuYNGCWlSrJFXg7%2BuRtZwW965K8tq6vZg7mSmbRhY0ZoGIwKm87AmwLNccabz417Iw6Dj6NQ%2F%2Ba8dJfCCkZDTeeDXg7VrP4lXvjA4bEt0lr0a8o32jS%2FRd8RV42oC9q%2BYDvIiHtW51zligy4d4%2BTj34VDOH6ffhAAc0HAeyzkLEt3zQiaLcPZgJ9ALPszKnJsYHJv3yfh4Y%2FZS%2BO2JygB4W6zblrnARiJzPhcOkYl%2BkjLLEtDQ81iDD4suXesyqif%2BUQN5JxND83g56Ofj7UHl4CSAl%2FOvcOGKk2GrPkw39GUmQY6qQF%2ByYMHKyYY3UH8zNZhRZ0UHmk2FQ0YZ27wsdDHtDNKsTj%2B1kV7ZfTmZgboJjkSYAZ2S1VPRY2Ny6sqw%2BYiD4fzFSAsQMLBIKT5CIUTUpx3%2FvhIN7drV8u%2FwEjsThhu0hCZbQp9s%2B3DJiWJRaQiFC3lpTKmCGTBSIIBO7elh4%2FnYmBhBXKehK8UKsShro1JbNS0eD%2B0MBolug61%2BGWqmhfAaY8jGR0YGhRB\u0026X-Amz-Algorithm\u003dAWS4-HMAC-SHA256\u0026X-Amz-Date\u003d20220917T024912Z\u0026X-Amz-SignedHeaders\u003dhost\u0026X-Amz-Expires\u003d3600\u0026X-Amz-Credential\u003dASIASXCYXIIFEP2G5W5S%2F20220917%2Fus-east-1%2Fs3%2Faws4_request\u0026X-Amz-Signature\u003df41e7f3a91bcc0950f9339b3d2304f4046fe9aeda1af5759af202ad19aac2ad5",
+      "width": 100
+    }
+  },
+  "ingredientLines": [
+    "For the Basil Syrup:",
+    "1 cup sugar",
+    "1 cup water",
+    "6 large fresh basil leaves, torn in half",
+    "For the cocktail:",
+    "1 ounce freshly squeezed pomelo juice",
+    "3/4 ounce basil simple syrup",
+    "1 1/2 ounce gin"
+  ],
+  "ingredients": [
+    {
+      "food": "sugar",
+      "foodCategory": "sugars",
+      "foodId": "food_axi2ijobrk819yb0adceobnhm1c2",
+      "image": "https://www.edamam.com/food-img/ecb/ecb3f5aaed96d0188c21b8369be07765.jpg",
+      "measure": "cup",
+      "quantity": 1.0,
+      "text": "1 cup sugar",
+      "weight": 200.0
+    },
+    {
+      "food": "water",
+      "foodCategory": "water",
+      "foodId": "food_a99vzubbk1ayrsad318rvbzr3dh0",
+      "image": "https://www.edamam.com/food-img/5dd/5dd9d1361847b2ca53c4b19a8f92627e.jpg",
+      "measure": "cup",
+      "quantity": 1.0,
+      "text": "1 cup water",
+      "weight": 237.0
+    },
+    {
+      "food": "fresh basil",
+      "foodCategory": "Condiments and sauces",
+      "foodId": "food_bfeht3obd58c3gak5ehpibxgbbs6",
+      "image": "https://www.edamam.com/food-img/5f1/5f1b05685ac2b404236a5d1c1f3c8c10.jpg",
+      "measure": "leaf",
+      "quantity": 6.0,
+      "text": "6 large fresh basil leaves, torn in half",
+      "weight": 3.75
+    },
+    {
+      "food": "pomelo",
+      "foodCategory": "fruit",
+      "foodId": "food_ar8p4coa9yfmc8askacwsaia5m7i",
+      "image": "https://www.edamam.com/food-img/a26/a262361f648c8c6d41f307b41033827f.jpg",
+      "measure": "ounce",
+      "quantity": 1.0,
+      "text": "1 ounce freshly squeezed pomelo juice",
+      "weight": 28.349523125
+    },
+    {
+      "food": "simple syrup",
+      "foodCategory": "sugars",
+      "foodId": "food_aftzb4hav0begxbvchpd3bhc9368",
+      "image": "https://www.edamam.com/food-img/198/198cf875b0112c3798592532e502e664.jpg",
+      "measure": "ounce",
+      "quantity": 0.75,
+      "text": "3/4 ounce basil simple syrup",
+      "weight": 21.26214234375
+    },
+    {
+      "food": "gin",
+      "foodCategory": "liquors and cocktails",
+      "foodId": "food_bzz3udhaawy24xa9sltd7b2o447b",
+      "image": "https://www.edamam.com/food-img/12c/12cf1175cd25bb81c9651bf8f9b276e8.jpg",
+      "measure": "ounce",
+      "quantity": 1.5,
+      "text": "1 1/2 ounce gin",
+      "weight": 42.5242846875
+    }
+  ],
+  "isFavorite": false,
+  "label": "Pomelo and Basil Cocktail Recipe",
+  "mealType": [
+    "lunch/dinner"
+  ],
+  "shareAs": "http://www.edamam.com/recipe/pomelo-and-basil-cocktail-recipe-07c7d1d16f3f6c1e2d917e04d6896f08/cocktail",
+  "source": "Serious Eats",
+  "totalTime": 5.0,
+  "totalWeight": 532.88595015625,
+  "uri": "http://www.edamam.com/ontologies/edamam.owl#recipe_07c7d1d16f3f6c1e2d917e04d6896f08",
+  "url": "http://www.seriouseats.com/recipes/2012/02/drinking-in-season-pomelo-basil-cocktail-recipe.html",
+  "userIdList": [
+    "YcpAXYpcMYUNEsmJgdTSO6eYeVq2"
+  ],
+  "yield": 1.0
+}
