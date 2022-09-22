@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.recipes.business.domain.singletons.BackPressedSingleton
 import com.example.recipes.business.usecases.GetFavoriteRecipesUseCase
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -28,6 +29,8 @@ class UserProfileViewModel @Inject constructor(
 
     val email = currentUser?.email ?: "--"
 
+    val onBackPressed = BackPressedSingleton.isBackPressClick
+
     private val _photoUri = MutableLiveData<Uri>()
     val photoUri: LiveData<Uri>
         get() = _photoUri
@@ -48,6 +51,11 @@ class UserProfileViewModel @Inject constructor(
         currentUser?.photoUrl?.let {
             _photoUri.value = it
         }
+    }
+
+    override fun onCleared() {
+        BackPressedSingleton.isBackPressClick.value = null
+        super.onCleared()
     }
 
 }

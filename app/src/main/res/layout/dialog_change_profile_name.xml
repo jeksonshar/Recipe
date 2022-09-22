@@ -14,15 +14,14 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clDialogChangeProfile"
-        android:layout_width="260dp"
+        android:layout_width="360dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@drawable/bg_dialog_connection"
-        android:theme="@style/DialogChangeProfileTheme">
+        android:background="@drawable/bg_dialog_connection">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvChangeNameProfile"
-            android:layout_width="0dp"
+            android:layout_width="260dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="14dp"
             android:layout_marginTop="24dp"
@@ -37,13 +36,13 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etChangeNameProfile"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="14dp"
             android:layout_marginTop="16dp"
             android:afterTextChanged="@{(text) -> vm.setValue(text)}"
             android:hint="@string/enter_new_value"
-            android:maxLines="2"
+            android:maxLength="30"
             android:textColorHint="@color/gray"
             app:layout_constraintBottom_toTopOf="@id/btnSubmit"
             app:layout_constraintEnd_toEndOf="parent"

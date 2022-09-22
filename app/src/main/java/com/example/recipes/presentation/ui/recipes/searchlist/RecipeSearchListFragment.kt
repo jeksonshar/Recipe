@@ -320,7 +320,7 @@ class RecipeSearchListFragment : Fragment() {
 
         viewModelSearch.queryHandler.observe(viewLifecycleOwner) {
             if (!it.isNullOrEmpty()) {
-                if (BackPressedSingleton.isBackPressClick != true) {
+                if (BackPressedSingleton.isBackPressClick.value != true) {
                     loadRecipes(it)
                 } else if (pagingAdapter?.itemCount == 0) {
                     loadRecipes(it)

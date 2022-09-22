@@ -1,14 +1,8 @@
 package com.example.recipes.presentation.ui.recipes
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import com.example.recipes.R
 import com.example.recipes.business.domain.singletons.BackPressedSingleton
 import com.example.recipes.business.domain.singletons.LoadedRecipesSingleton
@@ -63,7 +57,7 @@ class RecipesActivity : AppCompatActivity() {
 //    }
 
     override fun onBackPressed() {
-        BackPressedSingleton.isBackPressClick = true
+        BackPressedSingleton.isBackPressClick.value = true
         super.onBackPressed()
     }
 }

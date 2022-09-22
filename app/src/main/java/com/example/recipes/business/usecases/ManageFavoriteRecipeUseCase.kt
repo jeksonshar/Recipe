@@ -1,22 +1,23 @@
 package com.example.recipes.business.usecases
 
 import android.os.Bundle
-import android.util.Log
 import androidx.collection.arraySetOf
 import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.datasouce.local.room.DataBaseEntitiesMappers
 import com.example.recipes.datasouce.local.room.RecipeDataBase
+import com.example.recipes.datasouce.network.NetWorkEntitiesMappers
+import com.example.recipes.datasouce.network.RecipesApiService
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import javax.inject.Inject
 
 class ManageFavoriteRecipeUseCase @Inject constructor(
-    private val dataBase: RecipeDataBase?
+    private val dataBase: RecipeDataBase?,
+    private val apiService: RecipesApiService
 ) {
     private val firebaseAnalytics = Firebase.analytics
     private val favoriteFirebaseRecipesRef = Firebase.database
@@ -40,12 +41,18 @@ class ManageFavoriteRecipeUseCase @Inject constructor(
             userIdList.add(it)
         }
         userIdList.add(userId)
-        val newRecipe = changeRecipeUserIdList(recipe, userIdList)
-        dataBase?.recipesDao()?.insertFavoriteRecipes(DataBaseEntitiesMappers.mapToRecipeEntityLocal(newRecipe))
+        val recipeToSave = apiService.getRecipeInfo(recipe.uri.substringAfter("recipe_"))
+        val newRecipe: Recipe = if (recipeToSave.isSuccessful) {
+            NetWorkEntitiesMappers.mapToRecipe(recipeToSave.body()?.recipeEntity)
+        } else recipe
+        val newRecipeWithUserId = changeRecipeUserIdList(newRecipe, userIdList)
+        dataBase?.recipesDao()?.insertFavoriteRecipes(
+            DataBaseEntitiesMappers.mapToRecipeEntityLocal(newRecipeWithUserId)
+        )
 
         val gson = GsonBuilder()/*.disableHtmlEscaping()*/.create()
-        val newRecipeString = gson.toJson(newRecipe)
-        favoriteFirebaseRecipesRef.child(newRecipe.label).setValue(newRecipeString)
+        val newRecipeString = gson.toJson(newRecipeWithUserId)
+        favoriteFirebaseRecipesRef.child(newRecipeWithUserId.label).setValue(newRecipeString)
 
         firebaseAnalytics.logEvent("add_to_favorite") {
             param(FirebaseAnalytics.Param.ITEM_ID, recipe.uri)

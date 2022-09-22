@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.recipes.R
 import com.example.recipes.databinding.FragmentUserProfileBinding
 import com.example.recipes.presentation.ui.auth.AuthActivity
+import com.example.recipes.presentation.ui.recipes.userprofile.dialogs.ChangeProfileNameDialog
 import com.example.recipes.presentation.utils.ImagesUtil
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
@@ -58,6 +59,13 @@ class UserProfileFragment : Fragment() {
                     UserProfileFragmentDirections
                         .actionUserProfileFragmentToChangeProfileNameDialog(Action.CHANGE_NAME)
                 )
+//                val bundle = Bundle()
+//                bundle.putString("action", Action.CHANGE_NAME.toString())
+//                requireActivity().supportFragmentManager.beginTransaction().add(
+//                    R.id.fragmentRecipesContainer, ChangeProfileNameDialog::class.java, bundle
+//                )
+//                    .addToBackStack(null)
+//                    .commit()
             }
             fabChangePhoto.setOnClickListener {
 
@@ -72,6 +80,13 @@ class UserProfileFragment : Fragment() {
                     UserProfileFragmentDirections
                         .actionUserProfileFragmentToChangeProfileNameDialog(Action.CHANGE_PASSWORD)
                 )
+//                val bundle = Bundle()
+//                bundle.putString("action", Action.CHANGE_PASSWORD.toString())
+//                parentFragmentManager.beginTransaction().add(
+//                    R.id.fragmentRecipesContainer, ChangeProfileNameDialog::class.java, bundle
+//                )
+//                    .addToBackStack(null)
+//                    .commit()
             }
             btnSignOut.setOnClickListener {
                 showAskAlertDialog(SIGN_OUT)
@@ -83,6 +98,10 @@ class UserProfileFragment : Fragment() {
 
         viewModelProfile.photoUri.observe(viewLifecycleOwner) {
             ImagesUtil.setImage(it, binding.ivProfile)
+        }
+
+        viewModelProfile.onBackPressed.observe(viewLifecycleOwner) {
+                viewModelProfile.getName()
         }
         return binding.root
     }

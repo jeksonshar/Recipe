@@ -4,6 +4,7 @@ import android.net.Uri
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.recipes.R
 
 object ImagesUtil {
 
@@ -11,6 +12,7 @@ object ImagesUtil {
         Glide.with(imageView.context)
             .load(image)
             .apply(RequestOptions())
+            .placeholder(R.drawable.dish_not_loading)
             .into(imageView)
     }
 

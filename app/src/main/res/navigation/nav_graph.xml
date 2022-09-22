@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
@@ -31,8 +30,8 @@
         tools:layout="@layout/fragment_detail_recipe" >
         <argument
             android:name="recipeLink"
-            app:argType="string"
-            android:defaultValue=" " />
+            android:defaultValue=" "
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/noConnectionDialogFragment"
@@ -64,7 +63,7 @@
             android:id="@+id/action_userProfileFragment_to_changeProfileNameDialog"
             app:destination="@id/changeProfileNameDialog" />
     </fragment>
-    <fragment
+    <dialog
         android:id="@+id/changeProfileNameDialog"
         android:name="com.example.recipes.presentation.ui.recipes.userprofile.dialogs.ChangeProfileNameDialog"
         android:label="ChangeProfileNameDialog"
@@ -72,5 +71,5 @@
         <argument
             android:name="action"
             app:argType="com.example.recipes.presentation.ui.recipes.userprofile.Action" />
-    </fragment>
+    </dialog>
 </navigation>

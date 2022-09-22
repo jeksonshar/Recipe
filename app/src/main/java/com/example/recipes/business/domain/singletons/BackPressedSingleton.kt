@@ -1,11 +1,13 @@
 package com.example.recipes.business.domain.singletons
 
+import androidx.lifecycle.MutableLiveData
+
 object BackPressedSingleton {
 
-    var isBackPressClick: Boolean? = null
+    var isBackPressClick = MutableLiveData<Boolean?>(null)
 
     fun clear() {
-        isBackPressClick = null
+        isBackPressClick.value = null
     }
 
 }

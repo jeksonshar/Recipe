@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.recipes.business.domain.singletons.BackPressedSingleton
 import com.example.recipes.presentation.ui.recipes.userprofile.Action
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
@@ -61,6 +62,7 @@ class ChangeProfileNameViewModel : ViewModel() {
                             Log.d("TAG", "submit: change name not done!!")
                         }
                         exitFromDialog.value = true
+                        BackPressedSingleton.isBackPressClick.value = true
                     }
                 } else {
                     exitFromDialog.value = true
