@@ -73,6 +73,8 @@
     <string name="no">No</string>
     <string name="detail_recipe">Detail recipe</string>
     <string name="how_to_cook">How to cook</string>
+    <string name="turn_on_net_connection_and_repeat">Turn on net connection and repeat</string>
+    <string name="turn_on_net_connection_and_make_search">Turn on net connection and make search</string>
     <string name="retry">Retry</string>
 
 </resources>

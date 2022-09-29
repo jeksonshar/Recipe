@@ -4,11 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.KeyEvent
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.inputmethod.EditorInfo
+import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -22,6 +20,7 @@ import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.business.utils.CheckConnectionUtils
 import com.example.recipes.databinding.FragmentRecipeListBinding
 import com.example.recipes.business.domain.singletons.BackPressedSingleton
+import com.example.recipes.business.domain.singletons.NetworkStatusSingleton
 import com.example.recipes.presentation.ui.recipes.RecipeClickListener
 import com.example.recipes.presentation.ui.auth.AuthActivity
 import com.google.android.material.snackbar.Snackbar
@@ -32,6 +31,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -47,6 +47,8 @@ class RecipeSearchListFragment : Fragment() {
     private var auth: FirebaseAuth? = null
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
+    private lateinit var snackBar: Snackbar
+
     private var clickListener: RecipeClickListener? = object : RecipeClickListener {
         override fun openRecipeDetailsFragment(recipe: Recipe) {
             viewModelSearch.setRecipeToSingleton(recipe)
@@ -59,6 +61,9 @@ class RecipeSearchListFragment : Fragment() {
             RecipePagingAdapter(it)
         }
     }
+
+//пытаясь использовать эту переменную апп падает, ругается на путь (закоментировал стр 347, 367)
+//    private val fileName = context?.filesDir.toString() + "/cachedRecipes.txt"
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -238,7 +243,7 @@ class RecipeSearchListFragment : Fragment() {
                 when (it.itemId) {
                     R.id.favoriteListFragment -> {
                         findNavController().navigate(R.id.action_recipeSearchListFragment_to_favoriteListFragment)
-                        false
+                        true
                     }
                     else -> false
                 }
@@ -249,23 +254,24 @@ class RecipeSearchListFragment : Fragment() {
                     R.id.favoriteListFragment -> {
                         findNavController().navigate(R.id.action_recipeSearchListFragment_to_favoriteListFragment)
                         drawerLayout.close()
-                        false
+                        true
                     }
                     R.id.recipeSearchListFragment -> {
                         drawerLayout.close()
-                        false
+                        true
                     }
                     R.id.settings -> {
                         findNavController().navigate(R.id.action_recipeSearchListFragment_to_userProfileFragment)
                         drawerLayout.close()
-                        false
+                        true
                     }
                     R.id.signOut -> {
                         signOutUser()
+                        true
                     }
                     R.id.delete -> {
-                        auth?.currentUser?.delete()
-                        signOutUser()
+                        deleteUser()
+                        true
                     }
                     else -> false
                 }
@@ -337,28 +343,50 @@ class RecipeSearchListFragment : Fragment() {
             }
         }
 
-//        viewModelSearch.loadState.observe(viewLifecycleOwner) {
-//            viewModelSearch.isProgressBarWhileListEmptyVisible.value = it.refresh is LoadState.Loading
-//            viewModelSearch.isErrorLoadingVisible.value =
-//                it.refresh !is LoadState.Loading && it.append is LoadState.Error
-//            viewModelSearch.isButtonRetryVisible.value =
-//                it.refresh !is LoadState.Loading && it.append is LoadState.Error
-//            viewModelSearch.isProgressBarPagingVisible.value = it.append is LoadState.Loading
-//            viewModelSearch.loadingError.value = if (it.source.toString().contains("429")) {
-//                context?.getString(R.string.too_fast)
-//            } else {
-//                it.source.toString()
-//            }
-//        }
+        viewModelSearch.cachedRecipes.observe(viewLifecycleOwner) {
+            viewModelSearch.saveInFileCacheOfLoadRecipes(/*fileName)*/
+                context?.filesDir.toString() + "/cachedRecipes.txt"
+            )
+        }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        CheckConnectionUtils.getNetConnection(requireContext())
+        if (!NetworkStatusSingleton.isNetworkConnected) {
+            showSnackBarNetConnection()
+        }
     }
 
     private fun loadRecipes(query: String?) {
-        if (!CheckConnectionUtils.isNetConnected(requireContext())) {
-            findNavController().navigate(R.id.action_recipeSearchListFragment_to_noConnectionDialogFragment)
+        CheckConnectionUtils.getNetConnection(requireContext())
+        if (!NetworkStatusSingleton.isNetworkConnected) {
+//            findNavController().navigate(R.id.action_recipeSearchListFragment_to_noConnectionDialogFragment)
+            showSnackBarNetConnection()
+            val recipeList = viewModelSearch.getFromFileCacheOfLoadRecipes(/*fileName)*/
+                context?.filesDir.toString() + "/cachedRecipes.txt"
+            )
+            lifecycleScope.launch {
+                pagingAdapter?.submitData(PagingData.from(recipeList))
+            }
         } else {
+            if (this::snackBar.isInitialized) {
+                val param = binding.titleOfList.layoutParams as ViewGroup.MarginLayoutParams
+                param.bottomMargin = 0
+                snackBar.dismiss()
+            }
             lifecycleScope.launchWhenStarted {
                 viewModelSearch.loadRecipes(query).collectLatest {
-                    pagingAdapter?.submitData(it)
+                    pagingAdapter?.submitData(lifecycle, it)
+                    delay(3500)
+//                    if (
+////                        viewModelSearch.cachedRecipes.value == null &&
+//                        pagingAdapter?.snapshot()?.items != null
+//                    ) {
+                    Log.d("TAG", "loadRecipes: ${pagingAdapter?.snapshot()?.items?.size}")
+                    viewModelSearch.setCachedRecipes(pagingAdapter?.snapshot()?.items!!)
+//                    }
                 }
             }
             if (query != null) {
@@ -371,12 +399,34 @@ class RecipeSearchListFragment : Fragment() {
         }
     }
 
-    private fun signOutUser(): Boolean {
+    private fun showSnackBarNetConnection() {
+        val param = binding.titleOfList.layoutParams as ViewGroup.MarginLayoutParams
+        param.bottomMargin = MARGIN_FOR_SNACK_BAR
+
+        snackBar = Snackbar.make(
+            requireView(),
+            requireContext().getText(R.string.turn_on_net_connection_and_make_search),
+            Snackbar.LENGTH_INDEFINITE
+        )
+        val view = snackBar.view
+        val snackParam = view.layoutParams as FrameLayout.LayoutParams
+        snackParam.gravity = Gravity.TOP
+        snackParam.topMargin = MARGIN_FOR_SNACK_BAR
+        view.layoutParams = snackParam
+        snackBar.setBackgroundTint(requireContext().getColor(R.color.background_snack_attention))
+        snackBar.show()
+    }
+
+    private fun deleteUser() {
+        auth?.currentUser?.delete()
+        signOutUser()
+    }
+
+    private fun signOutUser() {
+        viewModelSearch.resetLastQuery()
         auth?.signOut()
         startActivity(Intent(requireContext(), AuthActivity::class.java))
-        viewModelSearch.resetLastQuery()
         requireActivity().finish()
-        return false
     }
 
     private fun showSnackBar(message: String) {
@@ -390,12 +440,17 @@ class RecipeSearchListFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         _binding = null
+        if (this::snackBar.isInitialized) snackBar.dismiss()
+        super.onDestroyView()
     }
 
     override fun onDetach() {
         super.onDetach()
         clickListener = null
+    }
+
+    companion object {
+        const val MARGIN_FOR_SNACK_BAR = 188
     }
 }

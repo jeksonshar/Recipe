@@ -7,6 +7,7 @@ import com.example.recipes.R
 import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.business.domain.singletons.BackPressedSingleton
 import com.example.recipes.business.domain.singletons.RecipeSingleton
+import com.example.recipes.business.utils.CheckConnectionUtils
 import com.example.recipes.datasouce.local.datastore.RecipeDataStore
 import com.example.recipes.datasouce.network.RecipesApiService
 import com.example.recipes.presentation.ui.recipes.searchlist.enums.CuisineTypes
@@ -14,9 +15,13 @@ import com.example.recipes.presentation.ui.recipes.searchlist.enums.Diet
 import com.example.recipes.presentation.ui.recipes.searchlist.enums.Health
 import com.example.recipes.presentation.ui.recipes.searchlist.enums.MealTypes
 import com.example.recipes.presentation.ui.recipes.searchlist.paging.RecipesPagingSource
+import com.google.gson.GsonBuilder
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import java.io.File
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,6 +43,10 @@ class RecipeSearchListViewModel @Inject constructor(
     val isEmptyListImageViewVisible = MutableLiveData<Boolean>()
     val isProgressBarWhileListEmptyVisible = MutableLiveData<Boolean>()
 
+    private val _cachedRecipes = MutableLiveData<List<Recipe>>()
+    val cachedRecipes: LiveData<List<Recipe>>
+        get() = _cachedRecipes
+
     private val filtersDiet = arrayListOf<String>()
     private val filtersHealth = arrayListOf<String>()
     private val filtersCuisineType = arrayListOf<String>()
@@ -50,8 +59,8 @@ class RecipeSearchListViewModel @Inject constructor(
 
     private fun newPager(): Pager<String, Recipe> {
         val pagingConfig = PagingConfig(
-            pageSize = 3,
-//            enablePlaceholders = true,
+            pageSize = 10,
+            enablePlaceholders = true,
         )
         return Pager(
             pagingConfig,
@@ -170,6 +179,33 @@ class RecipeSearchListViewModel @Inject constructor(
 
     fun setRecipeToSingleton(recipe: Recipe) {
         RecipeSingleton.recipe = recipe
+    }
+
+    fun setCachedRecipes(data: List<Recipe>) {
+        _cachedRecipes.value = data
+        Log.d("TAG", "setCachedRecipes: $data")
+    }
+
+    fun getFromFileCacheOfLoadRecipes(fileName: String): List<Recipe> {
+        val gson = GsonBuilder().disableHtmlEscaping().create()
+        val recipeList: List<Recipe> = if (File(fileName).exists()) {
+            gson.fromJson(File(fileName).readText(), Array<Recipe>::class.java).toList()
+        } else {
+            emptyList()
+        }
+        Log.d("TAG", "getFromFileCacheOfLoadRecipes: $recipeList")
+        return recipeList
+    }
+
+    fun saveInFileCacheOfLoadRecipes(fileName: String) {
+        if (!File(fileName).exists()) {
+            File(fileName).createNewFile()
+        }
+        val gson = GsonBuilder().disableHtmlEscaping().create()
+        val cachedRecipeListString = gson.toJson(cachedRecipes.value)
+        Log.d("TAG", "saveInFileCacheOfLoadRecipes: $cachedRecipeListString")
+
+        File(fileName).writeText(cachedRecipeListString)
     }
 
     override fun onCleared() {

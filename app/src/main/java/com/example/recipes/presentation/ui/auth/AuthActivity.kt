@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.asLiveData
 import com.example.recipes.R
+import com.example.recipes.business.domain.singletons.NetworkStatusSingleton
 import com.example.recipes.business.utils.CheckConnectionUtils
 import com.example.recipes.databinding.ActivityAuthBinding
 import com.example.recipes.presentation.ui.recipes.RecipesActivity
@@ -23,8 +24,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
-import com.facebook.FacebookSdk
-import com.facebook.appevents.AppEventsLogger
 
 @AndroidEntryPoint
 class AuthActivity : AppCompatActivity(), ConfirmationListener {
@@ -103,7 +102,8 @@ class AuthActivity : AppCompatActivity(), ConfirmationListener {
     }
 
     private fun isConnected(): Boolean {
-        return if (!CheckConnectionUtils.isNetConnected(applicationContext)) {
+        CheckConnectionUtils.getNetConnection(applicationContext)
+        return if (!NetworkStatusSingleton.isNetworkConnected) {
             showSnackBar("No internet connection")
             false
         } else true

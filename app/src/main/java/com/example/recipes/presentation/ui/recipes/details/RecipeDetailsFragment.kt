@@ -1,20 +1,19 @@
 package com.example.recipes.presentation.ui.recipes.details
 
 import android.content.Intent
-import android.content.pm.verify.domain.DomainVerificationManager
-import android.content.pm.verify.domain.DomainVerificationUserState
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.recipes.R
+import com.example.recipes.business.domain.singletons.NetworkStatusSingleton
+import com.example.recipes.business.utils.CheckConnectionUtils
 import com.example.recipes.databinding.FragmentDetailRecipeBinding
 import com.example.recipes.presentation.utils.ImagesUtil
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,7 +37,7 @@ class RecipeDetailsFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         viewModel.moveToRecipe(args.recipeLink)
-//        checkDomainVerification()
+//        checkDomainVerification() // для запроса пользователя добавить домен на устройстве выше 11
     }
 
     override fun onCreateView(
@@ -56,6 +55,11 @@ class RecipeDetailsFragment : Fragment() {
             rvIngredients.adapter = adapter
 
             btnShare.setOnClickListener {
+                CheckConnectionUtils.getNetConnection(requireContext())
+                if (!NetworkStatusSingleton.isNetworkConnected) {
+                    createToastForUser()
+                    return@setOnClickListener
+                }
                 val intent = Intent(Intent.ACTION_SEND).apply {
                     type = "text/plain" //для URL можно использовать text/x-uri
 
@@ -73,6 +77,11 @@ class RecipeDetailsFragment : Fragment() {
             }
 
             btnHowToCook.setOnClickListener {
+                CheckConnectionUtils.getNetConnection(requireContext())
+                if (!NetworkStatusSingleton.isNetworkConnected) {
+                    createToastForUser()
+                    return@setOnClickListener
+                }
                 val uri = Uri.parse(viewModel.currentRecipe.value?.url)
                 val intent = Intent(Intent.ACTION_VIEW, uri)
 
@@ -153,5 +162,13 @@ class RecipeDetailsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun createToastForUser() {
+        Toast.makeText(
+            context,
+            requireContext().getText(R.string.turn_on_net_connection_and_repeat),
+            Toast.LENGTH_LONG
+        ).show()
     }
 }

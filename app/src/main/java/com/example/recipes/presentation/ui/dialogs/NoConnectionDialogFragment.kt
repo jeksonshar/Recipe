@@ -8,6 +8,7 @@ import androidx.fragment.app.DialogFragment
 import com.example.recipes.databinding.DialogNoConnectionBinding
 import com.example.recipes.business.utils.CheckConnectionUtils
 import com.example.recipes.business.domain.singletons.BackPressedSingleton
+import com.example.recipes.business.domain.singletons.NetworkStatusSingleton
 
 class NoConnectionDialogFragment : DialogFragment() {
 
@@ -23,7 +24,8 @@ class NoConnectionDialogFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.okButton.setOnClickListener {
-            if (CheckConnectionUtils.isNetConnected(requireContext())) {
+            CheckConnectionUtils.getNetConnection(requireContext())
+            if (NetworkStatusSingleton.isNetworkConnected) {
                 requireActivity().onBackPressed()
                 BackPressedSingleton.clear()
             }
