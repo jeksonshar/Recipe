@@ -62,8 +62,7 @@ class RecipeSearchListFragment : Fragment() {
         }
     }
 
-//пытаясь использовать эту переменную апп падает, ругается на путь (закоментировал стр 347, 367)
-//    private val fileName = context?.filesDir.toString() + "/cachedRecipes.txt"
+    private lateinit var fileName: String
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -83,6 +82,8 @@ class RecipeSearchListFragment : Fragment() {
 
         auth = Firebase.auth
         firebaseAnalytics = Firebase.analytics
+
+        fileName = context?.filesDir.toString() + "/cachedRecipes.txt"
 
         binding.apply {
 
@@ -120,7 +121,132 @@ class RecipeSearchListFragment : Fragment() {
                 viewModelSearch.changeFilterVisibility()
             }
 
-            // start - сделать красивее?
+            bottomNavigation.selectedItemId = R.id.recipeSearchListFragment
+
+//            bottomNavigation.setupWithNavController(findNavController())          // при нажатии назад selectedItem остается на предидущем значении
+            bottomNavigation.setOnItemSelectedListener {
+                when (it.itemId) {
+                    R.id.favoriteListFragment -> {
+                        findNavController().navigate(R.id.action_recipeSearchListFragment_to_favoriteListFragment)
+                        true
+                    }
+                    else -> false
+                }
+            }
+
+            navView.setNavigationItemSelectedListener {
+                when (it.itemId) {
+                    R.id.favoriteListFragment -> {
+                        findNavController().navigate(R.id.action_recipeSearchListFragment_to_favoriteListFragment)
+                        drawerLayout.close()
+                        true
+                    }
+                    R.id.recipeSearchListFragment -> {
+                        drawerLayout.close()
+                        true
+                    }
+                    R.id.settings -> {
+                        findNavController().navigate(R.id.action_recipeSearchListFragment_to_userProfileFragment)
+                        drawerLayout.close()
+                        true
+                    }
+                    R.id.signOut -> {
+                        signOutUser()
+                        true
+                    }
+                    R.id.delete -> {
+                        deleteUser()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }
+
+        setFiltersListener()
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        pagingAdapter?.addLoadStateListener { loadState ->
+
+            when (val stateRefresh = loadState.source.refresh) {
+                is LoadState.Loading -> {
+                    viewModelSearch.isEmptyListImageViewVisible.value = false
+                    viewModelSearch.loadState.value = loadState
+                    Log.d("TAG", "onViewCreatedException: Is not Exception")
+                }
+                is LoadState.NotLoading -> {
+                    viewModelSearch.isProgressBarWhileListEmptyVisible.value = false
+                }
+                is LoadState.Error -> {
+                    when (stateRefresh.error) {
+                        is PagingSourceException.EmptyListException -> {
+                            Log.d("TAG", "onViewCreatedException: EmptyList")
+                            viewModelSearch.isEmptyListImageViewVisible.value = true
+                            viewLifecycleOwner.lifecycleScope.launch {
+                                pagingAdapter?.submitData(PagingData.empty())
+                            }
+                        }
+                        is PagingSourceException.EndOfListException -> {
+                            Log.d("TAG", "onViewCreatedException: End of List")
+                        }
+                        is PagingSourceException.Response429Exception -> {
+                            Log.d("TAG", "onViewCreatedException: 429")
+                            viewModelSearch.loadState.value = loadState
+                            viewModelSearch.isProgressBarWhileListEmptyVisible.value = false
+                        }
+                    }
+                }
+            }
+        }
+
+        viewModelSearch.loadState.observe(viewLifecycleOwner) {
+            viewModelSearch.isProgressBarWhileListEmptyVisible.value = it?.refresh is LoadState.Loading
+            val state = it?.source?.refresh
+            if (state is LoadState.Error && state.error is PagingSourceException.Response429Exception) {
+                showSnackBar(requireContext().getString(R.string.too_fast))
+            }
+        }
+
+        viewModelSearch.queryHandler.observe(viewLifecycleOwner) {
+            if (!it.isNullOrEmpty()) {
+                if (BackPressedSingleton.isBackPressClick.value != true) {
+                    loadRecipes(it)
+                } else if (pagingAdapter?.itemCount == 0) {
+                    loadRecipes(it)
+                } else {
+                    viewModelSearch.isProgressBarWhileListEmptyVisible.value = false
+                }
+// если в деталях смена конфига, после возврата - список не прогружается (else if решает)
+            } else {
+                viewModelSearch.isEmptyListImageViewVisible.value = true
+                viewModelSearch.searchIsOpened.value = true
+                viewLifecycleOwner.lifecycleScope.launch {
+                    pagingAdapter?.submitData(PagingData.empty())
+                }
+            }
+        }
+
+        viewModelSearch.cachedRecipes.observe(viewLifecycleOwner) {
+            viewModelSearch.saveInFileCacheOfLoadRecipes(fileName)
+        }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        CheckConnectionUtils.getNetConnection(requireContext())
+        if (!NetworkStatusSingleton.isNetworkConnected) {
+            showSnackBarNetConnection()
+        }
+    }
+
+    private fun setFiltersListener() {
+        binding.apply {
             filterDietGroup.setOnCheckedStateChangeListener { _, _ ->
                 chipBalanced.setOnCheckedChangeListener { compoundButton, b ->
                     viewModelSearch.changeCheckedStateDietFilter(compoundButton.id, b)
@@ -234,128 +360,6 @@ class RecipeSearchListFragment : Fragment() {
                     viewModelSearch.changeCheckedStateMealTypeFilter(compoundButton.id, b)
                 }
             }
-            // end - go to start
-
-            bottomNavigation.selectedItemId = R.id.recipeSearchListFragment
-
-//            bottomNavigation.setupWithNavController(findNavController())          // при нажатии назад selectedItem остается на предидущем значении
-            bottomNavigation.setOnItemSelectedListener {
-                when (it.itemId) {
-                    R.id.favoriteListFragment -> {
-                        findNavController().navigate(R.id.action_recipeSearchListFragment_to_favoriteListFragment)
-                        true
-                    }
-                    else -> false
-                }
-            }
-
-            navView.setNavigationItemSelectedListener {
-                when (it.itemId) {
-                    R.id.favoriteListFragment -> {
-                        findNavController().navigate(R.id.action_recipeSearchListFragment_to_favoriteListFragment)
-                        drawerLayout.close()
-                        true
-                    }
-                    R.id.recipeSearchListFragment -> {
-                        drawerLayout.close()
-                        true
-                    }
-                    R.id.settings -> {
-                        findNavController().navigate(R.id.action_recipeSearchListFragment_to_userProfileFragment)
-                        drawerLayout.close()
-                        true
-                    }
-                    R.id.signOut -> {
-                        signOutUser()
-                        true
-                    }
-                    R.id.delete -> {
-                        deleteUser()
-                        true
-                    }
-                    else -> false
-                }
-            }
-        }
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        pagingAdapter?.addLoadStateListener { loadState ->
-
-            when (val stateRefresh = loadState.source.refresh) {
-                is LoadState.Loading -> {
-                    viewModelSearch.isEmptyListImageViewVisible.value = false
-                    viewModelSearch.loadState.value = loadState
-                    Log.d("TAG", "onViewCreatedException: Is not Exception")
-                }
-                is LoadState.NotLoading -> {
-                    viewModelSearch.isProgressBarWhileListEmptyVisible.value = false
-                }
-                is LoadState.Error -> {
-                    when (stateRefresh.error) {
-                        is PagingSourceException.EmptyListException -> {
-                            Log.d("TAG", "onViewCreatedException: EmptyList")
-                            viewModelSearch.isEmptyListImageViewVisible.value = true
-                            viewLifecycleOwner.lifecycleScope.launch {
-                                pagingAdapter?.submitData(PagingData.empty())
-                            }
-                        }
-                        is PagingSourceException.EndOfListException -> {
-                            Log.d("TAG", "onViewCreatedException: End of List")
-                        }
-                        is PagingSourceException.Response429Exception -> {
-                            Log.d("TAG", "onViewCreatedException: 429")
-                            viewModelSearch.loadState.value = loadState
-                            viewModelSearch.isProgressBarWhileListEmptyVisible.value = false
-                        }
-                    }
-                }
-            }
-        }
-
-        viewModelSearch.loadState.observe(viewLifecycleOwner) {
-            viewModelSearch.isProgressBarWhileListEmptyVisible.value = it?.refresh is LoadState.Loading
-            val state = it?.source?.refresh
-            if (state is LoadState.Error && state.error is PagingSourceException.Response429Exception) {
-                showSnackBar(requireContext().getString(R.string.too_fast))
-            }
-        }
-
-        viewModelSearch.queryHandler.observe(viewLifecycleOwner) {
-            if (!it.isNullOrEmpty()) {
-                if (BackPressedSingleton.isBackPressClick.value != true) {
-                    loadRecipes(it)
-                } else if (pagingAdapter?.itemCount == 0) {
-                    loadRecipes(it)
-                } else {
-                    viewModelSearch.isProgressBarWhileListEmptyVisible.value = false
-                }
-// если в деталях смена конфига, после возврата - список не прогружается (else if решает)
-            } else {
-                viewModelSearch.isEmptyListImageViewVisible.value = true
-                viewModelSearch.searchIsOpened.value = true
-                viewLifecycleOwner.lifecycleScope.launch {
-                    pagingAdapter?.submitData(PagingData.empty())
-                }
-            }
-        }
-
-        viewModelSearch.cachedRecipes.observe(viewLifecycleOwner) {
-            viewModelSearch.saveInFileCacheOfLoadRecipes(/*fileName)*/
-                context?.filesDir.toString() + "/cachedRecipes.txt"
-            )
-        }
-
-    }
-
-    override fun onResume() {
-        super.onResume()
-        CheckConnectionUtils.getNetConnection(requireContext())
-        if (!NetworkStatusSingleton.isNetworkConnected) {
-            showSnackBarNetConnection()
         }
     }
 
@@ -364,9 +368,7 @@ class RecipeSearchListFragment : Fragment() {
         if (!NetworkStatusSingleton.isNetworkConnected) {
 //            findNavController().navigate(R.id.action_recipeSearchListFragment_to_noConnectionDialogFragment)
             showSnackBarNetConnection()
-            val recipeList = viewModelSearch.getFromFileCacheOfLoadRecipes(/*fileName)*/
-                context?.filesDir.toString() + "/cachedRecipes.txt"
-            )
+            val recipeList = viewModelSearch.getFromFileCacheOfLoadRecipes(fileName)
             lifecycleScope.launch {
                 pagingAdapter?.submitData(PagingData.from(recipeList))
             }
@@ -380,13 +382,7 @@ class RecipeSearchListFragment : Fragment() {
                 viewModelSearch.loadRecipes(query).collectLatest {
                     pagingAdapter?.submitData(lifecycle, it)
                     delay(3500)
-//                    if (
-////                        viewModelSearch.cachedRecipes.value == null &&
-//                        pagingAdapter?.snapshot()?.items != null
-//                    ) {
-                    Log.d("TAG", "loadRecipes: ${pagingAdapter?.snapshot()?.items?.size}")
                     viewModelSearch.setCachedRecipes(pagingAdapter?.snapshot()?.items!!)
-//                    }
                 }
             }
             if (query != null) {
