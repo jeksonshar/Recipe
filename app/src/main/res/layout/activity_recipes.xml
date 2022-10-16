@@ -6,6 +6,57 @@
     android:layout_height="match_parent"
     tools:context=".presentation.ui.recipes.RecipesActivity">
 
+<!-- TODO закончить с выносом тулбара и подключением его с деталям и спискам,
+     возможно и DrawerLayout или избавиться от него и вынести профиль в BottomNavigation-->
+<!--    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_radius"
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        app:contentInsetStartWithNavigation="0dp"
+        app:layout_constraintBottom_toTopOf="@id/fragmentRecipesContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:titleMarginStart="0dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivTitleOfList"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginVertical="4dp"
+            android:layout_marginEnd="8dp"
+            app:srcCompat="@drawable/chef_hat" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTitleOfList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@string/recipes"
+            android:textColor="#191A19"
+            android:textSize="18sp"
+            android:textStyle="italic" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="end">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivOpenSearchET"
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:onClick="@{() -> vm.changeSearchIsOpenedValue()}"
+                android:src="@{vm.searchIsOpened ? @drawable/arrow_up : @drawable/search}" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.appcompat.widget.Toolbar>-->
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentRecipesContainer"
         android:name="androidx.navigation.fragment.NavHostFragment"

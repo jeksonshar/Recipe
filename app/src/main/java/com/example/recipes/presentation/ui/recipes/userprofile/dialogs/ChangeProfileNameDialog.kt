@@ -9,7 +9,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.recipes.databinding.DialogChangeProfileNameBinding
-import com.example.recipes.presentation.ui.recipes.userprofile.Action
 
 
 class ChangeProfileNameDialog : DialogFragment() {
@@ -39,12 +38,7 @@ class ChangeProfileNameDialog : DialogFragment() {
         binding.lifecycleOwner = this
         binding.vm = vmChangeProfileName
 
-//        val action: Action = when (args?.get("action")) {
-//            "CHANGE_PASSWORD" ->  Action.CHANGE_PASSWORD
-//            else -> Action.CHANGE_NAME
-//        }
         vmChangeProfileName.setAction(args.action)
-//        vmChangeProfileName.setAction(action)
 
         vmChangeProfileName.exitFromDialog.observe(viewLifecycleOwner) {
             if (it) {

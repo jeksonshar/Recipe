@@ -4,8 +4,10 @@ import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import com.example.recipes.R
 import com.example.recipes.business.domain.singletons.FirebaseUserSingleton
+import com.example.recipes.business.usecases.CheckConnectionUseCaseImpl
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -18,12 +20,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class AuthViewModel @Inject constructor() : ViewModel() {
+class AuthViewModel @Inject constructor(
+    checkConnectionUseCase: CheckConnectionUseCaseImpl,
+) : ViewModel() {
 
     val exceptionMessageForUser = MutableStateFlow<String?>(null)
     val resMessageForUser = MutableStateFlow<Int?>(null)
     val user = MutableStateFlow<FirebaseUser?>(null)
     val btnSignInVisibility = MutableLiveData(true)
+    val isNetConnected = checkConnectionUseCase.isConnected().asLiveData()
 
     private val email = MutableLiveData<CharSequence>()
     private val userName = MutableLiveData<CharSequence>()
@@ -112,8 +117,8 @@ class AuthViewModel @Inject constructor() : ViewModel() {
     }
 
     fun setFirebaseUser(user: FirebaseUser) {
-        FirebaseUserSingleton.user =
-            user                                                           // перенести в юзкейс
+        // TODO перенести в юзкейс
+        FirebaseUserSingleton.user = user
     }
 
     private fun logIn(auth: FirebaseAuth) {
@@ -283,6 +288,12 @@ class AuthViewModel @Inject constructor() : ViewModel() {
 
     private fun checkForWatcherConfirmPassword(password: String, confirmPassword: String): Boolean {
         return password == confirmPassword
+    }
+
+    override fun onCleared() {
+        // TODO проверить это нужно или нет
+        FirebaseUserSingleton.cancel()
+        super.onCleared()
     }
 
 }

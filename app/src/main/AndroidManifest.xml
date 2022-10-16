@@ -29,7 +29,7 @@
             android:value="@string/facebook_client_token" />
 
         <activity
-            android:name=".presentation.ui.SplashActivity"
+            android:name=".presentation.ui.SplashScreenActivity"
             android:exported="true"
             android:theme="@style/SplashTheme">
             <intent-filter  android:autoVerify="true">

@@ -12,8 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.recipes.R
-import com.example.recipes.business.domain.singletons.NetworkStatusSingleton
-import com.example.recipes.business.utils.CheckConnectionUtils
 import com.example.recipes.databinding.FragmentDetailRecipeBinding
 import com.example.recipes.presentation.utils.ImagesUtil
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,7 +35,8 @@ class RecipeDetailsFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         viewModel.moveToRecipe(args.recipeLink)
-//        checkDomainVerification() // для запроса пользователя добавить домен на устройстве выше 11
+        // TODO разобраться: как запросить у пользователя добавить домен на устройстве выше 11, закоменчено ниже
+//        checkDomainVerification()
     }
 
     override fun onCreateView(
@@ -55,37 +54,29 @@ class RecipeDetailsFragment : Fragment() {
             rvIngredients.adapter = adapter
 
             btnShare.setOnClickListener {
-                CheckConnectionUtils.getNetConnection(requireContext())
-                if (!NetworkStatusSingleton.isNetworkConnected) {
+                if (viewModel.isNetConnected.value != true) {
                     createToastForUser()
-                    return@setOnClickListener
+                } else {
+                    val intent = Intent(Intent.ACTION_SEND).apply {
+                        type = "text/plain" //для URL можно использовать text/x-uri
+
+                        putExtra(Intent.EXTRA_TEXT, viewModel.currentRecipe.value?.shareAs)
+
+                    }
+                    val shareIntent = Intent.createChooser(intent, "Выбери месседжер:")
+                    startActivity(shareIntent)
                 }
-                val intent = Intent(Intent.ACTION_SEND).apply {
-                    type = "text/plain" //для URL можно использовать text/x-uri
-
-//                    putExtra(Intent.EXTRA_SUBJECT, "Recipe app")
-//                    var shareMessage = "\nLet me recommend you this recipe\n\n"
-//                    shareMessage = shareMessage + viewModel.currentRecipe.value?.shareAs + "\n\n"
-//                    putExtra(Intent.EXTRA_TEXT, shareMessage)
-
-//                    putExtra(Intent.EXTRA_TEXT, viewModel.currentRecipe.value?.uri)
-                    putExtra(Intent.EXTRA_TEXT, viewModel.currentRecipe.value?.shareAs)
-
-                }
-                val shareIntent = Intent.createChooser(intent, "Выбери месседжер:")
-                startActivity(shareIntent)
             }
 
             btnHowToCook.setOnClickListener {
-                CheckConnectionUtils.getNetConnection(requireContext())
-                if (!NetworkStatusSingleton.isNetworkConnected) {
+                if (viewModel.isNetConnected.value != true) {
                     createToastForUser()
-                    return@setOnClickListener
-                }
-                val uri = Uri.parse(viewModel.currentRecipe.value?.url)
-                val intent = Intent(Intent.ACTION_VIEW, uri)
+                } else {
+                    val uri = Uri.parse(viewModel.currentRecipe.value?.url)
+                    val intent = Intent(Intent.ACTION_VIEW, uri)
 
-                startActivity(intent)
+                    startActivity(intent)
+                }
             }
         }
         return binding.root
@@ -130,6 +121,12 @@ class RecipeDetailsFragment : Fragment() {
                 }
             }
         }
+
+// TODO разобраться почему без этого обсёрва btnShare и btnHowToCook срабатывают все
+//  время как с откл соединением? не из-зи задержки?
+        viewModel.isNetConnected.observe(viewLifecycleOwner) {
+//            Log.d("TAG", "onCreateView: $it")
+        }
     }
 
 //    private fun checkDomainVerification() {
@@ -160,8 +157,9 @@ class RecipeDetailsFragment : Fragment() {
 //    }
 
     override fun onDestroyView() {
-        super.onDestroyView()
+        binding.rvIngredients.adapter = null
         _binding = null
+        super.onDestroyView()
     }
 
     private fun createToastForUser() {

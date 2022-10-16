@@ -9,8 +9,6 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.asLiveData
 import com.example.recipes.R
-import com.example.recipes.business.domain.singletons.NetworkStatusSingleton
-import com.example.recipes.business.utils.CheckConnectionUtils
 import com.example.recipes.databinding.ActivityAuthBinding
 import com.example.recipes.presentation.ui.recipes.RecipesActivity
 import com.firebase.ui.auth.AuthUI
@@ -33,6 +31,8 @@ class AuthActivity : AppCompatActivity(), ConfirmationListener {
         get() = _binding!!
 
     private var auth: FirebaseAuth? = null
+
+    private lateinit var snackBarNoConnection: Snackbar
 
     private val signInLauncher = registerForActivityResult(
         FirebaseAuthUIActivityResultContract()
@@ -57,14 +57,14 @@ class AuthActivity : AppCompatActivity(), ConfirmationListener {
             }
 
             ibtnGoogle.setOnClickListener {
-                if (isConnected()) {
+                if (viewModel.isNetConnected.value == true) {
                     val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
                     signInWithSocial(providers)
                 }
             }
 
             ibtnFacebook.setOnClickListener {
-                if (isConnected()) {
+                if (viewModel.isNetConnected.value == true) {
                     val providers = arrayListOf(AuthUI.IdpConfig.FacebookBuilder().build())
                     signInWithSocial(providers)
                 }
@@ -89,6 +89,14 @@ class AuthActivity : AppCompatActivity(), ConfirmationListener {
             openRecipeByUser(it)
         }
 
+        viewModel.isNetConnected.observe(this) {
+            if (!it) {
+                showSnackBarNoNetConnection()
+            } else {
+                dismissSnackBarNoNetConnection()
+            }
+        }
+
         if (auth?.currentUser != null) moveToRecipeActivity()
 
     }
@@ -99,14 +107,6 @@ class AuthActivity : AppCompatActivity(), ConfirmationListener {
 
     override fun cancelButtonClicked() {
         showSnackBar(applicationContext.getString(R.string.cancel_reset_password))
-    }
-
-    private fun isConnected(): Boolean {
-        CheckConnectionUtils.getNetConnection(applicationContext)
-        return if (!NetworkStatusSingleton.isNetworkConnected) {
-            showSnackBar("No internet connection")
-            false
-        } else true
     }
 
     private fun signInWithSocial(providers: ArrayList<AuthUI.IdpConfig>) {
@@ -187,14 +187,18 @@ class AuthActivity : AppCompatActivity(), ConfirmationListener {
         ConfirmationDialogFragment().show(supportFragmentManager, "ConfirmationDialogFragmentTag")
     }
 
-}
+    private fun showSnackBarNoNetConnection() {
+        snackBarNoConnection = Snackbar.make(
+            binding.root,
+            applicationContext.getText(R.string.turn_on_net_connection_and_make_login),
+            Snackbar.LENGTH_INDEFINITE
+        )
+        snackBarNoConnection.setBackgroundTint(applicationContext.getColor(R.color.background_snack_attention))
+        snackBarNoConnection.show()
+    }
 
-//        val test = TestData.DATA_1
-//        when(test) {
-//            TestData.DATA_1 -> {}
-//            TestData.DATA_2-> {}
-//            TestData.DATA_3 -> {}
-//            TestData.DATA_4 -> {}
-//        }.exclusive
-//        val <T> T.exclusive: T
-//            get() = this
+    private fun dismissSnackBarNoNetConnection() {
+        snackBarNoConnection.dismiss()
+    }
+
+}

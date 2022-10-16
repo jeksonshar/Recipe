@@ -1,5 +1,6 @@
 package com.example.recipes.presentation.ui.recipes.searchlist
 
+import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.*
 import androidx.paging.*
@@ -7,7 +8,9 @@ import com.example.recipes.R
 import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.business.domain.singletons.BackPressedSingleton
 import com.example.recipes.business.domain.singletons.RecipeSingleton
-import com.example.recipes.business.utils.CheckConnectionUtils
+import com.example.recipes.business.usecases.CheckConnectionUseCaseImpl
+import com.example.recipes.business.usecases.SaveInFileCacheLoadRecipesUseCaseImpl
+import com.example.recipes.business.usecases.SendEventToAnalyticsUseCaseImpl
 import com.example.recipes.datasouce.local.datastore.RecipeDataStore
 import com.example.recipes.datasouce.network.RecipesApiService
 import com.example.recipes.presentation.ui.recipes.searchlist.enums.CuisineTypes
@@ -15,9 +18,9 @@ import com.example.recipes.presentation.ui.recipes.searchlist.enums.Diet
 import com.example.recipes.presentation.ui.recipes.searchlist.enums.Health
 import com.example.recipes.presentation.ui.recipes.searchlist.enums.MealTypes
 import com.example.recipes.presentation.ui.recipes.searchlist.paging.RecipesPagingSource
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.GsonBuilder
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.io.File
@@ -26,13 +29,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RecipeSearchListViewModel @Inject constructor(
-//    private val getRecipesBySearchUseCase: GetRecipesBySearchUseCase,
     private val apiService: RecipesApiService,
     private val recipeDataStore: RecipeDataStore,
+    private val saveInFileCacheLoadRecipesUseCase: SaveInFileCacheLoadRecipesUseCaseImpl,
+    checkConnectionUseCase: CheckConnectionUseCaseImpl,
+    private val sendEventToAnalyticsUseCase: SendEventToAnalyticsUseCaseImpl
 //    val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     val queryHandler = recipeDataStore.getLastQuery().asLiveData()
+    val isNetConnected = checkConnectionUseCase.isConnected().asLiveData()
 
     val loadState = MutableLiveData<CombinedLoadStates?>()
     val searchIsOpened = MutableLiveData<Boolean>()
@@ -43,9 +49,7 @@ class RecipeSearchListViewModel @Inject constructor(
     val isEmptyListImageViewVisible = MutableLiveData<Boolean>()
     val isProgressBarWhileListEmptyVisible = MutableLiveData<Boolean>()
 
-    private val _cachedRecipes = MutableLiveData<List<Recipe>>()
-    val cachedRecipes: LiveData<List<Recipe>>
-        get() = _cachedRecipes
+    private val fileName = MutableLiveData<String>()
 
     private val filtersDiet = arrayListOf<String>()
     private val filtersHealth = arrayListOf<String>()
@@ -67,6 +71,8 @@ class RecipeSearchListViewModel @Inject constructor(
             pagingSourceFactory = {
                 RecipesPagingSource(
                     apiService,
+                    saveInFileCacheLoadRecipesUseCase,
+                    fileName.value ?: "",
                     filtersDiet,
                     filtersHealth,
                     filtersCuisineType,
@@ -181,11 +187,6 @@ class RecipeSearchListViewModel @Inject constructor(
         RecipeSingleton.recipe = recipe
     }
 
-    fun setCachedRecipes(data: List<Recipe>) {
-        _cachedRecipes.value = data
-        Log.d("TAG", "setCachedRecipes: $data")
-    }
-
     fun getFromFileCacheOfLoadRecipes(fileName: String): List<Recipe> {
         val gson = GsonBuilder().disableHtmlEscaping().create()
         val recipeList: List<Recipe> = if (File(fileName).exists()) {
@@ -197,20 +198,26 @@ class RecipeSearchListViewModel @Inject constructor(
         return recipeList
     }
 
-    fun saveInFileCacheOfLoadRecipes(fileName: String) {
-        if (!File(fileName).exists()) {
-            File(fileName).createNewFile()
-        }
-        val gson = GsonBuilder().disableHtmlEscaping().create()
-        val cachedRecipeListString = gson.toJson(cachedRecipes.value)
-        Log.d("TAG", "saveInFileCacheOfLoadRecipes: $cachedRecipeListString")
+    fun setFileName(name: String) {
+        fileName.value = name
+    }
 
-        File(fileName).writeText(cachedRecipeListString)
+    fun sendEventToAnalytics(query: String?) {
+        val bundle = Bundle()
+        bundle.putString(REQUEST_NAME_ANALYTICS_PARAMETER, query)
+
+        sendEventToAnalyticsUseCase.sendEventToAnalytics(SEARCH_EVENT_NAME, bundle)
     }
 
     override fun onCleared() {
         super.onCleared()
         BackPressedSingleton.clear()
+    }
+
+    companion object {
+        const val REQUEST_NAME_ANALYTICS_PARAMETER = "request_name"
+
+        const val SEARCH_EVENT_NAME = FirebaseAnalytics.Event.SEARCH
     }
 
 }

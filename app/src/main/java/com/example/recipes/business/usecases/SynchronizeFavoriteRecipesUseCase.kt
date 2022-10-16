@@ -40,6 +40,7 @@ class SynchronizeFavoriteRecipesUseCase @Inject constructor(
         return recipes
     }
 
+    // TODO заменить на ChangeRecipeUserIdListUtil
     private fun changeRecipeUserIdList(recipe: Recipe, userIdList: List<String>): Recipe {
         return Recipe(
             calories = recipe.calories,

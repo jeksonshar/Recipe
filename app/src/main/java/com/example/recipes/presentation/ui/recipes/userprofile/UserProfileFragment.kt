@@ -13,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.recipes.R
 import com.example.recipes.databinding.FragmentUserProfileBinding
 import com.example.recipes.presentation.ui.auth.AuthActivity
-import com.example.recipes.presentation.ui.recipes.userprofile.dialogs.ChangeProfileNameDialog
 import com.example.recipes.presentation.utils.ImagesUtil
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest

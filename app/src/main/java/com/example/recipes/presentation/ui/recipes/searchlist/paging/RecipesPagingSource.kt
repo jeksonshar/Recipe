@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.recipes.business.domain.models.Recipe
+import com.example.recipes.business.usecases.SaveInFileCacheLoadRecipesUseCaseImpl
 import com.example.recipes.datasouce.network.NetWorkEntitiesMappers
 import com.example.recipes.datasouce.network.RecipesApiService
 import com.example.recipes.datasouce.network.entities.RecipeSearchEntity
@@ -13,6 +14,8 @@ import retrofit2.Response
 
 class RecipesPagingSource(
     private val recipesApiService: RecipesApiService,
+    private val saveInFileCacheLoadRecipesUseCase: SaveInFileCacheLoadRecipesUseCaseImpl,
+    private val fileName: String,
     private val filtersDiet: List<String>?,
     private val filtersHealth: List<String>?,
     private val filtersCuisineType: List<String>?,
@@ -60,8 +63,13 @@ class RecipesPagingSource(
             if (response.body()?.hits?.isEmpty() == true) {
                 LoadResult.Error(PagingSourceException.EmptyListException())
             } else {
+                val loadingData = NetWorkEntitiesMappers.mapToRecipes(response.body() ?: RecipeSearchEntity())
+                if (href == null) {
+                    // сохранение первых 20 загруженных рецептов в файл
+                    cachingFirstLoadRecipes(loadingData)
+                }
                 LoadResult.Page(
-                    data = NetWorkEntitiesMappers.mapToRecipes(response.body() ?: RecipeSearchEntity()),
+                    data = loadingData,
                     prevKey = href,
                     nextKey = getHref(response.body() ?: RecipeSearchEntity())
                 )
@@ -81,5 +89,9 @@ class RecipesPagingSource(
                 }
             }
         }
+    }
+
+    private fun cachingFirstLoadRecipes(loadingData: List<Recipe>) {
+        saveInFileCacheLoadRecipesUseCase.saveInFileCacheOfLoadRecipes(fileName, loadingData)
     }
 }

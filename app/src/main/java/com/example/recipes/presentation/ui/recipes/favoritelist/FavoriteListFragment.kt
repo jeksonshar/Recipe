@@ -126,12 +126,13 @@ class FavoriteListFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
+        binding.recyclerRecipe.adapter = null
         _binding = null
+        super.onDestroyView()
     }
 
     override fun onDetach() {
-        super.onDetach()
         clickListener = null
+        super.onDetach()
     }
 }

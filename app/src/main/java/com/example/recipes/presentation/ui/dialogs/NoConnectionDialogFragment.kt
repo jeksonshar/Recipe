@@ -5,15 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
 import com.example.recipes.databinding.DialogNoConnectionBinding
-import com.example.recipes.business.utils.CheckConnectionUtils
 import com.example.recipes.business.domain.singletons.BackPressedSingleton
-import com.example.recipes.business.domain.singletons.NetworkStatusSingleton
 
 class NoConnectionDialogFragment : DialogFragment() {
 
     private var _binding: DialogNoConnectionBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel: NoConnectionDialogViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = DialogNoConnectionBinding.inflate(inflater, container, false)
@@ -24,8 +25,7 @@ class NoConnectionDialogFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.okButton.setOnClickListener {
-            CheckConnectionUtils.getNetConnection(requireContext())
-            if (NetworkStatusSingleton.isNetworkConnected) {
+            if (viewModel.isNetConnected.value == true) {
                 requireActivity().onBackPressed()
                 BackPressedSingleton.clear()
             }
