@@ -383,7 +383,9 @@ class RecipeSearchListFragment : Fragment() {
     }
 
     private fun dismissSnackBarNoConnection() {
-        snackBarNoConnection.dismiss()
+        if (this::snackBarNoConnection.isInitialized) {
+            snackBarNoConnection.dismiss()
+        }
     }
 
     private fun showSnackBar(message: String) {
@@ -400,7 +402,7 @@ class RecipeSearchListFragment : Fragment() {
         binding.recyclerRecipe.adapter = null
         _binding = null
         _bindingActivity = null
-        if (this::snackBarNoConnection.isInitialized) snackBarNoConnection.dismiss()
+        dismissSnackBarNoConnection()
         super.onDestroyView()
     }
 

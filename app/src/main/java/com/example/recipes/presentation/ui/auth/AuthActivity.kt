@@ -198,7 +198,9 @@ class AuthActivity : AppCompatActivity(), ConfirmationListener {
     }
 
     private fun dismissSnackBarNoNetConnection() {
-        snackBarNoConnection.dismiss()
+        if (this::snackBarNoConnection.isInitialized) {
+            snackBarNoConnection.dismiss()
+        }
     }
 
 }
