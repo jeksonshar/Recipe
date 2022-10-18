@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.view.inputmethod.EditorInfo
-import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -41,7 +40,7 @@ class RecipeSearchListFragment : Fragment() {
 
     private var auth: FirebaseAuth? = null
 
-    private lateinit var snackBarNoConnection: Snackbar
+//    private lateinit var snackBarNoConnection: Snackbar
 
     private var clickListener: RecipeClickListener? = object : RecipeClickListener {
         override fun openRecipeDetailsFragment(recipe: Recipe) {
@@ -114,6 +113,7 @@ class RecipeSearchListFragment : Fragment() {
                 if (etSearch.text.toString() != viewModelSearch.queryHandler.value) {
                     viewModelSearch.setQueryToDatastore(etSearch.text.toString())
                 } else {
+                    Log.d("TAG", "onViewCreated785: 0 - ${pagingAdapter?.itemCount}")
                     loadRecipes(viewModelSearch.queryHandler.value)
                 }
                 viewModelSearch.changeFilterVisibility()
@@ -189,8 +189,10 @@ class RecipeSearchListFragment : Fragment() {
         viewModelSearch.queryHandler.observe(viewLifecycleOwner) {
             if (!it.isNullOrEmpty()) {
                 if (BackPressedSingleton.isBackPressClick.value != true) {
+                    Log.d("TAG", "onViewCreated785: 1 - ${pagingAdapter?.itemCount}")
                     loadRecipes(it)
                 } else if (pagingAdapter?.itemCount == 0) {
+                    Log.d("TAG", "onViewCreated785: 2 - ${pagingAdapter?.itemCount}")
                     loadRecipes(it)
                 } else {
                     viewModelSearch.isProgressBarWhileListEmptyVisible.value = false
@@ -217,11 +219,14 @@ class RecipeSearchListFragment : Fragment() {
         viewModelSearch.isNetConnected.observe(viewLifecycleOwner) {
             Log.d("TAG", "onViewCreated: $it")
             if (!it) {
-                showSnackBarNetConnection()
+//                showSnackBarNetConnection()
+                binding.tvSnackbarNoConnection.visibility = View.VISIBLE
             } else {
-                if (this::snackBarNoConnection.isInitialized) {
-                    dismissSnackBarNoConnection()
-                }
+//                if (this::snackBarNoConnection.isInitialized) {
+//                    dismissSnackBarNoConnection()
+//                }
+                binding.tvSnackbarNoConnection.visibility = View.GONE
+                Log.d("TAG", "onViewCreated785: 3 - ${pagingAdapter?.itemCount}")
                 loadRecipes(viewModelSearch.queryHandler.value)
             }
         }
@@ -367,26 +372,29 @@ class RecipeSearchListFragment : Fragment() {
         }
     }
 
-    private fun showSnackBarNetConnection() {
+    //TODO отображения отсутствия соединения сделал через textView в xml, со снэкбаром не разобрался,
+    // не получилось разместить его между Toolbar Activity и recycler фрагмента. времени мого потратил.
+    // Влад - оставить так или разобраться и реализовать через SnackBar?
+//    private fun showSnackBarNetConnection() {
+//
+//        snackBarNoConnection = Snackbar.make(
+//            requireView(),
+//            requireContext().getText(R.string.turn_on_net_connection_and_make_search),
+//            Snackbar.LENGTH_INDEFINITE
+//        )
+//        val view = snackBarNoConnection.view
+//        val snackParam = view.layoutParams as FrameLayout.LayoutParams
+//        snackParam.gravity = Gravity.TOP
+//        view.layoutParams = snackParam
+//        snackBarNoConnection.setBackgroundTint(requireContext().getColor(R.color.background_snack_attention))
+//        snackBarNoConnection.show()
+//    }
 
-        snackBarNoConnection = Snackbar.make(
-            requireView(),
-            requireContext().getText(R.string.turn_on_net_connection_and_make_search),
-            Snackbar.LENGTH_INDEFINITE
-        )
-        val view = snackBarNoConnection.view
-        val snackParam = view.layoutParams as FrameLayout.LayoutParams
-        snackParam.gravity = Gravity.TOP
-        view.layoutParams = snackParam
-        snackBarNoConnection.setBackgroundTint(requireContext().getColor(R.color.background_snack_attention))
-        snackBarNoConnection.show()
-    }
-
-    private fun dismissSnackBarNoConnection() {
-        if (this::snackBarNoConnection.isInitialized) {
-            snackBarNoConnection.dismiss()
-        }
-    }
+//    private fun dismissSnackBarNoConnection() {
+//        if (this::snackBarNoConnection.isInitialized) {
+//            snackBarNoConnection.dismiss()
+//        }
+//    }
 
     private fun showSnackBar(message: String) {
         val mySnackBar = Snackbar
@@ -402,7 +410,7 @@ class RecipeSearchListFragment : Fragment() {
         binding.recyclerRecipe.adapter = null
         _binding = null
         _bindingActivity = null
-        dismissSnackBarNoConnection()
+//        dismissSnackBarNoConnection()
         super.onDestroyView()
     }
 
