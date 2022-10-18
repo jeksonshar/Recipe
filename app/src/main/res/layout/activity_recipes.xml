@@ -1,74 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".presentation.ui.recipes.RecipesActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-<!-- TODO закончить с выносом тулбара и подключением его с деталям и спискам,
-     возможно и DrawerLayout или избавиться от него и вынести профиль в BottomNavigation-->
-<!--    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/background_radius"
-        android:elevation="4dp"
-        android:gravity="center_vertical"
-        app:contentInsetStartWithNavigation="0dp"
-        app:layout_constraintBottom_toTopOf="@id/fragmentRecipesContainer"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:titleMarginStart="0dp">
+    <data>
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivTitleOfList"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginVertical="4dp"
-            android:layout_marginEnd="8dp"
-            app:srcCompat="@drawable/chef_hat" />
+        <import type="android.view.View" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvTitleOfList"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="@string/recipes"
-            android:textColor="#191A19"
-            android:textSize="18sp"
-            android:textStyle="italic" />
+    </data>
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="32dp"
-            android:layout_marginEnd="16dp"
-            android:gravity="end">
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
+            android:background="@color/background_list"
+            tools:context=".presentation.ui.recipes.RecipesActivity">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/ivOpenSearchET"
-                android:layout_width="20dp"
-                android:layout_height="match_parent"
-                android:onClick="@{() -> vm.changeSearchIsOpenedValue()}"
-                android:src="@{vm.searchIsOpened ? @drawable/arrow_up : @drawable/search}" />
-        </androidx.appcompat.widget.LinearLayoutCompat>
+            <!-- TODO закончить с выносом тулбара и подключением его с деталям и спискам,
+                 возможно и DrawerLayout или избавиться от него и вынести профиль в BottomNavigation-->
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbarActivity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/green_for_header_nav_drawer"
+                android:gravity="center_vertical"
+                app:contentInsetStartWithNavigation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                app:titleMarginStart="0dp">
 
-    </androidx.appcompat.widget.Toolbar>-->
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/btnBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="16dp"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="8dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_arrow_back" />
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentRecipesContainer"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:defaultNavHost="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:navGraph="@navigation/nav_graph" />
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivTitleOfList"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginVertical="4dp"
+                    android:layout_marginEnd="8dp"
+                    app:srcCompat="@drawable/chef_hat" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvTitleOfList"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="@string/recipes"
+                    android:textColor="#191A19"
+                    android:textSize="18sp"
+                    android:textStyle="italic" />
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="end">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ivOpenSearchET"
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/search" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+            </androidx.appcompat.widget.Toolbar>
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/fragmentRecipesContainer"
+                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:defaultNavHost="true"
+                android:elevation="6dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toolbarActivity"
+                app:layout_constraintVertical_bias="0.0"
+                app:navGraph="@navigation/nav_graph" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

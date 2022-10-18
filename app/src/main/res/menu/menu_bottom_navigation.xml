@@ -13,4 +13,10 @@
         android:icon="@drawable/ic_favorite_icon"
         android:title="@string/favorite"/>
 
+    <item
+        android:id="@+id/profileFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_login_icon"
+        android:title="@string/profile"/>
+
 </menu>

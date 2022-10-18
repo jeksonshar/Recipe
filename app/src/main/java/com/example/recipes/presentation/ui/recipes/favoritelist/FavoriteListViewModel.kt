@@ -56,7 +56,18 @@ class FavoriteListViewModel @Inject constructor(
                 viewModelScope.launch {
                     val favoriteRecipesSynchronized = synchronizedFavoriteRecipesUseCase
                         .synchronizeFavoriteRecipesWithFirebase(favoriteRecipesFirebase, userId)
-                    if (favoriteRecipesSynchronized.isNotEmpty()) {
+
+// oldRecipeList != newRecipeList - проверка, которая не дает обновлять список, если старое и новое значение совпадают
+                    val oldRecipeList: ArrayList<String> = arrayListOf()
+                    favoriteRecipes.value?.forEach { recipe ->
+                        oldRecipeList.add(recipe.label)
+                    }
+                    val newRecipeList: ArrayList<String> = arrayListOf()
+                    favoriteRecipesSynchronized.forEach { recipe ->
+                        newRecipeList.add(recipe.label)
+                    }
+
+                    if ( favoriteRecipesSynchronized.isNotEmpty() && oldRecipeList != newRecipeList ) {
                         favoriteRecipes.value = favoriteRecipesSynchronized
                     }
                 }

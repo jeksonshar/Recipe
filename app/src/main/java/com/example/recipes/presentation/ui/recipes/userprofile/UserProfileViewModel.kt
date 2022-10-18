@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.recipes.business.domain.singletons.BackPressedSingleton
 import com.example.recipes.business.usecases.GetFavoriteRecipesUseCase
+import com.example.recipes.datasouce.local.datastore.RecipeDataStore
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,13 +16,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserProfileViewModel @Inject constructor(
+    private val recipeDataStore: RecipeDataStore,
     private val getFavoriteRecipesUseCase: GetFavoriteRecipesUseCase,
 ) : ViewModel() {
 
     private val _favoriteRecipesCount = MutableLiveData<Int>()
     val favoriteRecipesCount: LiveData<Int> = _favoriteRecipesCount
 
-    val currentUser = Firebase.auth.currentUser
+    private val currentUser = Firebase.auth.currentUser
 
     private val _userName = MutableLiveData<String>()
     val userName: LiveData<String>
@@ -50,6 +52,12 @@ class UserProfileViewModel @Inject constructor(
     fun getPhoto() {
         currentUser?.photoUrl?.let {
             _photoUri.value = it
+        }
+    }
+
+    fun resetQueryInDatastore() {
+        viewModelScope.launch {
+            recipeDataStore.setLastQuery("")
         }
     }
 

@@ -43,8 +43,8 @@ class RecipeSearchListViewModel @Inject constructor(
     val loadState = MutableLiveData<CombinedLoadStates?>()
     val searchIsOpened = MutableLiveData<Boolean>()
 
-    private val _filterIsOpen = MutableLiveData(false)
-    val filterIsOpen: LiveData<Boolean> = _filterIsOpen
+    val filterIsOpened = MutableLiveData(false)
+//    val filterIsOpen: LiveData<Boolean> = _filterIsOpen
 
     val isEmptyListImageViewVisible = MutableLiveData<Boolean>()
     val isProgressBarWhileListEmptyVisible = MutableLiveData<Boolean>()
@@ -85,7 +85,7 @@ class RecipeSearchListViewModel @Inject constructor(
 
     fun changeFilterVisibility() {
         Log.d("TAG", "changeFilterVisibility: 1111111111111")
-        _filterIsOpen.value = filterIsOpen.value != true
+        filterIsOpened.value = filterIsOpened.value != true
     }
 
     fun changeCheckedStateDietFilter(chipId: Int, isChecked: Boolean) {
@@ -164,12 +164,6 @@ class RecipeSearchListViewModel @Inject constructor(
             filtersMealType.add(value)
         } else {
             filtersMealType.remove(value)
-        }
-    }
-
-    fun resetLastQuery() {
-        viewModelScope.launch {
-            setQueryToDatastore("")
         }
     }
 

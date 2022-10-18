@@ -7,12 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.recipes.R
+import com.example.recipes.databinding.ActivityRecipesBinding
 import com.example.recipes.databinding.FragmentUserProfileBinding
 import com.example.recipes.presentation.ui.auth.AuthActivity
+import com.example.recipes.presentation.ui.recipes.RecipesActivity
 import com.example.recipes.presentation.utils.ImagesUtil
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
@@ -25,6 +28,10 @@ class UserProfileFragment : Fragment() {
     private var _binding: FragmentUserProfileBinding? = null
     val binding: FragmentUserProfileBinding
         get() = _binding!!
+
+    private var _bindingActivity: ActivityRecipesBinding? = null
+    private val bindingActivity: ActivityRecipesBinding
+        get() = _bindingActivity!!
 
     private val viewModelProfile: UserProfileViewModel by viewModels()
 
@@ -45,19 +52,38 @@ class UserProfileFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        _bindingActivity = (activity as RecipesActivity).bindingActivity
+        bindingActivity.lifecycleOwner = this
+
         _binding = FragmentUserProfileBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.vm = viewModelProfile
 
         viewModelProfile.getFavoriteRecipes()
 
+        bindingActivity.apply {
+            btnBack.visibility = View.VISIBLE
+            tvTitleOfList.setText(R.string.profile)
+            ivOpenSearchET.visibility = View.GONE
+            toolbarActivity.background = ResourcesCompat.getDrawable(
+                requireContext().resources,
+                R.color.green_for_header_nav_drawer,
+                requireContext().theme
+            )
+
+            btnBack.setOnClickListener {
+                requireActivity().onBackPressed()
+            }
+        }
+
         binding.apply {
 
-            tvProfileName.setOnClickListener {
-                findNavController().navigate(
-                    UserProfileFragmentDirections
-                        .actionUserProfileFragmentToChangeProfileNameDialog(Action.CHANGE_NAME)
-                )
+//            tvProfileName.setOnClickListener {
+//                findNavController().navigate(
+//                    UserProfileFragmentDirections
+//                        .actionUserProfileFragmentToChangeProfileNameDialog(Action.CHANGE_NAME)
+//                )
 //                val bundle = Bundle()
 //                bundle.putString("action", Action.CHANGE_NAME.toString())
 //                requireActivity().supportFragmentManager.beginTransaction().add(
@@ -65,6 +91,12 @@ class UserProfileFragment : Fragment() {
 //                )
 //                    .addToBackStack(null)
 //                    .commit()
+//            }
+            tvChangeUserName. setOnClickListener {
+                findNavController().navigate(
+                    UserProfileFragmentDirections
+                        .actionUserProfileFragmentToChangeProfileNameDialog(Action.CHANGE_NAME)
+                )
             }
             fabChangePhoto.setOnClickListener {
 
@@ -117,12 +149,14 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun signOutUser() {
+        viewModelProfile.resetQueryInDatastore()
         auth.signOut()
         startActivity(Intent(requireContext(), AuthActivity::class.java))
         requireActivity().finish()
     }
 
     private fun deleteUser() {
+        viewModelProfile.resetQueryInDatastore()
         auth.currentUser?.delete()
         signOutUser()
     }

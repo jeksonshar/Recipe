@@ -1,26 +1,23 @@
 package com.example.recipes.presentation.ui.recipes.searchlist
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.FrameLayout
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
 import androidx.paging.*
 import com.example.recipes.R
 import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.databinding.FragmentRecipeListBinding
 import com.example.recipes.business.domain.singletons.BackPressedSingleton
+import com.example.recipes.databinding.ActivityRecipesBinding
 import com.example.recipes.presentation.ui.recipes.RecipeClickListener
-import com.example.recipes.presentation.ui.auth.AuthActivity
+import com.example.recipes.presentation.ui.recipes.RecipesActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -35,6 +32,10 @@ class RecipeSearchListFragment : Fragment() {
     private var _binding: FragmentRecipeListBinding? = null
     private val binding: FragmentRecipeListBinding
         get() = _binding!!
+
+    private var _bindingActivity: ActivityRecipesBinding? = null
+    private val bindingActivity: ActivityRecipesBinding
+        get() = _bindingActivity!!
 
     private val viewModelSearch: RecipeSearchListViewModel by viewModels()
 
@@ -69,6 +70,9 @@ class RecipeSearchListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        _bindingActivity = (activity as RecipesActivity).bindingActivity
+        bindingActivity.lifecycleOwner = this
+
         _binding = FragmentRecipeListBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.vm = viewModelSearch
@@ -78,15 +82,18 @@ class RecipeSearchListFragment : Fragment() {
         fileName = context?.filesDir.toString() + "/cachedRecipes.txt"
         viewModelSearch.setFileName(fileName)
 
+        bindingActivity.apply {
+            btnBack.visibility = View.GONE
+            tvTitleOfList.setText(R.string.recipes)
+            ivOpenSearchET.setImageResource(R.drawable.search)
+            ivOpenSearchET.visibility = View.VISIBLE
+
+            ivOpenSearchET.setOnClickListener {
+                viewModelSearch.changeSearchIsOpenedValue()
+            }
+        }
+
         binding.apply {
-
-            val navController = findNavController()
-            val appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
-            titleOfList.setupWithNavController(navController, appBarConfiguration)
-
-            val header = navView.getHeaderView(0)
-            header.findViewById<TextView>(R.id.headerTitle).text = auth.let { it?.currentUser?.displayName }
-            header.findViewById<TextView>(R.id.headerText).text = auth.let { it?.currentUser?.email }
 
             val loadStateAdapter = RecipeLoadStateAdapter { pagingAdapter?.retry() }
             recyclerRecipe.adapter = pagingAdapter?.withLoadStateFooter(loadStateAdapter)
@@ -121,32 +128,8 @@ class RecipeSearchListFragment : Fragment() {
                         findNavController().navigate(R.id.action_recipeSearchListFragment_to_favoriteListFragment)
                         false
                     }
-                    else -> false
-                }
-            }
-
-            navView.setNavigationItemSelectedListener {
-                when (it.itemId) {
-                    R.id.favoriteListFragment -> {
-                        findNavController().navigate(R.id.action_recipeSearchListFragment_to_favoriteListFragment)
-                        drawerLayout.close()
-                        false
-                    }
-                    R.id.recipeSearchListFragment -> {
-                        drawerLayout.close()
-                        false
-                    }
-                    R.id.settings -> {
+                    R.id.profileFragment -> {
                         findNavController().navigate(R.id.action_recipeSearchListFragment_to_userProfileFragment)
-                        drawerLayout.close()
-                        false
-                    }
-                    R.id.signOut -> {
-                        signOutUser()
-                        false
-                    }
-                    R.id.delete -> {
-                        deleteUser()
                         false
                     }
                     else -> false
@@ -219,6 +202,15 @@ class RecipeSearchListFragment : Fragment() {
                 viewLifecycleOwner.lifecycleScope.launch {
                     pagingAdapter?.submitData(PagingData.empty())
                 }
+            }
+        }
+
+        viewModelSearch.searchIsOpened.observe(viewLifecycleOwner) {
+            if (it) {
+                (activity as RecipesActivity).bindingActivity.ivOpenSearchET.setImageResource(R.drawable.arrow_up)
+            } else {
+                (activity as RecipesActivity).bindingActivity.ivOpenSearchET.setImageResource(R.drawable.search)
+                viewModelSearch.filterIsOpened.value = false
             }
         }
 
@@ -375,11 +367,7 @@ class RecipeSearchListFragment : Fragment() {
         }
     }
 
-    // TODO вынести SnackBar в widget в xml (показывая когда надо), а то много ненужного траха - оставить на конец.
     private fun showSnackBarNetConnection() {
-        val param = binding.titleOfList.layoutParams as ViewGroup.MarginLayoutParams
-        param.bottomMargin = MARGIN_FOR_SNACK_BAR
-        binding.titleOfList.layoutParams = param
 
         snackBarNoConnection = Snackbar.make(
             requireView(),
@@ -389,29 +377,13 @@ class RecipeSearchListFragment : Fragment() {
         val view = snackBarNoConnection.view
         val snackParam = view.layoutParams as FrameLayout.LayoutParams
         snackParam.gravity = Gravity.TOP
-        snackParam.topMargin = MARGIN_FOR_SNACK_BAR
         view.layoutParams = snackParam
         snackBarNoConnection.setBackgroundTint(requireContext().getColor(R.color.background_snack_attention))
         snackBarNoConnection.show()
     }
 
     private fun dismissSnackBarNoConnection() {
-        val param = binding.titleOfList.layoutParams as ViewGroup.MarginLayoutParams
-        param.bottomMargin = 0
-        binding.titleOfList.layoutParams = param
         snackBarNoConnection.dismiss()
-    }
-
-    private fun deleteUser() {
-        auth?.currentUser?.delete()
-        signOutUser()
-    }
-
-    private fun signOutUser() {
-        viewModelSearch.resetLastQuery()
-        auth?.signOut()
-        startActivity(Intent(requireContext(), AuthActivity::class.java))
-        requireActivity().finish()
     }
 
     private fun showSnackBar(message: String) {
@@ -427,6 +399,7 @@ class RecipeSearchListFragment : Fragment() {
     override fun onDestroyView() {
         binding.recyclerRecipe.adapter = null
         _binding = null
+        _bindingActivity = null
         if (this::snackBarNoConnection.isInitialized) snackBarNoConnection.dismiss()
         super.onDestroyView()
     }
@@ -434,10 +407,5 @@ class RecipeSearchListFragment : Fragment() {
     override fun onDetach() {
         clickListener = null
         super.onDetach()
-    }
-
-    companion object {
-        //TODO убрать маржин, перенеся Toolbar в activity из фрагментов
-        const val MARGIN_FOR_SNACK_BAR = 188
     }
 }

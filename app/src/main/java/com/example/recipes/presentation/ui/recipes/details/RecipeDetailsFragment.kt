@@ -12,7 +12,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.recipes.R
+import com.example.recipes.databinding.ActivityRecipesBinding
 import com.example.recipes.databinding.FragmentDetailRecipeBinding
+import com.example.recipes.presentation.ui.recipes.RecipesActivity
 import com.example.recipes.presentation.utils.ImagesUtil
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,6 +24,10 @@ class RecipeDetailsFragment : Fragment() {
     private var _binding: FragmentDetailRecipeBinding? = null
     private val binding: FragmentDetailRecipeBinding
         get() = _binding!!
+
+    private var _bindingActivity: ActivityRecipesBinding? = null
+    private val bindingActivity: ActivityRecipesBinding
+        get() = _bindingActivity!!
 
     private val viewModel: RecipeDetailsViewModel by viewModels()
 
@@ -44,16 +50,22 @@ class RecipeDetailsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentDetailRecipeBinding.inflate(inflater, container, false)
+        _bindingActivity = (activity as RecipesActivity).bindingActivity
+        bindingActivity.lifecycleOwner = this
 
+        _binding = FragmentDetailRecipeBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
+
         binding.activity = requireActivity()
         binding.vm = viewModel
 
-        binding.apply {
-            rvIngredients.adapter = adapter
+        bindingActivity.apply {
+            btnBack.visibility = View.VISIBLE
+            tvTitleOfList.setText(R.string.detail_recipe)
+            ivOpenSearchET.setImageResource(R.drawable.ic_share_icon)
+            ivOpenSearchET.visibility = View.VISIBLE
 
-            btnShare.setOnClickListener {
+            ivOpenSearchET.setOnClickListener {
                 if (viewModel.isNetConnected.value != true) {
                     createToastForUser()
                 } else {
@@ -67,6 +79,14 @@ class RecipeDetailsFragment : Fragment() {
                     startActivity(shareIntent)
                 }
             }
+
+            btnBack.setOnClickListener {
+                requireActivity().onBackPressed()
+            }
+        }
+
+        binding.apply {
+            rvIngredients.adapter = adapter
 
             btnHowToCook.setOnClickListener {
                 if (viewModel.isNetConnected.value != true) {
@@ -159,6 +179,7 @@ class RecipeDetailsFragment : Fragment() {
     override fun onDestroyView() {
         binding.rvIngredients.adapter = null
         _binding = null
+        _bindingActivity = null
         super.onDestroyView()
     }
 

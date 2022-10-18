@@ -43,7 +43,7 @@
     <!-- Facebook Application ID, prefixed by 'fb'. Enables Chrome Custom tabs. -->
 
     <string name="sign_out">Sign Out</string>
-    <string name="delete">Delete user</string>
+    <string name="delete">Delete\nprofile</string>
     <string name="settings">Settings</string>
     <string name="profile">Profile</string>
     <string name="header_title">Header title</string>
@@ -62,8 +62,10 @@
     <string name="description_actions_at_forget_password">On your email address will send email for reset password</string>
     <string name="too_fast">Да не торопись ты так\nЖди минуту!</string>
     <string name="submit">Submit</string>
+    <string name="apply">Apply</string>
     <string name="change_password">Change password</string>
     <string name="change_name">Change name</string>
+    <string name="change_user_name">Change user name</string>
     <string name="enter_new_name_for_profile">Enter new name for profile</string>
     <string name="name_for_profile">Name for profile</string>
     <string name="enter_new_value">Enter new value</string>
@@ -73,9 +75,18 @@
     <string name="no">No</string>
     <string name="detail_recipe">Detail recipe</string>
     <string name="how_to_cook">How to cook</string>
+    <string name="master_of_recipes">Master of recipes</string>
     <string name="turn_on_net_connection_and_repeat">Turn on net connection and repeat</string>
     <string name="turn_on_net_connection_and_make_search">Turn on net connection and make search</string>
     <string name="turn_on_net_connection_and_make_login">Turn on net connection and make login</string>
     <string name="retry_it">Retry</string>
+
+    <!-- Filter gropes name -->
+    <string name="filters">Filters</string>
+    <string name="by_diets">By diets</string>
+    <string name="by_health">By health</string>
+    <string name="by_meal_types">By meal types</string>
+    <string name="by_cuisine_types">By cuisine types</string>
+
 
 </resources>

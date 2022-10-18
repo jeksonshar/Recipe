@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Рецепты</string>
+    <string name="login">login</string>
+    <string name="email">email</string>
+    <string name="password">password</string>
+    <string name="confirm_password">подтвердить пароль</string>
+    <string name="sign_in">Войти</string>
+    <string name="sign_up">Зарегистрироваться</string>
+    <string name="recipes">Рецепты</string>
+    <string name="favorite_recipes">Любимые рецепты</string>
+    <string name="name_of_recipe">Имя рецепта</string>
+    <string name="type_your_query">Введи свой запрос для поиска</string>
+    <string name="error_message">Сообщение ошибки</string>
+    <string name="no_internet_connection_message">Для загрузки вам необходимо интернет соединение.</string>
+    <string name="name_recipe">Имя рецепта</string>
+    <string name="ingredients">Ингредиенты:</string>
+    <string name="test_text">Test text</string>
+    <string name="reload">Перезагрузить</string>
+    <string name="turn_on_the_internet_connection_and_reload">Включите интернет-соединение и reload</string>
+    <string name="image_view">image view</string>
+    <string name="favorite">Favorite</string>
+    <string name="list">List</string>
+    <string name="first_slide">First slide</string>
+    <string name="second_slide">Second slide</string>
+    <string name="third_slide">Third slide</string>
+    <string name="fourth_slide">Fourth slide</string>
+    <string name="skip">Пропустить</string>
+    <string name="next">Следующий</string>
+    <string name="start">Начать</string>
+    <string name="sign_up_in_recipe_application">Зарегистрируйтесь в приложении Рецепты или войдите, если у вас есть учетная запись</string>
+    <string name="sign_up_to_continue">РЕГИСТРАЦИЯ</string>
+    <string name="log_in_to_continue">АВТОРИЗАЦИЯ</string>
+    <string name="log_in">Войти</string>
+    <string name="value_not_email">значение не является email</string>
+    <string name="user_name_not_set">Имя пользователя не задано</string>
+    <string name="min_length_password">минимальная длина пароля 8 символов</string>
+    <string name="value_not_match_password">значение не соответствует паролю</string>
+    <string name="or_use_social_networks">или используйте социальные сети</string>
+
+    <string name="facebook_application_id" translatable="false">308378624662427</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb308378624662427</string>
+    <string name="facebook_client_token">59ae8e35e9c8c6be7b5a99608b1630cc</string>
+    <!-- Facebook Application ID, prefixed by 'fb'. Enables Chrome Custom tabs. -->
+
+    <string name="sign_out">Выйти</string>
+    <string name="delete">Удалить\nпрофиль</string>
+    <string name="settings">Настройки</string>
+    <string name="profile">Профиль</string>
+    <string name="header_title">Название заголовка</string>
+    <string name="header_text">Текст заголовка</string>
+    <string name="user_name">имя пользователя</string>
+    <string name="user_name_not_filled">имя пользователя не заполнено</string>
+    <string name="forgot_password">Забыли пароль?</string>
+    <string name="passwords_not_filled">Пароли не заполнены</string>
+    <string name="email_not_filled">Email не заполнен</string>
+    <string name="passwords_does_not_match">Пароли не совпадают</string>
+    <string name="email_does_not_match">email не соответзтвует форме</string>
+    <string name="password_length_eight">Длина пароля должна быть не менее 8 символов</string>
+    <string name="send_something_on_email">На указанную почту было что-то отправлено</string>
+    <string name="cancel_user_registration">Регистрация отменена пользователем</string>
+    <string name="cancel_reset_password">Сброс пароля отменен пользователем</string>
+    <string name="description_actions_at_forget_password">На ваш email будет отправлено сообщение для сброса пароля</string>
+    <string name="too_fast">Да не торопись ты так\nЖди минуту!</string>
+    <string name="submit">Submit</string>
+    <string name="apply">Применить</string>
+    <string name="change_password">Изменить пароль</string>
+    <string name="change_name">Изменить имя</string>
+    <string name="change_user_name">Изменить имя пользователя</string>
+    <string name="enter_new_name_for_profile">Ввести новое имя профиля</string>
+    <string name="name_for_profile">Имя профиля</string>
+    <string name="enter_new_value">Ввести новое значение</string>
+    <string name="cancel">Отмена</string>
+    <string name="are_you_sure">Вы уверены?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="detail_recipe">Детали рецепта</string>
+    <string name="how_to_cook">Как приготовить</string>
+    <string name="master_of_recipes">Владыка рецептов</string>
+    <string name="turn_on_net_connection_and_repeat">Включите сетевое соединение и повторите</string>
+    <string name="turn_on_net_connection_and_make_search">Включите сетевое соединение и выполните поиск</string>
+    <string name="turn_on_net_connection_and_make_login">Включите сетевое соединение и авторизируйтесь</string>
+    <string name="retry_it">Повторить попытку</string>
+
+    <!-- Filter gropes name -->
+    <string name="filters">Фильтры</string>
+    <string name="by_diets">По диетам</string>
+    <string name="by_health">По здоровью</string>
+    <string name="by_meal_types">По типам еды</string>
+    <string name="by_cuisine_types">По видам кухни</string>
+</resources>

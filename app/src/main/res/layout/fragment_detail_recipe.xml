@@ -20,56 +20,8 @@
         android:id="@+id/containerDetailRecipe"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background_list"
+        android:background="@color/green_light"
         android:theme="@style/DetailTheme">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/background_radius"
-            android:elevation="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/btnBack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingVertical="16dp"
-                android:onClick="@{() -> activity.onBackPressed()}"
-                android:paddingStart="0dp"
-                android:paddingEnd="8dp"
-                android:src="@drawable/ic_arrow_back" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/ivTitleOfList"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginVertical="4dp"
-                android:layout_marginStart="24dp"
-                app:srcCompat="@drawable/chef_hat" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvTitleOfList"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:text="@string/detail_recipe"
-                android:textColor="#191A19"
-                android:textSize="18sp"
-                android:textStyle="italic" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/btnShare"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginEnd="8dp"
-                android:paddingHorizontal="8dp"
-                android:src="@drawable/ic_share_icon" />
-        </androidx.appcompat.widget.Toolbar>
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/detailContainer"
@@ -78,7 +30,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -176,8 +128,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
+                    android:background="@drawable/background_btn_user_profile"
                     android:text="@string/how_to_cook"
+                    android:textAllCaps="false"
                     android:textSize="18sp"
+                    android:paddingVertical="8dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:gravity="center"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/rvIngredients"
