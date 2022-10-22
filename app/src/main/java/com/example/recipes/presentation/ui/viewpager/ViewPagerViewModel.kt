@@ -27,8 +27,8 @@ class ViewPagerViewModel @Inject constructor(
     private val _isLastDotPosition = MutableLiveData(false)
     val isLastDotPosition: LiveData<Boolean> = _isLastDotPosition
 
-    private val _isMovingToRecipe = MutableLiveData(false)
-    val isMovingToRecipe: LiveData<Boolean> = _isMovingToRecipe
+    private val _isMovingToAuth = MutableLiveData(false)
+    val isMovingToAuth: LiveData<Boolean> = _isMovingToAuth
 
     fun setVisibility(position: Int) {
         _isLastDotPosition.value = position == slides.size - 1
@@ -45,7 +45,7 @@ class ViewPagerViewModel @Inject constructor(
     }
 
     fun moveToRecipe() {
-        _isMovingToRecipe.value = true
+        _isMovingToAuth.value = true
     }
 
 }

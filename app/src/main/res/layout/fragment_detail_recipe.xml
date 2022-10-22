@@ -8,10 +8,6 @@
         <import type="android.view.View" />
 
         <variable
-            name="activity"
-            type="android.app.Activity"/>
-
-        <variable
             name="vm"
             type="com.example.recipes.presentation.ui.recipes.details.RecipeDetailsViewModel" />
     </data>
@@ -92,7 +88,7 @@
                         android:layout_width="24dp"
                         android:layout_height="21dp"
                         android:contentDescription="@string/image_view"
-                        android:src="@drawable/like_off" />
+                        android:src="@{vm.currentRecipeIsFavorite ? @drawable/like_on : @drawable/like_off}" />
                 </LinearLayout>
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -104,7 +100,7 @@
                     android:gravity="start"
                     android:text="@string/ingredients"
                     android:textStyle="italic|bold"
-                    android:visibility="invisible"
+                    android:visibility="@{vm.errorMassageLiveData.empty ? View.VISIBLE : View.GONE}"
                     app:layout_constraintBottom_toTopOf="@+id/rvIngredients"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -156,8 +152,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:text="@string/error_message"
-                    android:visibility="invisible"
+                    android:text="@{vm.errorMassageLiveData}"
+                    android:visibility="@{vm.errorMassageLiveData.empty ? View.GONE : View.VISIBLE}"
                     app:layout_constraintBottom_toTopOf="@id/buttonRetryDetail"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -168,7 +164,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/retry_it"
-                    android:visibility="@{vm.retryVisibilityLiveData ? View.VISIBLE : View.INVISIBLE}"
+                    android:visibility="@{vm.errorMassageLiveData.empty ? View.INVISIBLE : View.VISIBLE}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

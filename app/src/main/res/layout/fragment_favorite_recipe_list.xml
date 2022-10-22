@@ -29,11 +29,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scaleType="fitStart"
-                android:visibility="gone"
+                android:src="@drawable/empty_favorite_list_removebg_preview"
+                android:visibility="@{vm.favoriteRecipes.empty ? View.VISIBLE : View.GONE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/empty_list_removebg_preview" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:id="@+id/coordinatorRecipeList"

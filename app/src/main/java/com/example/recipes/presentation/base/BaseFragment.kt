@@ -1,19 +1,35 @@
 package com.example.recipes.presentation.base
 
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.annotation.LayoutRes
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import com.example.recipes.databinding.FragmentDetailRecipeBinding
 
-//open class BaseFragment : Fragment() {
-//
-//    private var _binding: FragmentDetailRecipeBinding? = null
-//    private val binding get() = _binding!!
-//
-//
-//
-//
-//
-//    override fun onDestroy() {
-//        super.onDestroy()
-//        _binding = null
-//    }
-//}
+open class BaseFragment<VDB : ViewDataBinding>(
+    @LayoutRes private val layoutId: Int
+) : Fragment() {
+
+    private var _binding: VDB? = null
+    //TODO разобраться почему тут падает
+    val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
+        binding.lifecycleOwner = this
+        return binding.root
+    }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+}

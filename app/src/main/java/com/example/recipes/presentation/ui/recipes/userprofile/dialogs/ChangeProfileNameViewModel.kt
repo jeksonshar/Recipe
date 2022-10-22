@@ -16,9 +16,11 @@ class ChangeProfileNameViewModel : ViewModel() {
 
     private val auth = Firebase.auth
 
-    val exitFromDialog = MutableLiveData(false)
     private val newName = MutableLiveData<String>()
     private val newPassword = MutableLiveData<String>()
+
+    private var _exitFromDialog = MutableLiveData(false)
+    val exitFromDialog: LiveData<Boolean> = _exitFromDialog
 
     private val _action = MutableLiveData<Action>()
     val action: LiveData<Action>
@@ -61,11 +63,11 @@ class ChangeProfileNameViewModel : ViewModel() {
                         if (!it.isSuccessful) {
                             Log.d("TAG", "submit: change name not done!!")
                         }
-                        exitFromDialog.value = true
+                        _exitFromDialog.value = true
                         BackPressedSingleton.isBackPressClick.value = true
                     }
                 } else {
-                    exitFromDialog.value = true
+                    _exitFromDialog.value = true
                 }
             }
             Action.CHANGE_PASSWORD -> {
@@ -75,10 +77,10 @@ class ChangeProfileNameViewModel : ViewModel() {
                             if (!it.isSuccessful) {
                                 Log.d("TAG", "submit: change password not done!!")
                             }
-                            exitFromDialog.value = true
+                            _exitFromDialog.value = true
                         }
                 } else {
-                    exitFromDialog.value = true
+                    _exitFromDialog.value = true
                 }
             }
             else -> {
@@ -88,7 +90,7 @@ class ChangeProfileNameViewModel : ViewModel() {
     }
 
     fun cancel() {
-        exitFromDialog.value = true
+        _exitFromDialog.value = true
     }
 
 }

@@ -1,4 +1,4 @@
-package com.example.recipes.business.usecases
+package com.example.recipes.business.usecases.notused
 
 import androidx.paging.PagingSource
 import com.example.recipes.business.domain.models.Recipe

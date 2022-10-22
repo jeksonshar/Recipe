@@ -7,6 +7,10 @@
 
         <import type="android.view.View" />
 
+        <variable
+            name="vm"
+            type="com.example.recipes.presentation.ui.recipes.RecipesActivityViewModel" />
+
     </data>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,8 +20,6 @@
             android:background="@color/background_list"
             tools:context=".presentation.ui.recipes.RecipesActivity">
 
-            <!-- TODO закончить с выносом тулбара и подключением его с деталям и спискам,
-                 возможно и DrawerLayout или избавиться от него и вынести профиль в BottomNavigation-->
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbarActivity"
                 android:layout_width="0dp"
@@ -26,9 +28,9 @@
                 android:gravity="center_vertical"
                 app:contentInsetStartWithNavigation="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
                 app:titleMarginStart="0dp">
 
                 <androidx.appcompat.widget.AppCompatImageView
@@ -38,8 +40,8 @@
                     android:paddingVertical="16dp"
                     android:paddingStart="0dp"
                     android:paddingEnd="8dp"
-                    android:visibility="gone"
-                    android:src="@drawable/ic_arrow_back" />
+                    android:src="@drawable/ic_arrow_back"
+                    android:visibility="@{vm.isBtnBackVisible ? View.VISIBLE : View.GONE}" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/ivTitleOfList"
@@ -54,8 +56,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:text="@string/recipes"
-                    android:textColor="#191A19"
+                    android:text="@{context.getString(vm.titleOfListText)}"
+                    android:textColor="@color/gray_dark"
                     android:textSize="18sp"
                     android:textStyle="italic" />
 
@@ -69,7 +71,8 @@
                         android:id="@+id/ivOpenSearchET"
                         android:layout_width="20dp"
                         android:layout_height="match_parent"
-                        android:src="@drawable/search" />
+                        android:src="@{context.getDrawable(vm.searchIconResource)}"
+                        android:visibility="@{vm.isSearchIconVisible ? View.VISIBLE : View.GONE}"/>
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
             </androidx.appcompat.widget.Toolbar>

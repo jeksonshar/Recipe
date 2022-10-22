@@ -33,13 +33,17 @@ class RecipeDetailsViewModel @Inject constructor(
     private var _currentRecipe = MutableLiveData<Recipe>()
     val currentRecipe: LiveData<Recipe> = _currentRecipe
 
-    private val _currentRecipeIngredients = MutableLiveData<List<Ingredient>>()
+    private var _currentRecipeIngredients = MutableLiveData<List<Ingredient>>()
     val currentRecipeIngredients: LiveData<List<Ingredient>> = _currentRecipeIngredients
 
-    val progressVisibilityLiveData = MutableLiveData<Boolean>()
-    val errorMassageLiveData = MutableLiveData<String?>()
-    val retryVisibilityLiveData = MutableLiveData<Boolean>()
-    var currentRecipeIsFavorite = MutableLiveData(false)
+    private var _progressVisibilityLiveData = MutableLiveData<Boolean>()
+    val progressVisibilityLiveData: LiveData<Boolean> = _progressVisibilityLiveData
+
+    private var _errorMassageLiveData = MutableLiveData("")
+    val errorMassageLiveData: LiveData<String> = _errorMassageLiveData
+
+    private var _currentRecipeIsFavorite = MutableLiveData(false)
+    val currentRecipeIsFavorite: LiveData<Boolean> = _currentRecipeIsFavorite
 
     private val userId = Firebase.auth.currentUser?.uid ?: ""
 
@@ -55,15 +59,14 @@ class RecipeDetailsViewModel @Inject constructor(
             _currentRecipe.value = RecipeSingleton.recipe
             _currentRecipeIngredients.value = recipe?.ingredients
         }
-        progressVisibilityLiveData.value = false
-        errorMassageLiveData.value = null
-        retryVisibilityLiveData.value = false
+        _progressVisibilityLiveData.value = false
+        _errorMassageLiveData.value = ""
     }
 
     fun recipeIsFavorite(uri: String) {
         viewModelScope.launch {
             val favoriteRecipe = getFavoriteRecipeUseCase.getFavoriteRecipe(uri, userId)
-            currentRecipeIsFavorite.value = favoriteRecipe != null
+            _currentRecipeIsFavorite.value = favoriteRecipe != null
         }
     }
 
@@ -77,7 +80,7 @@ class RecipeDetailsViewModel @Inject constructor(
     }
 
     fun saveOrDeleteRecipeToFavorite() {
-        currentRecipeIsFavorite.value = !currentRecipeIsFavorite.value!!
+        _currentRecipeIsFavorite.value = !currentRecipeIsFavorite.value!!
         val favoriteFirebaseRecipesRef = Firebase.database
             .getReference("favorite")
             .child("favorite_recipes")

@@ -40,14 +40,20 @@ class RecipeSearchListViewModel @Inject constructor(
     val queryHandler = recipeDataStore.getLastQuery().asLiveData()
     val isNetConnected = checkConnectionUseCase.isConnected().asLiveData()
 
-    val loadState = MutableLiveData<CombinedLoadStates?>()
-    val searchIsOpened = MutableLiveData<Boolean>()
+    private var _loadState = MutableLiveData<CombinedLoadStates?>()
+    val loadState: LiveData<CombinedLoadStates?> = _loadState
 
-    val filterIsOpened = MutableLiveData(false)
-//    val filterIsOpen: LiveData<Boolean> = _filterIsOpen
+    private var _searchIsOpened = MutableLiveData<Boolean>()
+    val searchIsOpened: LiveData<Boolean> = _searchIsOpened
 
-    val isEmptyListImageViewVisible = MutableLiveData<Boolean>()
-    val isProgressBarWhileListEmptyVisible = MutableLiveData<Boolean>()
+    private var _isEmptyListImageViewVisible = MutableLiveData<Boolean>()
+    val isEmptyListImageViewVisible: LiveData<Boolean> = _isEmptyListImageViewVisible
+
+    private var _isProgressBarWhileListEmptyVisible = MutableLiveData<Boolean>()
+    val isProgressBarWhileListEmptyVisible: LiveData<Boolean> = _isProgressBarWhileListEmptyVisible
+
+    private val _filterIsOpened = MutableLiveData(false)
+    val filterIsOpened: LiveData<Boolean> = _filterIsOpened
 
     private val fileName = MutableLiveData<String>()
 
@@ -83,9 +89,29 @@ class RecipeSearchListViewModel @Inject constructor(
         )
     }
 
+    fun setLoadState(state: CombinedLoadStates) {
+        _loadState.value = state
+    }
+
+    fun setSearchIsOpened(value: Boolean) {
+        _searchIsOpened.value = value
+    }
+
+    fun setFilterIsOpened(value: Boolean) {
+        _filterIsOpened.value = value
+    }
+
+    fun setEmptyListImageViewVisibility(value: Boolean) {
+        _isEmptyListImageViewVisible.value = value
+    }
+
+    fun setProgressBarWhileListEmptyVisibility(value: Boolean) {
+        _isProgressBarWhileListEmptyVisible.value = value
+    }
+
     fun changeFilterVisibility() {
         Log.d("TAG", "changeFilterVisibility: 1111111111111")
-        filterIsOpened.value = filterIsOpened.value != true
+        _filterIsOpened.value = filterIsOpened.value != true
     }
 
     fun changeCheckedStateDietFilter(chipId: Int, isChecked: Boolean) {
@@ -174,7 +200,7 @@ class RecipeSearchListViewModel @Inject constructor(
     }
 
     fun changeSearchIsOpenedValue() {
-        searchIsOpened.value = searchIsOpened.value != true
+        _searchIsOpened.value = searchIsOpened.value != true
     }
 
     fun setRecipeToSingleton(recipe: Recipe) {

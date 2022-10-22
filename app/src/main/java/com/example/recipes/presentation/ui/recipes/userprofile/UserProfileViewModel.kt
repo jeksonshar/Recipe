@@ -20,22 +20,22 @@ class UserProfileViewModel @Inject constructor(
     private val getFavoriteRecipesUseCase: GetFavoriteRecipesUseCase,
 ) : ViewModel() {
 
+    private val currentUser = Firebase.auth.currentUser
+    val email = currentUser?.email ?: "--"
+
+    val onBackPressed = BackPressedSingleton.isBackPressClick
+
     private val _favoriteRecipesCount = MutableLiveData<Int>()
     val favoriteRecipesCount: LiveData<Int> = _favoriteRecipesCount
-
-    private val currentUser = Firebase.auth.currentUser
 
     private val _userName = MutableLiveData<String>()
     val userName: LiveData<String>
         get() = _userName
 
-    val email = currentUser?.email ?: "--"
-
-    val onBackPressed = BackPressedSingleton.isBackPressClick
-
     private val _photoUri = MutableLiveData<Uri>()
     val photoUri: LiveData<Uri>
         get() = _photoUri
+
 
     fun getFavoriteRecipes() {
         viewModelScope.launch {
@@ -62,7 +62,8 @@ class UserProfileViewModel @Inject constructor(
     }
 
     override fun onCleared() {
-        BackPressedSingleton.isBackPressClick.value = null
+        // разобраться, вроде не нужно тут
+//        BackPressedSingleton.clear()
         super.onCleared()
     }
 

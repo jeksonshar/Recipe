@@ -1,4 +1,4 @@
-package com.example.recipes.business.domain.singletons
+package com.example.recipes.business.domain.singletons.notused
 
 object LoadedRecipesSingleton {
 

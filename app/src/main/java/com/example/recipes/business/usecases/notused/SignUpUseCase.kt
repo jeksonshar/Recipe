@@ -1,4 +1,4 @@
-package com.example.recipes.business.usecases
+package com.example.recipes.business.usecases.notused
 
 import com.example.recipes.presentation.ui.auth.AuthViewModel
 import com.google.firebase.auth.FirebaseAuth

@@ -51,7 +51,7 @@ abstract class RecipeDataBase : RoomDatabase() {
                 RecipeDataBase::class.java,
                 DATABASE_NAME
             )
-//                .fallbackToDestructiveMigration()
+//                .fallbackToDestructiveMigration() // удалить после того как проверю, что работает автомиграция
                 .build()
         }
     }

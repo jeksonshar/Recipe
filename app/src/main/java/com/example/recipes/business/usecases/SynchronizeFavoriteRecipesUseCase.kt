@@ -40,7 +40,7 @@ class SynchronizeFavoriteRecipesUseCase @Inject constructor(
         return recipes
     }
 
-    // TODO заменить на ChangeRecipeUserIdListUtil
+    // TODO заменить на ChangeRecipeUserIdListUtil, там нужны изменения в модели List на Set
     private fun changeRecipeUserIdList(recipe: Recipe, userIdList: List<String>): Recipe {
         return Recipe(
             calories = recipe.calories,

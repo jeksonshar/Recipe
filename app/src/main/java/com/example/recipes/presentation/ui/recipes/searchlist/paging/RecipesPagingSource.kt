@@ -65,7 +65,7 @@ class RecipesPagingSource(
             } else {
                 val loadingData = NetWorkEntitiesMappers.mapToRecipes(response.body() ?: RecipeSearchEntity())
                 if (href == null) {
-                    // сохранение первых 20 загруженных рецептов в файл
+ // сохранение первых 20 загруженных рецептов в файл
                     cachingFirstLoadRecipes(loadingData)
                 }
                 LoadResult.Page(
@@ -83,8 +83,6 @@ class RecipesPagingSource(
                     LoadResult.Error(PagingSourceException.EndOfListException())
                 }
                 else -> {
-                    Log.d("TAG", "responseNOT: ${response.raw().code}")
-                    Log.d("TAG", "responseHREF: ${getHref(response.body() ?: RecipeSearchEntity())}")
                     LoadResult.Error(HttpException(response))
                 }
             }

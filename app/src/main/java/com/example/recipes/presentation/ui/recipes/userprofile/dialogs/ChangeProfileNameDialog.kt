@@ -20,7 +20,6 @@ class ChangeProfileNameDialog : DialogFragment() {
     private val vmChangeProfileName: ChangeProfileNameViewModel by viewModels()
 
     private val args: ChangeProfileNameDialogArgs by navArgs()
-//    val args = this.arguments
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -42,18 +41,11 @@ class ChangeProfileNameDialog : DialogFragment() {
 
         vmChangeProfileName.exitFromDialog.observe(viewLifecycleOwner) {
             if (it) {
-                vmChangeProfileName.exitFromDialog.value = false
                 requireActivity().onBackPressed()
             }
         }
 
         return binding.root
     }
-
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//
-//        dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
-//    }
 
 }

@@ -1,6 +1,5 @@
 package com.example.recipes.presentation.ui.viewpager
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +9,7 @@ import com.example.recipes.R
 import com.example.recipes.databinding.ActivityViewPagerBinding
 import com.example.recipes.presentation.ui.auth.AuthActivity
 import com.example.recipes.presentation.ui.viewpager.transfotmers.HorizontalFlipTransformation
+import com.example.recipes.presentation.utils.NewIntentUtil
 import com.example.recipes.presentation.utils.NextViewPageUtil.onNextPageClick
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,10 +52,10 @@ class ViewPagerActivity : AppCompatActivity() {
             TabLayoutMediator(tabLayoutDots, viewPager) { _, _ -> }.attach()
         }
 
-        viewModelPager.isMovingToRecipe.observe(this) {
+        viewModelPager.isMovingToAuth.observe(this) {
             if (it) {
                 viewModelPager.setNotFirstLaunch()
-                startActivity(Intent(this, AuthActivity::class.java))
+                startActivity(NewIntentUtil.newIntent(this, AuthActivity()))
                 finish()
             }
         }

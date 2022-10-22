@@ -1,4 +1,4 @@
-package com.example.recipes.presentation.ui.viewpager
+package com.example.recipes.presentation.ui.viewpager.notused
 
 import androidx.databinding.BindingAdapter
 import androidx.viewpager2.widget.ViewPager2

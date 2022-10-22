@@ -14,7 +14,7 @@
         android:title="@string/favorite"/>
 
     <item
-        android:id="@+id/profileFragment"
+        android:id="@+id/userProfileFragment"
         android:enabled="true"
         android:icon="@drawable/ic_login_icon"
         android:title="@string/profile"/>

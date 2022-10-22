@@ -11,12 +11,10 @@ import com.example.recipes.business.usecases.CheckConnectionUseCaseImpl
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,16 +22,22 @@ class AuthViewModel @Inject constructor(
     checkConnectionUseCase: CheckConnectionUseCaseImpl,
 ) : ViewModel() {
 
-    val exceptionMessageForUser = MutableStateFlow<String?>(null)
-    val resMessageForUser = MutableStateFlow<Int?>(null)
-    val user = MutableStateFlow<FirebaseUser?>(null)
-    val btnSignInVisibility = MutableLiveData(true)
     val isNetConnected = checkConnectionUseCase.isConnected().asLiveData()
 
-    private val email = MutableLiveData<CharSequence>()
-    private val userName = MutableLiveData<CharSequence>()
-    private val password = MutableLiveData<CharSequence>()
-    private val confirmPassword = MutableLiveData<CharSequence>()
+    private var _exceptionMessageForUser = MutableLiveData<String?>(null)
+    val exceptionMessageForUser: LiveData<String?>
+        get() = _exceptionMessageForUser
+
+    private var _resMessageForUser = MutableLiveData<Int?>(null)
+    val resMessageForUser: LiveData<Int?>
+        get() = _resMessageForUser
+
+    private var _isOpenRecipeByUser = MutableLiveData(false)
+    val isOpenRecipeByUser: LiveData<Boolean>
+        get() = _isOpenRecipeByUser
+
+    private var _btnSignInVisibility = MutableLiveData(true)
+    val btnSignInVisibility: LiveData<Boolean> = _btnSignInVisibility
 
     private val _isSignUpPage = MutableLiveData(false)
     val isSignUpPage: LiveData<Boolean> = _isSignUpPage
@@ -50,16 +54,21 @@ class AuthViewModel @Inject constructor(
     private val _etConfirmPasswordError = MutableLiveData<Boolean?>()
     val etConfirmPasswordError: LiveData<Boolean?> = _etConfirmPasswordError
 
+    private val email = MutableLiveData<CharSequence>()
+    private val userName = MutableLiveData<CharSequence>()
+    private val password = MutableLiveData<CharSequence>()
+    private val confirmPassword = MutableLiveData<CharSequence>()
+
     fun sendPasswordResetEmail() {
         val auth = Firebase.auth
         if (checkForEmailMatch()) {
             auth.sendPasswordResetEmail(email.value.toString())
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        resMessageForUser.value = R.string.send_something_on_email
+                        _resMessageForUser.value = R.string.send_something_on_email
                     } else {
                         task.exception?.localizedMessage?.let { message ->
-                            exceptionMessageForUser.value = message
+                            _exceptionMessageForUser.value = message
                         }
                     }
                 }
@@ -113,12 +122,7 @@ class AuthViewModel @Inject constructor(
     }
 
     fun changeVisibilityAtProgress() {
-        btnSignInVisibility.postValue(!(btnSignInVisibility.value ?: false))
-    }
-
-    fun setFirebaseUser(user: FirebaseUser) {
-        // TODO перенести в юзкейс
-        FirebaseUserSingleton.user = user
+        _btnSignInVisibility.postValue(!(btnSignInVisibility.value ?: false))
     }
 
     private fun logIn(auth: FirebaseAuth) {
@@ -139,13 +143,13 @@ class AuthViewModel @Inject constructor(
     private fun taskResultLogIn(task: Task<AuthResult>, auth: FirebaseAuth) {
         when {
             task.isSuccessful -> {
-                user.value = auth.currentUser
+                FirebaseUserSingleton.user = auth.currentUser
+                _isOpenRecipeByUser.value = true
             }
             task.exception is Exception -> {
                 task.exception?.localizedMessage?.let { message ->
-                    exceptionMessageForUser.value = message
+                    _exceptionMessageForUser.value = message
                 }
-                user.value = null
             }
         }
     }
@@ -153,13 +157,11 @@ class AuthViewModel @Inject constructor(
     private fun checkForPasswordMatchSingIn(): Boolean {
         return when {
             password.value.isNullOrEmpty() -> {
-                resMessageForUser.value = R.string.passwords_not_filled
-                user.value = null
+                _resMessageForUser.value = R.string.passwords_not_filled
                 false
             }
             password.value!!.length < 8 -> {
-                resMessageForUser.value = R.string.password_length_eight
-                user.value = null
+                _resMessageForUser.value = R.string.password_length_eight
                 false
             }
             else -> true
@@ -190,7 +192,8 @@ class AuthViewModel @Inject constructor(
             displayName = userName.value.toString()
         })?.addOnCompleteListener {
             if (it.isSuccessful) {
-                user.value = auth.currentUser
+                FirebaseUserSingleton.user = auth.currentUser
+                _isOpenRecipeByUser.value = true
             }
         }
     }
@@ -199,9 +202,8 @@ class AuthViewModel @Inject constructor(
         when (task.exception) {
             is Exception -> {
                 task.exception?.localizedMessage?.let { message ->
-                    exceptionMessageForUser.value = message
+                    _exceptionMessageForUser.value = message
                 }
-                user.value = null
             }
         }
     }
@@ -209,8 +211,7 @@ class AuthViewModel @Inject constructor(
     private fun checkForUserNameEnter(): Boolean {
         return when {
             userName.value.isNullOrEmpty() -> {
-                resMessageForUser.value = R.string.user_name_not_filled
-                user.value = null
+                _resMessageForUser.value = R.string.user_name_not_filled
                 false
             }
             else -> true
@@ -220,18 +221,15 @@ class AuthViewModel @Inject constructor(
     private fun checkForPasswordsMatchSingUp(): Boolean {
         return when {
             password.value.isNullOrEmpty() || confirmPassword.value.isNullOrEmpty() -> {
-                resMessageForUser.value = R.string.passwords_not_filled
-                user.value = null
+                _resMessageForUser.value = R.string.passwords_not_filled
                 false
             }
             password.value!!.length < 8 -> {
-                resMessageForUser.value = R.string.password_length_eight
-                user.value = null
+                _resMessageForUser.value = R.string.password_length_eight
                 false
             }
             password.value.toString() != confirmPassword.value.toString() -> {
-                resMessageForUser.value = R.string.passwords_does_not_match
-                user.value = null
+                _resMessageForUser.value = R.string.passwords_does_not_match
                 false
             }
             else -> true
@@ -241,13 +239,11 @@ class AuthViewModel @Inject constructor(
     private fun checkForEmailMatch(): Boolean {
         return when {
             email.value.isNullOrEmpty() -> {
-                resMessageForUser.value = R.string.email_not_filled
-                user.value = null
+                _resMessageForUser.value = R.string.email_not_filled
                 false
             }
             !Patterns.EMAIL_ADDRESS.matcher(email.value!!).matches() -> {
-                resMessageForUser.value = R.string.email_does_not_match
-                user.value = null
+                _resMessageForUser.value = R.string.email_does_not_match
                 false
             }
             else -> true
@@ -291,7 +287,6 @@ class AuthViewModel @Inject constructor(
     }
 
     override fun onCleared() {
-        // TODO проверить это нужно или нет
         FirebaseUserSingleton.cancel()
         super.onCleared()
     }

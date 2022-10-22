@@ -10,10 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.recipes.R
 import com.example.recipes.business.domain.models.Recipe
-import com.example.recipes.databinding.ActivityRecipesBinding
 import com.example.recipes.databinding.FragmentFavoriteRecipeListBinding
 import com.example.recipes.presentation.ui.recipes.RecipeClickListener
-import com.example.recipes.presentation.ui.recipes.RecipesActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,11 +20,6 @@ class FavoriteListFragment : Fragment() {
     private var _binding: FragmentFavoriteRecipeListBinding? = null
     private val binding: FragmentFavoriteRecipeListBinding
         get() = _binding!!
-
-    private var _bindingActivity: ActivityRecipesBinding? = null
-    private val bindingActivity: ActivityRecipesBinding
-        get() = _bindingActivity!!
-
 
     private val viewModelFavorite: FavoriteListViewModel by viewModels()
 
@@ -55,19 +48,9 @@ class FavoriteListFragment : Fragment() {
     ): View {
         _binding = FragmentFavoriteRecipeListBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
+        binding.vm = viewModelFavorite
 
-        _bindingActivity = (activity as RecipesActivity).bindingActivity
-        bindingActivity.lifecycleOwner = this
-
-        bindingActivity.apply {
-            btnBack.visibility = View.VISIBLE
-            tvTitleOfList.setText(R.string.favorite_recipes)
-            ivOpenSearchET.visibility = View.INVISIBLE
-
-            btnBack.setOnClickListener {
-                requireActivity().onBackPressed()
-            }
-        }
+        viewModelFavorite.getUserFavoriteRecipes()
 
         binding.apply {
 
@@ -81,16 +64,13 @@ class FavoriteListFragment : Fragment() {
                         findNavController().navigate(R.id.action_favoriteListFragment_to_recipeSearchListFragment)
                         false
                     }
-                    R.id.profileFragment -> {
+                    R.id.userProfileFragment -> {
                         findNavController().navigate(R.id.action_favoriteListFragment_to_userProfileFragment)
                         false
                     }
                     else -> false
                 }
             }
-
-            viewModelFavorite.getUserFavoriteRecipes()
-
         }
         return binding.root
     }
@@ -100,19 +80,12 @@ class FavoriteListFragment : Fragment() {
 
         viewModelFavorite.favoriteRecipes.observe(viewLifecycleOwner) {
             adapter?.submitList(it)
-            if (it.isEmpty()) {
-                binding.ivEmptyList.setImageResource(R.drawable.empty_favorite_list_removebg_preview)
-                binding.ivEmptyList.visibility = View.VISIBLE
-            } else {
-                binding.ivEmptyList.visibility = View.GONE
-            }
         }
     }
 
     override fun onDestroyView() {
         binding.recyclerRecipe.adapter = null
         _binding = null
-        _bindingActivity = null
         super.onDestroyView()
     }
 

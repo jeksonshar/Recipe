@@ -1,24 +1,21 @@
 package com.example.recipes.presentation.ui.auth
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.asLiveData
 import com.example.recipes.R
 import com.example.recipes.databinding.ActivityAuthBinding
 import com.example.recipes.presentation.ui.recipes.RecipesActivity
+import com.example.recipes.presentation.utils.NewIntentUtil
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.IdpResponse
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,11 +23,10 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class AuthActivity : AppCompatActivity(), ConfirmationListener {
 
+    //TODO 22,10 не забудь занулить биндинг во всех активити, если надо
     private var _binding: ActivityAuthBinding? = null
     private val binding: ActivityAuthBinding
         get() = _binding!!
-
-    private var auth: FirebaseAuth? = null
 
     private lateinit var snackBarNoConnection: Snackbar
 
@@ -47,7 +43,6 @@ class AuthActivity : AppCompatActivity(), ConfirmationListener {
 
         _binding = DataBindingUtil.setContentView(this, R.layout.activity_auth)
         binding.lifecycleOwner = this
-        auth = Firebase.auth
 
         binding.apply {
             vm = viewModel
@@ -71,22 +66,22 @@ class AuthActivity : AppCompatActivity(), ConfirmationListener {
             }
         }
 
-        viewModel.exceptionMessageForUser.asLiveData().observe(this) {
+        viewModel.exceptionMessageForUser.observe(this) {
             if (!it.isNullOrEmpty()) {
                 showSnackBar(it)
-                viewModel.exceptionMessageForUser.value = null
             }
         }
 
-        viewModel.resMessageForUser.asLiveData().observe(this) {
+        viewModel.resMessageForUser.observe(this) {
             if (it != null) {
                 showSnackBar(applicationContext.getString(it))
-                viewModel.resMessageForUser.value = null
             }
         }
 
-        viewModel.user.asLiveData().observe(this) {
-            openRecipeByUser(it)
+        viewModel.isOpenRecipeByUser.observe(this) {
+            if (it) {
+                moveToRecipeActivity()
+            }
         }
 
         viewModel.isNetConnected.observe(this) {
@@ -97,7 +92,7 @@ class AuthActivity : AppCompatActivity(), ConfirmationListener {
             }
         }
 
-        if (auth?.currentUser != null) moveToRecipeActivity()
+        if (Firebase.auth.currentUser != null) moveToRecipeActivity()
 
     }
 
@@ -136,16 +131,8 @@ class AuthActivity : AppCompatActivity(), ConfirmationListener {
     }
 
     private fun moveToRecipeActivity() {
-        startActivity(Intent(this, RecipesActivity::class.java))
+        startActivity(NewIntentUtil.newIntent(this, RecipesActivity()))
         finish()
-    }
-
-    private fun openRecipeByUser(user: FirebaseUser?) {
-        if (user != null) {
-            startActivity(Intent(this, RecipesActivity::class.java))
-            viewModel.setFirebaseUser(user)
-            finish()
-        }
     }
 
     private fun showSnackBar(message: String) {

@@ -25,6 +25,7 @@ object ConvertersRoom {
     fun convertStringToList(string: String?): List<String> {
         return string?.split(",") ?: emptyList()
     }
+    // понадибится, когда переделаю в модели recipe List на Set
     @TypeConverter
     fun convertSetToString(set: Set<String>): String {
         return set.joinToString(",")

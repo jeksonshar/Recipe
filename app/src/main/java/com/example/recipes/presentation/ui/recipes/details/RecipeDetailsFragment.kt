@@ -7,12 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.recipes.R
-import com.example.recipes.databinding.ActivityRecipesBinding
 import com.example.recipes.databinding.FragmentDetailRecipeBinding
 import com.example.recipes.presentation.ui.recipes.RecipesActivity
 import com.example.recipes.presentation.utils.ImagesUtil
@@ -24,10 +22,6 @@ class RecipeDetailsFragment : Fragment() {
     private var _binding: FragmentDetailRecipeBinding? = null
     private val binding: FragmentDetailRecipeBinding
         get() = _binding!!
-
-    private var _bindingActivity: ActivityRecipesBinding? = null
-    private val bindingActivity: ActivityRecipesBinding
-        get() = _bindingActivity!!
 
     private val viewModel: RecipeDetailsViewModel by viewModels()
 
@@ -50,25 +44,18 @@ class RecipeDetailsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _bindingActivity = (activity as RecipesActivity).bindingActivity
-        bindingActivity.lifecycleOwner = this
 
         _binding = FragmentDetailRecipeBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
-
-        binding.activity = requireActivity()
         binding.vm = viewModel
 
-        bindingActivity.apply {
-            btnBack.visibility = View.VISIBLE
-            tvTitleOfList.setText(R.string.detail_recipe)
-            ivOpenSearchET.setImageResource(R.drawable.ic_share_icon)
-            ivOpenSearchET.visibility = View.VISIBLE
-
-            ivOpenSearchET.setOnClickListener {
+        (activity as RecipesActivity).bindingActivity.ivOpenSearchET.setOnClickListener {
                 if (viewModel.isNetConnected.value != true) {
-                    createToastForUser()
+                    createToastNoConnectionForUser()
                 } else {
+/**
+ * intent используется, когда формируем ссылку на рецепт (для передачи в соцсети) - deepLink
+ */
                     val intent = Intent(Intent.ACTION_SEND).apply {
                         type = "text/plain" //для URL можно использовать text/x-uri
 
@@ -80,17 +67,12 @@ class RecipeDetailsFragment : Fragment() {
                 }
             }
 
-            btnBack.setOnClickListener {
-                requireActivity().onBackPressed()
-            }
-        }
-
         binding.apply {
             rvIngredients.adapter = adapter
 
             btnHowToCook.setOnClickListener {
                 if (viewModel.isNetConnected.value != true) {
-                    createToastForUser()
+                    createToastNoConnectionForUser()
                 } else {
                     val uri = Uri.parse(viewModel.currentRecipe.value?.url)
                     val intent = Intent(Intent.ACTION_VIEW, uri)
@@ -116,39 +98,18 @@ class RecipeDetailsFragment : Fragment() {
             }
         }
 
-        viewModel.currentRecipeIsFavorite.observe(viewLifecycleOwner) {
-            if (it) {
-                binding.favoriteImage.setImageResource(R.drawable.like_on)
-            } else {
-                binding.favoriteImage.setImageResource(R.drawable.like_off)
-            }
-        }
-
         viewModel.currentRecipeIngredients.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
 
-        viewModel.errorMassageLiveData.observe(viewLifecycleOwner) {
-            binding.apply {
-                if (!it.isNullOrEmpty()) {
-                    tvErrorDetail.text = it
-                    tvErrorDetail.isVisible = true
-                    buttonRetryDetail.isVisible = true
-                } else {
-                    tvErrorDetail.isVisible = false
-                    buttonRetryDetail.isVisible = false
-                    tvDetailIngredient.isVisible = true
-                }
-            }
-        }
-
 // TODO разобраться почему без этого обсёрва btnShare и btnHowToCook срабатывают все
-//  время как с откл соединением? не из-зи задержки?
+//  время, как с откл соединением? не из-зи задержки?
         viewModel.isNetConnected.observe(viewLifecycleOwner) {
 //            Log.d("TAG", "onCreateView: $it")
         }
     }
 
+// не удалять, разобраться
 //    private fun checkDomainVerification() {
 //        if (args.recipeLink.isNotBlank() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
 //            val manager = requireContext().getSystemService(DomainVerificationManager::class.java)
@@ -179,11 +140,10 @@ class RecipeDetailsFragment : Fragment() {
     override fun onDestroyView() {
         binding.rvIngredients.adapter = null
         _binding = null
-        _bindingActivity = null
         super.onDestroyView()
     }
 
-    private fun createToastForUser() {
+    private fun createToastNoConnectionForUser() {
         Toast.makeText(
             context,
             requireContext().getText(R.string.turn_on_net_connection_and_repeat),

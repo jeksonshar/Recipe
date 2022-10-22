@@ -36,6 +36,7 @@ class RecipeLoadStateViewHolder(
         }
     }
 
+//TODO разобраться и вынести в дата биндинг адаптер
     fun bind(loadState: LoadState) {
         binding.apply {
             if (loadState is LoadState.Error) {

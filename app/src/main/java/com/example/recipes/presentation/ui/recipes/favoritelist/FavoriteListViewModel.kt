@@ -1,6 +1,7 @@
 package com.example.recipes.presentation.ui.recipes.favoritelist
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -24,17 +25,14 @@ class FavoriteListViewModel @Inject constructor(
 //    val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    val favoriteRecipes = MutableLiveData<List<Recipe>>()
+    private var _favoriteRecipes = MutableLiveData<List<Recipe>>()
+    val favoriteRecipes: LiveData<List<Recipe>> = _favoriteRecipes
 
     private val userId = Firebase.auth.currentUser?.uid ?: ""
 
-//    private val favoriteFirebaseRecipesRef = Firebase.database
-//        .getReference("favorite")
-//        .child("favorite_recipes")
-
     fun getUserFavoriteRecipes() {
         viewModelScope.launch {
-            favoriteRecipes.value = getFavoriteRecipesUseCase.getUserFavoriteRecipesFromRoom(userId)
+            _favoriteRecipes.value = getFavoriteRecipesUseCase.getUserFavoriteRecipesFromRoom(userId)
             synchronizeFavoriteRecipesWithFirebase()
         }
     }
@@ -68,33 +66,11 @@ class FavoriteListViewModel @Inject constructor(
                     }
 
                     if ( favoriteRecipesSynchronized.isNotEmpty() && oldRecipeList != newRecipeList ) {
-                        favoriteRecipes.value = favoriteRecipesSynchronized
+                        _favoriteRecipes.value = favoriteRecipesSynchronized
                     }
                 }
             }
         }
-//        favoriteFirebaseRecipesRef.addValueEventListener(object : ValueEventListener {
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                favoriteRecipesFirebase = arrayListOf()
-//                val result: HashMap<String, String>? = snapshot.value as HashMap<String, String>?
-//                result?.forEach { (_, recipeString) ->
-//                    val gson = GsonBuilder()/*.disableHtmlEscaping()*/.create()
-//                    val recipe = gson.fromJson(recipeString, Recipe::class.java)
-//                    favoriteRecipesFirebase.add(recipe)
-//                }
-//                viewModelScope.launch {
-//                    val favoriteRecipesSynchronized = synchronizedFavoriteRecipesUseCase
-//                        .synchronizeFavoriteRecipesWithFirebase(favoriteRecipesFirebase, userId)
-//                    if (favoriteRecipesSynchronized.isNotEmpty()) {
-//                        favoriteRecipes.value = favoriteRecipesSynchronized
-//                    }
-//                }
-//            }
-//
-//            override fun onCancelled(error: DatabaseError) {
-//                Log.d("TAG111", "onCancelled: синхронизация не выполнена")
-//            }
-//        })
     }
 
     fun setRecipeToSingleton(recipe: Recipe) {
