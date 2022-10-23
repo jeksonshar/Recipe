@@ -168,11 +168,8 @@ class RecipeSearchListFragment : Fragment() {
 
         viewModelSearch.queryHandler.observe(viewLifecycleOwner) {
             if (!it.isNullOrEmpty()) {
-                if (BackPressedSingleton.isBackPressClick.value != true) {
-                    Log.d("TAG", "onViewCreated785: 1 - ${pagingAdapter?.itemCount}")
-                    loadRecipes(it)
-                } else if (pagingAdapter?.itemCount == 0) {
-                    Log.d("TAG", "onViewCreated785: 2 - ${pagingAdapter?.itemCount}")
+                if (pagingAdapter?.itemCount == 0) {
+                    Log.d("TAG", "onViewCreated785:$it")
                     loadRecipes(it)
                 } else {
                     viewModelSearch.setProgressBarWhileListEmptyVisibility(false)
@@ -192,18 +189,18 @@ class RecipeSearchListFragment : Fragment() {
             setSearchIcon(it)
         }
 
-        //удалить после того, как станет понятно с тулбаром, вопрос в туду
-//        viewModelSearch.isNetConnected.observe(viewLifecycleOwner) {
-//            Log.d("TAG", "onViewCreated: $it")
-//            if (!it) {
-//                showSnackBarNetConnection()
-//            } else {
+        //удалить после того, как станет понятно с тулбаром, вопрос в ТУДУ
+        viewModelSearch.isNetConnected.observe(viewLifecycleOwner) {
+            if (it) {
 //                if (this::snackBarNoConnection.isInitialized) {
 //                    dismissSnackBarNoConnection()
 //                }
-//                Log.d("TAG", "onViewCreated785: 3 - ${pagingAdapter?.itemCount}")
+                loadRecipes(viewModelSearch.queryHandler.value)
+            }
+//            else {
+//                showSnackBarNetConnection()
 //            }
-//        }
+        }
     }
 
 //TODO!!! 22.10 по логике, если запрс пуст, то должна открыться строка поиска и значек смениться на стрелку,
@@ -355,9 +352,11 @@ class RecipeSearchListFragment : Fragment() {
                 pagingAdapter?.submitData(PagingData.from(recipeList))
             }
         } else {
-            lifecycleScope.launchWhenStarted {
-                viewModelSearch.loadRecipes(query).collectLatest {
-                    pagingAdapter?.submitData(lifecycle, it)
+            if (BackPressedSingleton.isBackPressClick.value != true && !viewModelSearch.queryHandler.value.isNullOrEmpty()) {
+                lifecycleScope.launchWhenStarted {
+                    viewModelSearch.loadRecipes(query).collectLatest {
+                        pagingAdapter?.submitData(lifecycle, it)
+                    }
                 }
             }
             if (!query.isNullOrBlank()) {
