@@ -1,5 +1,7 @@
 package com.example.recipes.presentation.ui.auth
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
@@ -8,8 +10,8 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import com.example.recipes.R
 import com.example.recipes.databinding.ActivityAuthBinding
+import com.example.recipes.presentation.ui.auth.dialogs.ConfirmationDialogFragment
 import com.example.recipes.presentation.ui.recipes.RecipesActivity
-import com.example.recipes.presentation.utils.NewIntentUtil
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
@@ -131,7 +133,7 @@ class AuthActivity : AppCompatActivity(), ConfirmationListener {
     }
 
     private fun moveToRecipeActivity() {
-        startActivity(NewIntentUtil.newIntent(this, RecipesActivity()))
+        startActivity(newIntent(this, RecipesActivity()))
         finish()
     }
 
@@ -187,6 +189,13 @@ class AuthActivity : AppCompatActivity(), ConfirmationListener {
     private fun dismissSnackBarNoNetConnection() {
         if (this::snackBarNoConnection.isInitialized) {
             snackBarNoConnection.dismiss()
+        }
+    }
+
+
+    companion object {
+        fun newIntent(context: Context, activity: AppCompatActivity): Intent {
+            return Intent(context, activity::class.java)
         }
     }
 

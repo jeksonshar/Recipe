@@ -1,20 +1,20 @@
 package com.example.recipes.presentation.ui.recipes.userprofile
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.recipes.R
 import com.example.recipes.databinding.FragmentUserProfileBinding
 import com.example.recipes.presentation.ui.auth.AuthActivity
-import com.example.recipes.presentation.utils.ImagesUtil
-import com.example.recipes.presentation.utils.NewIntentUtil
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
@@ -55,11 +55,8 @@ class UserProfileFragment : Fragment() {
 
         binding.apply {
 
-            tvChangeUserName. setOnClickListener {
-                findNavController().navigate(
-                    UserProfileFragmentDirections
-                        .actionUserProfileFragmentToChangeProfileNameDialog(Action.CHANGE_NAME)
-                )
+            tvChangeUserName.setOnClickListener {
+                findNavController().navigate(R.id.changeProfileNameDialog)
             }
             fabChangePhoto.setOnClickListener {
 
@@ -70,10 +67,7 @@ class UserProfileFragment : Fragment() {
 
             }
             tvChangePassword.setOnClickListener {
-                findNavController().navigate(
-                    UserProfileFragmentDirections
-                        .actionUserProfileFragmentToChangeProfileNameDialog(Action.CHANGE_PASSWORD)
-                )
+                findNavController().navigate(R.id.changeProfilePasswordDialog)
             }
             btnSignOut.setOnClickListener {
                 showAskAlertDialog(SIGN_OUT)
@@ -84,9 +78,6 @@ class UserProfileFragment : Fragment() {
         }
 
 //TODO 22.10 фото подтягивается не всегда, разобраться почему!!!
-        viewModelProfile.photoUri.observe(viewLifecycleOwner) {
-            ImagesUtil.setImage(it, binding.ivProfile)
-        }
 
 /**
  * обсёрв через синглтон использую для установки измененного имени в профиле,
@@ -115,7 +106,7 @@ class UserProfileFragment : Fragment() {
     private fun signOutUser() {
         viewModelProfile.resetQueryInDatastore()
         auth.signOut()
-        startActivity(NewIntentUtil.newIntent(requireContext(), AuthActivity()))
+        startActivity(newIntent(requireContext(), AuthActivity()))
         requireActivity().finish()
     }
 
@@ -143,5 +134,9 @@ class UserProfileFragment : Fragment() {
     companion object {
         const val SIGN_OUT = "Sign out user"
         const val DELETE = "Delete user"
+
+        fun newIntent(context: Context, activity: AppCompatActivity): Intent {
+            return Intent(context, activity::class.java)
+        }
     }
 }

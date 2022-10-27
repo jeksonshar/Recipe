@@ -68,29 +68,47 @@
                     android:gravity="end">
 
                     <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/ivOpenSearchET"
+                        android:id="@+id/ivCurrentToolbarIcon"
                         android:layout_width="20dp"
                         android:layout_height="match_parent"
-                        android:src="@{context.getDrawable(vm.searchIconResource)}"
+                        android:src="@{context.getDrawable(vm.currentIconResource)}"
                         android:visibility="@{vm.isSearchIconVisible ? View.VISIBLE : View.GONE}"/>
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
             </androidx.appcompat.widget.Toolbar>
 
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/fragmentRecipesContainer"
-                android:name="androidx.navigation.fragment.NavHostFragment"
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:id="@+id/coordinatorActivity"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:defaultNavHost="true"
-                android:elevation="6dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/toolbarActivity"
-                app:layout_constraintVertical_bias="0.0"
-                app:navGraph="@navigation/nav_graph" />
+                app:layout_constraintVertical_bias="0.0">
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/fragmentRecipesContainer"
+                    android:name="androidx.navigation.fragment.NavHostFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:defaultNavHost="true"
+                    android:elevation="6dp"
+                    app:navGraph="@navigation/nav_graph" />
+
+                <com.google.android.material.bottomnavigation.BottomNavigationView
+                    android:id="@+id/bottomNavigation"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_gravity="bottom"
+                    android:visibility="@{vm.isBottomNavigationVisible ? View.VISIBLE : View.GONE}"
+                    android:background="@drawable/background_bottom_navigation"
+                    app:labelVisibilityMode="selected"
+                    app:menu="@menu/menu_bottom_navigation"
+                    app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"/>
+
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

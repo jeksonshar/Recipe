@@ -1,11 +1,18 @@
 package com.example.recipes.presentation.utils
 
-import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import com.example.recipes.business.domain.models.Recipe
 
 object NewIntentUtil {
-    fun newIntent(context: Context, activity: AppCompatActivity): Intent {
-        return Intent(context, activity::class.java)
+
+    fun createNewShareIntent(recipe: Recipe): Intent {
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain" //для URL можно использовать text/x-uri
+
+            putExtra(Intent.EXTRA_TEXT, recipe.shareAs)
+
+        }
+        return Intent.createChooser(intent, "Выбери месседжер:")
     }
+
 }

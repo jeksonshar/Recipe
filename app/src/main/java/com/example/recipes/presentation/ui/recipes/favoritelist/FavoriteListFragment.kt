@@ -1,6 +1,5 @@
 package com.example.recipes.presentation.ui.recipes.favoritelist
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,23 +21,24 @@ class FavoriteListFragment : Fragment() {
         get() = _binding!!
 
     private val viewModelFavorite: FavoriteListViewModel by viewModels()
-
-    private var clickListener: RecipeClickListener? = object : RecipeClickListener {
-        override fun openRecipeDetailsFragment(recipe: Recipe) {
-            viewModelFavorite.setRecipeToSingleton(recipe)
-            findNavController().navigate(R.id.action_favoriteListFragment_to_recipeDetailsFragment)
-        }
-    }
+    // TODO 26,10 убрать из тулбара в фаворит лист кнопку назад
 
     private val adapter by lazy {
-        clickListener?.let { FavoriteListAdapter(it) }
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is RecipeClickListener) {
-            clickListener = context
-        }
+        FavoriteListAdapter(
+            clickListener = object : RecipeClickListener {
+                override fun openRecipeDetailsFragment(recipe: Recipe) {
+                    viewModelFavorite.setRecipeToSingleton(recipe)
+                    findNavController().navigate(R.id.action_favoriteListFragment_to_recipeDetailsFragment)
+                }
+            },
+            /**
+             * Если параметр share в адаптере отсутствует, то кнопка шаринга рецепта в итеме скрыта,
+             * если параметр раскоментировать, кнопка шаринга будет шарить выбранный рецепт (итем) через соцсети
+             */
+//            share = { recipe ->
+//                startActivity(NewShareIntent.createNewShareIntent(recipe))
+//            }
+        )
     }
 
     override fun onCreateView(
@@ -56,21 +56,21 @@ class FavoriteListFragment : Fragment() {
 
             recyclerRecipe.adapter = adapter
 
-            bottomNavigation.selectedItemId = R.id.favoriteListFragment
+//            bottomNavigation.selectedItemId = R.id.favoriteListFragment
 //            bottomNavigation.setupWithNavController(findNavController()) // при нажатии назад selectedItem остается на предидущем значении
-            bottomNavigation.setOnItemSelectedListener {
-                when (it.itemId) {
-                    R.id.recipeSearchListFragment -> {
-                        findNavController().navigate(R.id.action_favoriteListFragment_to_recipeSearchListFragment)
-                        false
-                    }
-                    R.id.userProfileFragment -> {
-                        findNavController().navigate(R.id.action_favoriteListFragment_to_userProfileFragment)
-                        false
-                    }
-                    else -> false
-                }
-            }
+//            bottomNavigation.setOnItemSelectedListener {
+//                when (it.itemId) {
+//                    R.id.recipeSearchListFragment -> {
+//                        findNavController().navigate(R.id.action_favoriteListFragment_to_recipeSearchListFragment)
+//                        false
+//                    }
+//                    R.id.userProfileFragment -> {
+//                        findNavController().navigate(R.id.action_favoriteListFragment_to_userProfileFragment)
+//                        false
+//                    }
+//                    else -> false
+//                }
+//            }
         }
         return binding.root
     }
@@ -79,7 +79,7 @@ class FavoriteListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModelFavorite.favoriteRecipes.observe(viewLifecycleOwner) {
-            adapter?.submitList(it)
+            adapter.submitList(it)
         }
     }
 
@@ -89,8 +89,4 @@ class FavoriteListFragment : Fragment() {
         super.onDestroyView()
     }
 
-    override fun onDetach() {
-        clickListener = null
-        super.onDetach()
-    }
 }

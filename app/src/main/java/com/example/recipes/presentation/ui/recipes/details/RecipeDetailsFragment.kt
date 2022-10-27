@@ -12,7 +12,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.recipes.R
 import com.example.recipes.databinding.FragmentDetailRecipeBinding
-import com.example.recipes.presentation.ui.recipes.RecipesActivity
 import com.example.recipes.presentation.utils.ImagesUtil
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -30,6 +29,8 @@ class RecipeDetailsFragment : Fragment() {
     }
 
     private val args: RecipeDetailsFragmentArgs by navArgs()
+
+    private var isNetConnected: Boolean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,29 +50,11 @@ class RecipeDetailsFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.vm = viewModel
 
-        (activity as RecipesActivity).bindingActivity.ivOpenSearchET.setOnClickListener {
-                if (viewModel.isNetConnected.value != true) {
-                    createToastNoConnectionForUser()
-                } else {
-/**
- * intent используется, когда формируем ссылку на рецепт (для передачи в соцсети) - deepLink
- */
-                    val intent = Intent(Intent.ACTION_SEND).apply {
-                        type = "text/plain" //для URL можно использовать text/x-uri
-
-                        putExtra(Intent.EXTRA_TEXT, viewModel.currentRecipe.value?.shareAs)
-
-                    }
-                    val shareIntent = Intent.createChooser(intent, "Выбери месседжер:")
-                    startActivity(shareIntent)
-                }
-            }
-
         binding.apply {
             rvIngredients.adapter = adapter
 
             btnHowToCook.setOnClickListener {
-                if (viewModel.isNetConnected.value != true) {
+                if (isNetConnected != true) {
                     createToastNoConnectionForUser()
                 } else {
                     val uri = Uri.parse(viewModel.currentRecipe.value?.url)
@@ -102,10 +85,8 @@ class RecipeDetailsFragment : Fragment() {
             adapter.submitList(it)
         }
 
-// TODO разобраться почему без этого обсёрва btnShare и btnHowToCook срабатывают все
-//  время, как с откл соединением? не из-зи задержки?
-        viewModel.isNetConnected.observe(viewLifecycleOwner) {
-//            Log.d("TAG", "onCreateView: $it")
+        viewModel.isNetConnectedLiveData.observe(viewLifecycleOwner) {
+            isNetConnected = it
         }
     }
 

@@ -1,11 +1,11 @@
 package com.example.recipes.presentation.ui.recipes.searchlist
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -15,7 +15,8 @@ import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.databinding.FragmentRecipeListBinding
 import com.example.recipes.business.domain.singletons.BackPressedSingleton
 import com.example.recipes.presentation.ui.recipes.RecipeClickListener
-import com.example.recipes.presentation.ui.recipes.RecipesActivity
+import com.example.recipes.presentation.ui.recipes.RecipesActivityToolbarIconViewModel
+import com.example.recipes.presentation.utils.NewIntentUtil
 import com.example.recipes.presentation.utils.SystemUtil.hideKeyboard
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,33 +31,28 @@ class RecipeSearchListFragment : Fragment() {
         get() = _binding!!
 
     private val viewModelSearch: RecipeSearchListViewModel by viewModels()
+    private val viewModelToolbarIcon: RecipesActivityToolbarIconViewModel by activityViewModels()
 
-//TODO по-моему лучще оставить в xml поле, но Влад ставил ТЗ - snackBar, еслине критично - оставляем xml,
+//TODO 25,10 оставить в xml поле как запасной вариант, разобраться и запустить snackBar, как основной вариант
 // снекбар сейчас закомментирован
 
 //    private lateinit var snackBarNoConnection: Snackbar
 
-    private var clickListener: RecipeClickListener? = object : RecipeClickListener {
-        override fun openRecipeDetailsFragment(recipe: Recipe) {
-            viewModelSearch.setRecipeToSingleton(recipe)
-            findNavController().navigate(R.id.action_recipeSearchListFragment_to_recipeDetailsFragment)
-        }
-    }
-
     private val pagingAdapter by lazy(LazyThreadSafetyMode.NONE) {
-        clickListener?.let {
-            RecipePagingAdapter(it)
-        }
+        RecipePagingAdapter(
+            clickListener = object : RecipeClickListener {
+                override fun openRecipeDetailsFragment(recipe: Recipe) {
+                    viewModelSearch.setRecipeToSingleton(recipe)
+                    findNavController().navigate(R.id.action_recipeSearchListFragment_to_recipeDetailsFragment)
+                }
+            },
+            share = { recipe ->
+                startActivity(NewIntentUtil.createNewShareIntent(recipe))
+            }
+        )
     }
 
     private lateinit var fileName: String
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is RecipeClickListener) {
-            clickListener = context
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,18 +63,15 @@ class RecipeSearchListFragment : Fragment() {
         _binding = FragmentRecipeListBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.vm = viewModelSearch
+        binding.vmShare = viewModelToolbarIcon
 
         fileName = context?.filesDir.toString() + "/cachedRecipes.txt"
         viewModelSearch.setFileName(fileName)
 
-        (activity as RecipesActivity).bindingActivity.ivOpenSearchET.setOnClickListener {
-            viewModelSearch.changeSearchIsOpenedValue()
-        }
-
         binding.apply {
 
-            val loadStateAdapter = RecipeLoadStateAdapter { pagingAdapter?.retry() }
-            recyclerRecipe.adapter = pagingAdapter?.withLoadStateFooter(loadStateAdapter)
+            val loadStateAdapter = RecipeLoadStateAdapter { pagingAdapter.retry() }
+            recyclerRecipe.adapter = pagingAdapter.withLoadStateFooter(loadStateAdapter)
 
             /** обработка нажатия ок - поиск и закрытие клавиатуры */
             etSearch.setOnKeyListener { _, keyCode, keyEvent ->
@@ -98,23 +91,6 @@ class RecipeSearchListFragment : Fragment() {
                 confirmLoadingRecipesByEnter(etSearch.text.toString())
                 viewModelSearch.changeFilterVisibility()
             }
-
-            bottomNavigation.selectedItemId = R.id.recipeSearchListFragment
-
-//            bottomNavigation.setupWithNavController(findNavController())          // при нажатии назад selectedItem остается на предидущем значении
-            bottomNavigation.setOnItemSelectedListener {
-                when (it.itemId) {
-                    R.id.favoriteListFragment -> {
-                        findNavController().navigate(R.id.action_recipeSearchListFragment_to_favoriteListFragment)
-                        false
-                    }
-                    R.id.userProfileFragment -> {
-                        findNavController().navigate(R.id.action_recipeSearchListFragment_to_userProfileFragment)
-                        false
-                    }
-                    else -> false
-                }
-            }
         }
 
         setFiltersListener()
@@ -125,7 +101,7 @@ class RecipeSearchListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        pagingAdapter?.addLoadStateListener { loadState ->
+        pagingAdapter.addLoadStateListener { loadState ->
 
             when (val stateRefresh = loadState.source.refresh) {
                 is LoadState.Loading -> {
@@ -142,7 +118,7 @@ class RecipeSearchListFragment : Fragment() {
                             Log.d("TAG", "onViewCreatedException: EmptyList")
                             viewModelSearch.setEmptyListImageViewVisibility(true)
                             viewLifecycleOwner.lifecycleScope.launch {
-                                pagingAdapter?.submitData(PagingData.empty())
+                                pagingAdapter.submitData(PagingData.empty())
                             }
                         }
                         is PagingSourceException.EndOfListException -> {
@@ -168,7 +144,7 @@ class RecipeSearchListFragment : Fragment() {
 
         viewModelSearch.queryHandler.observe(viewLifecycleOwner) {
             if (!it.isNullOrEmpty()) {
-                if (pagingAdapter?.itemCount == 0) {
+                if (pagingAdapter.itemCount == 0) {
                     Log.d("TAG", "onViewCreated785:$it")
                     loadRecipes(it)
                 } else {
@@ -177,19 +153,15 @@ class RecipeSearchListFragment : Fragment() {
 // если в деталях смена конфига, после возврата - список не прогружается (else if решает)
             } else {
                 viewModelSearch.setEmptyListImageViewVisibility(true)
-                viewModelSearch.setSearchIsOpened(true)
+
+                viewModelToolbarIcon.setSearchIsOpened(true)
+
                 viewLifecycleOwner.lifecycleScope.launch {
-                    pagingAdapter?.submitData(PagingData.empty())
+                    pagingAdapter.submitData(PagingData.empty())
                 }
             }
         }
 
-        viewModelSearch.searchIsOpened.observe(viewLifecycleOwner) {
-            Log.d("TAG", "setSearchIcon: observe = ")
-            setSearchIcon(it)
-        }
-
-        //удалить после того, как станет понятно с тулбаром, вопрос в ТУДУ
         viewModelSearch.isNetConnected.observe(viewLifecycleOwner) {
             if (it) {
 //                if (this::snackBarNoConnection.isInitialized) {
@@ -203,14 +175,11 @@ class RecipeSearchListFragment : Fragment() {
         }
     }
 
-//TODO!!! 22.10 по логике, если запрс пуст, то должна открыться строка поиска и значек смениться на стрелку,
+    //TODO!!! 22.10 по логике, если запрс пуст, то должна открыться строка поиска и значек смениться на стрелку,
 // в другом месте это не работает
     override fun onResume() {
         super.onResume()
-//TODO!!! 22.10 если открыть поле поиска - ярлык стрелка, но если после этого войти в детали и выйти, то поиск открыт,
-// а ярлык - лупа, т.е не соответствует, хотя searchIsOpened - верное значение, что-то с жизненными циклами, разобраться!!!!
-        Log.d("TAG", "setSearchIcon: search is open = ${viewModelSearch.searchIsOpened.value}")
-        setSearchIcon(viewModelSearch.searchIsOpened.value == true)
+        setSearchIcon(viewModelToolbarIcon.searchIsOpened.value == true)
     }
 
     /**
@@ -220,7 +189,7 @@ class RecipeSearchListFragment : Fragment() {
         if (query != viewModelSearch.queryHandler.value) {
             viewModelSearch.setQueryToDatastore(query)
         } else {
-            Log.d("TAG", "onViewCreated785: 0 - ${pagingAdapter?.itemCount}")
+            Log.d("TAG", "onViewCreated785: 0 - ${pagingAdapter.itemCount}")
             loadRecipes(viewModelSearch.queryHandler.value)
         }
         requireContext().hideKeyboard(view)
@@ -349,13 +318,14 @@ class RecipeSearchListFragment : Fragment() {
 //            findNavController().navigate(R.id.action_recipeSearchListFragment_to_noConnectionDialogFragment)
             val recipeList = viewModelSearch.getFromFileCacheOfLoadRecipes(fileName)
             lifecycleScope.launch {
-                pagingAdapter?.submitData(PagingData.from(recipeList))
+                pagingAdapter.submitData(PagingData.from(recipeList))
             }
         } else {
+            //TODO 25,10 Избавиться от BackPressed, далее разгрести всю работу без него
             if (BackPressedSingleton.isBackPressClick.value != true && !viewModelSearch.queryHandler.value.isNullOrEmpty()) {
                 lifecycleScope.launchWhenStarted {
                     viewModelSearch.loadRecipes(query).collectLatest {
-                        pagingAdapter?.submitData(lifecycle, it)
+                        pagingAdapter.submitData(lifecycle, it)
                     }
                 }
             }
@@ -365,25 +335,19 @@ class RecipeSearchListFragment : Fragment() {
         }
     }
 
-// нужно тут, поскольку ресурс поля активити зависит от сосотояния поля vm фрагмента,
-// передавать vm этого фрагмента в xml активити не вариант
     private fun setSearchIcon(value: Boolean) {
-        if (value) {
-            Log.d("TAG", "setSearchIcon: arrow_up")
-            (activity as RecipesActivity).bindingActivity.ivOpenSearchET.setImageResource(R.drawable.arrow_up)
-        } else {
-            Log.d("TAG", "setSearchIcon: search")
-            (activity as RecipesActivity).bindingActivity.ivOpenSearchET.setImageResource(R.drawable.search)
+        viewModelToolbarIcon.setSearchIsOpened(value)
+        if (!value) {
             viewModelSearch.setFilterIsOpened(false)
         }
     }
 
-    //TODO отображения отсутствия соединения сделал через textView в xml, со снэкбаром не разобрался,
-    // не получилось разместить его между Toolbar Activity и recycler фрагмента. времени мого потратил.
-    // Влад - оставить так или разобраться и реализовать через SnackBar?
+    //TODO 25,10 разобраться и реализовать через SnackBar?
 //    private fun showSnackBarNetConnection() {
 //
 //        snackBarNoConnection = Snackbar.make(
+    //TODO 25,10 binding.root - использовать вместо requireView()
+
 //            requireView(),
 //            requireContext().getText(R.string.turn_on_net_connection_and_make_search),
 //            Snackbar.LENGTH_INDEFINITE
@@ -420,8 +384,6 @@ class RecipeSearchListFragment : Fragment() {
         super.onDestroyView()
     }
 
-    override fun onDetach() {
-        clickListener = null
-        super.onDetach()
-    }
+//TODO 24,10  создавать контракт (в случае если не используется navigation component - findNavController())
+// в виде companion object для созданию объекта фрагмента (типа newInstance(.. парам))
 }

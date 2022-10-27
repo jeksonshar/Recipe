@@ -62,14 +62,25 @@
         <action
             android:id="@+id/action_userProfileFragment_to_changeProfileNameDialog"
             app:destination="@id/changeProfileNameDialog" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_recipeSearchListFragment"
+            app:destination="@id/recipeSearchListFragment" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_favoriteListFragment"
+            app:destination="@id/favoriteListFragment" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_changeProfilePasswordDialog"
+            app:destination="@id/changeProfilePasswordDialog" />
     </fragment>
     <dialog
         android:id="@+id/changeProfileNameDialog"
         android:name="com.example.recipes.presentation.ui.recipes.userprofile.dialogs.ChangeProfileNameDialog"
         android:label="ChangeProfileNameDialog"
         tools:layout="@layout/dialog_change_profile_name">
-        <argument
-            android:name="action"
-            app:argType="com.example.recipes.presentation.ui.recipes.userprofile.Action" />
     </dialog>
+    <dialog
+        android:id="@+id/changeProfilePasswordDialog"
+        android:name="com.example.recipes.presentation.ui.recipes.userprofile.dialogs.ChangeProfilePasswordDialog"
+        android:label="ChangeProfilePasswordDialog"
+        tools:layout="@layout/dialog_change_profile_password"/>
 </navigation>

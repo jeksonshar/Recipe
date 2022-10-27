@@ -19,6 +19,7 @@ object ImagesUtil {
     fun setImage(image: Uri, imageView: ImageView) {
         Glide.with(imageView.context)
             .load(image)
+            .placeholder(R.drawable.cook_book)
             .apply(RequestOptions())
             .into(imageView)
     }

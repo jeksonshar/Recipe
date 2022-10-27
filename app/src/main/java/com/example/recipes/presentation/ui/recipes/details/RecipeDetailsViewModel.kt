@@ -28,7 +28,7 @@ class RecipeDetailsViewModel @Inject constructor(
 //    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    val isNetConnected = checkConnectionUseCase.isConnected().asLiveData()
+    val isNetConnectedLiveData = checkConnectionUseCase.isConnected().asLiveData()
 
     private var _currentRecipe = MutableLiveData<Recipe>()
     val currentRecipe: LiveData<Recipe> = _currentRecipe

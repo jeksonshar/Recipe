@@ -1,5 +1,7 @@
 package com.example.recipes.presentation.ui.viewpager
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -9,7 +11,6 @@ import com.example.recipes.R
 import com.example.recipes.databinding.ActivityViewPagerBinding
 import com.example.recipes.presentation.ui.auth.AuthActivity
 import com.example.recipes.presentation.ui.viewpager.transfotmers.HorizontalFlipTransformation
-import com.example.recipes.presentation.utils.NewIntentUtil
 import com.example.recipes.presentation.utils.NextViewPageUtil.onNextPageClick
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,7 +56,7 @@ class ViewPagerActivity : AppCompatActivity() {
         viewModelPager.isMovingToAuth.observe(this) {
             if (it) {
                 viewModelPager.setNotFirstLaunch()
-                startActivity(NewIntentUtil.newIntent(this, AuthActivity()))
+                startActivity(newIntent(this, AuthActivity()))
                 finish()
             }
         }
@@ -69,6 +70,13 @@ class ViewPagerActivity : AppCompatActivity() {
     override fun onStop() {
         binding.viewPager.unregisterOnPageChangeCallback(pageChangeCallback)
         super.onStop()
+    }
+
+
+    companion object {
+        fun newIntent(context: Context, activity: AppCompatActivity): Intent {
+            return Intent(context, activity::class.java)
+        }
     }
 
 }

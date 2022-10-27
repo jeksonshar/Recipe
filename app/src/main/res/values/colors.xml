@@ -25,6 +25,7 @@
     <color name="green_light">#D3E4CD</color>
     <color name="yellow_light">#DAD992</color>
     <color name="black_half_transparent">#33000000</color>
+    <color name="black_small_transparent">#55000000</color>
     <color name="full_transparent">#00000000</color>
     <color name="cream">#FFF2DDC1</color>
     <color name="background_list">#EEF2FF</color>

@@ -4,6 +4,8 @@
     <string name="login">login</string>
     <string name="email">email</string>
     <string name="password">password</string>
+    <string name="password_is_updated">Пароль изменен</string>
+    <string name="password_is_not_updated">Пароль не изменен</string>
     <string name="confirm_password">подтвердить пароль</string>
     <string name="sign_in">Войти</string>
     <string name="sign_up">Зарегистрироваться</string>
@@ -70,6 +72,8 @@
     <string name="enter_new_name_for_profile">Ввести новое имя профиля</string>
     <string name="name_for_profile">Имя профиля</string>
     <string name="enter_new_value">Ввести новое значение</string>
+    <string name="enter_new_password">Введите новый пароль</string>
+    <string name="confirm_new_password">Подтвердите новый пароль</string>
     <string name="cancel">Отмена</string>
     <string name="are_you_sure">Вы уверены?</string>
     <string name="yes">Да</string>

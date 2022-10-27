@@ -1,10 +1,11 @@
-package com.example.recipes.presentation.ui.auth
+package com.example.recipes.presentation.ui.auth.dialogs
 
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
+import com.example.recipes.presentation.ui.auth.ConfirmationListener
 import java.lang.ClassCastException
 
 class ConfirmationDialogFragment : DialogFragment() {

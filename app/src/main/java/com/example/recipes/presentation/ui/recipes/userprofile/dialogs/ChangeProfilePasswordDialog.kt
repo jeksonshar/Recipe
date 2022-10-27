@@ -5,18 +5,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
-import com.example.recipes.databinding.DialogChangeProfileNameBinding
+import com.example.recipes.databinding.DialogChangeProfilePasswordBinding
 
+class ChangeProfilePasswordDialog : DialogFragment() {
 
-class ChangeProfileNameDialog : DialogFragment() {
-
-    private var _binding: DialogChangeProfileNameBinding? = null
-    private val binding: DialogChangeProfileNameBinding
+    private var _binding: DialogChangeProfilePasswordBinding? = null
+    private val binding: DialogChangeProfilePasswordBinding
         get() = _binding!!
 
-    private val vmChangeProfileName: ChangeProfileNameViewModel by viewModels()
+    private val viewModelChangePassword: ChangeProfilePasswordViewModel by viewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
@@ -29,22 +29,26 @@ class ChangeProfileNameDialog : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = DialogChangeProfileNameBinding.inflate(inflater, container, false)
-        binding.lifecycleOwner = this
-        binding.vm = vmChangeProfileName
+        _binding = DialogChangeProfilePasswordBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.vm = viewModelChangePassword
 
-        vmChangeProfileName.exitFromDialog.observe(viewLifecycleOwner) {
-            if (it) {
+        viewModelChangePassword.exitFromDialog.observe(viewLifecycleOwner) {
+            if (it){
                 requireActivity().onBackPressed()
             }
+        }
+
+        viewModelChangePassword.messageForUser.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), resources.getText(it), Toast.LENGTH_LONG).show()
         }
 
         return binding.root
     }
 
+
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
     }
-
 }

@@ -21,7 +21,11 @@ class UserProfileViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val currentUser = Firebase.auth.currentUser
+
     val email = currentUser?.email ?: "--"
+
+    //TODO!!!! 26,11 без бэкпрессед не обновляется имя профиля после введения его в диалоге смены имени,
+    // обновляется только если выйти и войти в фрагмент профиля
 
     val onBackPressed = BackPressedSingleton.isBackPressClick
 
@@ -59,12 +63,6 @@ class UserProfileViewModel @Inject constructor(
         viewModelScope.launch {
             recipeDataStore.setLastQuery("")
         }
-    }
-
-    override fun onCleared() {
-        // разобраться, вроде не нужно тут
-//        BackPressedSingleton.clear()
-        super.onCleared()
     }
 
 }

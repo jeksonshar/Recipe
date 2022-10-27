@@ -1,6 +1,8 @@
 package com.example.recipes.presentation.utils
 
+import android.net.Uri
 import android.view.View
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.children
 import androidx.databinding.BindingAdapter
@@ -14,6 +16,11 @@ object BindingAdapters {
     @BindingAdapter("app:loadImageRecipeItem")
     @JvmStatic fun loadImageRecipeItem(view: ShapeableImageView, url: String) {
         ImagesUtil.setImage(url, view)
+    }
+
+    @BindingAdapter("app:loadImageProfileItem")
+    @JvmStatic fun loadImageProfileItem(view: AppCompatImageView, uri: Uri?) {
+        if (uri != null) ImagesUtil.setImage(uri, view)
     }
 
 //    @BindingAdapter("app:setLoadState")

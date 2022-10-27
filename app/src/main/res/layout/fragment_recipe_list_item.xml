@@ -37,6 +37,27 @@
                 app:srcCompat="@drawable/dish_not_loading"
                 app:loadImageRecipeItem="@{recipe.image}"/>
 
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/btnItemShare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_item_share"
+                android:padding="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.95"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.05">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_share_icon" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvNameRecipe"
                 android:layout_width="wrap_content"

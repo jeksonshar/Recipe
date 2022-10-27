@@ -10,40 +10,55 @@ import com.example.recipes.databinding.FragmentRecipeListItemBinding
 import com.example.recipes.presentation.ui.recipes.RecipeClickListener
 
 class RecipePagingAdapter(
-    private val clickListener: RecipeClickListener
+    private val clickListener: RecipeClickListener,
+    private val share: ((recipe: Recipe) -> Unit)?
 ) : PagingDataAdapter<Recipe, RecipePagingViewHolder>(RecipePagingComparator) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipePagingViewHolder {
-        return RecipePagingViewHolder.from(parent)
+        return RecipePagingViewHolder.from(parent, clickListener, share)
     }
 
     override fun onBindViewHolder(holder: RecipePagingViewHolder, position: Int) {
         getItem(position)?.let { recipe ->
             holder.bind(recipe)
-            holder.itemView.setOnClickListener {
-                clickListener.openRecipeDetailsFragment(recipe)
-            }
         }
     }
 }
 
 class RecipePagingViewHolder private constructor(
     private val binding: FragmentRecipeListItemBinding,
+    private val listener: RecipeClickListener,
+    private val share: ((recipe: Recipe) -> Unit)?
 ) : RecyclerView.ViewHolder(binding.root) {
+    private var localItem: Recipe? = null
 
-    fun bind(recipe: Recipe) {
+    init {
+        binding.root.setOnClickListener {
+            localItem?.let { recipe -> listener.openRecipeDetailsFragment(recipe) }
+        }
+        binding.btnItemShare.setOnClickListener {
+            localItem?.let { recipe -> share?.invoke(recipe) }
+        }
+    }
+
+    fun bind(recipe: Recipe?) {
+        localItem = recipe
         binding.recipe = recipe
     }
 
     companion object {
-        fun from(parent: ViewGroup): RecipePagingViewHolder {
+        fun from(
+            parent: ViewGroup,
+            listener: RecipeClickListener,
+            share: ((recipe: Recipe) -> Unit)?
+        ): RecipePagingViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val binding = FragmentRecipeListItemBinding.inflate(
                 inflater,
                 parent,
                 false
             )
-            return RecipePagingViewHolder(binding)
+            return RecipePagingViewHolder(binding, listener, share)
         }
     }
 }

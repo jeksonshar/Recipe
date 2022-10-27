@@ -43,9 +43,6 @@ class RecipeSearchListViewModel @Inject constructor(
     private var _loadState = MutableLiveData<CombinedLoadStates?>()
     val loadState: LiveData<CombinedLoadStates?> = _loadState
 
-    private var _searchIsOpened = MutableLiveData<Boolean>()
-    val searchIsOpened: LiveData<Boolean> = _searchIsOpened
-
     private var _isEmptyListImageViewVisible = MutableLiveData<Boolean>()
     val isEmptyListImageViewVisible: LiveData<Boolean> = _isEmptyListImageViewVisible
 
@@ -91,10 +88,6 @@ class RecipeSearchListViewModel @Inject constructor(
 
     fun setLoadState(state: CombinedLoadStates) {
         _loadState.value = state
-    }
-
-    fun setSearchIsOpened(value: Boolean) {
-        _searchIsOpened.value = value
     }
 
     fun setFilterIsOpened(value: Boolean) {
@@ -197,10 +190,6 @@ class RecipeSearchListViewModel @Inject constructor(
         viewModelScope.launch {
             recipeDataStore.setLastQuery(query ?: "")
         }
-    }
-
-    fun changeSearchIsOpenedValue() {
-        _searchIsOpened.value = searchIsOpened.value != true
     }
 
     fun setRecipeToSingleton(recipe: Recipe) {
