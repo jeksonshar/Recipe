@@ -49,6 +49,9 @@ class RecipeSearchListViewModel @Inject constructor(
     private var _isProgressBarWhileListEmptyVisible = MutableLiveData<Boolean>()
     val isProgressBarWhileListEmptyVisible: LiveData<Boolean> = _isProgressBarWhileListEmptyVisible
 
+    private val _isRefreshingProgressBarVisible = MutableLiveData<Boolean>()
+    val isRefreshingProgressBarVisible: LiveData<Boolean> = _isRefreshingProgressBarVisible
+
     private val _filterIsOpened = MutableLiveData(false)
     val filterIsOpened: LiveData<Boolean> = _filterIsOpened
 
@@ -100,6 +103,10 @@ class RecipeSearchListViewModel @Inject constructor(
 
     fun setProgressBarWhileListEmptyVisibility(value: Boolean) {
         _isProgressBarWhileListEmptyVisible.value = value
+    }
+
+    fun setRefreshingProgressVisibility(value: Boolean) {
+        _isRefreshingProgressBarVisible.value = value
     }
 
     fun changeFilterVisibility() {

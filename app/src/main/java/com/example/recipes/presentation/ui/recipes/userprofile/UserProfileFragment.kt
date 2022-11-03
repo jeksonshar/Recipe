@@ -15,6 +15,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.recipes.R
 import com.example.recipes.databinding.FragmentUserProfileBinding
 import com.example.recipes.presentation.ui.auth.AuthActivity
+import com.example.recipes.presentation.ui.recipes.userprofile.dialogs.ChangeProfileNameDialog
+import com.example.recipes.presentation.ui.recipes.userprofile.dialogs.UserProfileDelegate
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
@@ -56,7 +58,15 @@ class UserProfileFragment : Fragment() {
         binding.apply {
 
             tvChangeUserName.setOnClickListener {
-                findNavController().navigate(R.id.changeProfileNameDialog)
+//                findNavController().navigate(R.id.changeProfileNameDialog)
+
+                ChangeProfileNameDialog.newInstance(
+                    userProfileDelegate = object : UserProfileDelegate {
+                        override fun getUserName() {
+                            viewModelProfile.getName()
+                        }
+                    }
+                ).show(parentFragmentManager, "changeNameDialog")
             }
             fabChangePhoto.setOnClickListener {
 
@@ -77,18 +87,6 @@ class UserProfileFragment : Fragment() {
             }
         }
 
-//TODO 22.10 фото подтягивается не всегда, разобраться почему!!!
-
-/**
- * обсёрв через синглтон использую для установки измененного имени в профиле,
- * иначе если в диалоге смены имени его изменить, то возвратившись в фрагмент
- * профиля отображается имя до изменения
- * */
-//TODO 21.10 Влад говорил это не гуд, но как сделать чтобы после перехода из диалога смены имени сюда,
-// тут обновлялось имя???
-        viewModelProfile.onBackPressed.observe(viewLifecycleOwner) {
-                viewModelProfile.getName()
-        }
         return binding.root
     }
 

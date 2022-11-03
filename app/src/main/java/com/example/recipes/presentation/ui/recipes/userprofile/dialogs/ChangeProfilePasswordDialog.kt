@@ -9,7 +9,9 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.example.recipes.databinding.DialogChangeProfilePasswordBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ChangeProfilePasswordDialog : DialogFragment() {
 
     private var _binding: DialogChangeProfilePasswordBinding? = null

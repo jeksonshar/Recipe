@@ -8,15 +8,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.example.recipes.databinding.DialogChangeProfileNameBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-
-class ChangeProfileNameDialog : DialogFragment() {
+@AndroidEntryPoint
+class ChangeProfileNameDialog(private val userProfileDelegate: UserProfileDelegate) : DialogFragment() {
 
     private var _binding: DialogChangeProfileNameBinding? = null
     private val binding: DialogChangeProfileNameBinding
         get() = _binding!!
 
-    private val vmChangeProfileName: ChangeProfileNameViewModel by viewModels()
+    private val viewModelChangeProfileName: ChangeProfileNameViewModel by viewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
@@ -31,11 +32,12 @@ class ChangeProfileNameDialog : DialogFragment() {
     ): View {
         _binding = DialogChangeProfileNameBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
-        binding.vm = vmChangeProfileName
+        binding.vm = viewModelChangeProfileName
 
-        vmChangeProfileName.exitFromDialog.observe(viewLifecycleOwner) {
+        viewModelChangeProfileName.exitFromDialog.observe(viewLifecycleOwner) {
             if (it) {
-                requireActivity().onBackPressed()
+                dismiss()
+                userProfileDelegate.getUserName()
             }
         }
 
@@ -45,6 +47,12 @@ class ChangeProfileNameDialog : DialogFragment() {
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
+    }
+
+    companion object {
+        fun newInstance(userProfileDelegate: UserProfileDelegate): ChangeProfileNameDialog {
+            return ChangeProfileNameDialog(userProfileDelegate)
+        }
     }
 
 }

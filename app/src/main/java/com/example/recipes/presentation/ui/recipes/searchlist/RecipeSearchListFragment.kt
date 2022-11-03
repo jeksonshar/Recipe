@@ -1,5 +1,6 @@
 package com.example.recipes.presentation.ui.recipes.searchlist
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -16,6 +17,7 @@ import com.example.recipes.databinding.FragmentRecipeListBinding
 import com.example.recipes.business.domain.singletons.BackPressedSingleton
 import com.example.recipes.presentation.ui.recipes.RecipeClickListener
 import com.example.recipes.presentation.ui.recipes.RecipesActivityToolbarIconViewModel
+import com.example.recipes.presentation.utils.LoginUtil
 import com.example.recipes.presentation.utils.NewIntentUtil
 import com.example.recipes.presentation.utils.SystemUtil.hideKeyboard
 import com.google.android.material.snackbar.Snackbar
@@ -54,18 +56,28 @@ class RecipeSearchListFragment : Fragment() {
 
     private lateinit var fileName: String
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        LoginUtil.logD(tag = "LiveCycleMethod:", startMsg = "onAttach (RecipeSearchList) ", parameter = "+")
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        LoginUtil.logD(tag = "LiveCycleMethod:", startMsg = "onCreate (RecipeSearchList) ", parameter = "+")
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
+        LoginUtil.logD(tag = "LiveCycleMethod:", startMsg = "onCreateView (RecipeSearchList) ", parameter = "+")
         _binding = FragmentRecipeListBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.vm = viewModelSearch
         binding.vmShare = viewModelToolbarIcon
 
-        fileName = context?.filesDir.toString() + "/cachedRecipes.txt"
+        fileName = requireContext().filesDir.toString() + "/cachedRecipes.txt"
         viewModelSearch.setFileName(fileName)
 
         binding.apply {
@@ -91,6 +103,11 @@ class RecipeSearchListFragment : Fragment() {
                 confirmLoadingRecipesByEnter(etSearch.text.toString())
                 viewModelSearch.changeFilterVisibility()
             }
+
+            swipeToRefreshRecipeSearch.setOnRefreshListener {
+                loadRecipes(viewModelSearch.queryHandler.value)
+                viewModelSearch.setRefreshingProgressVisibility(true)
+            }
         }
 
         setFiltersListener()
@@ -100,17 +117,19 @@ class RecipeSearchListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        LoginUtil.logD(tag = "LiveCycleMethod:", startMsg = "onViewCreated (RecipeSearchList) ", parameter = "+")
         pagingAdapter.addLoadStateListener { loadState ->
 
             when (val stateRefresh = loadState.source.refresh) {
                 is LoadState.Loading -> {
                     viewModelSearch.setEmptyListImageViewVisibility(false)
                     viewModelSearch.setLoadState(loadState)
+                    //TODO 28.10 вынести все логированиев Util Object
                     Log.d("TAG", "onViewCreatedException: Is not Exception")
                 }
                 is LoadState.NotLoading -> {
                     viewModelSearch.setProgressBarWhileListEmptyVisibility(false)
+                    viewModelSearch.setRefreshingProgressVisibility(false)
                 }
                 is LoadState.Error -> {
                     when (stateRefresh.error) {
@@ -128,6 +147,7 @@ class RecipeSearchListFragment : Fragment() {
                             Log.d("TAG", "onViewCreatedException: 429")
                             viewModelSearch.setLoadState(loadState)
                             viewModelSearch.setProgressBarWhileListEmptyVisibility(false)
+                            viewModelSearch.setRefreshingProgressVisibility(false)
                         }
                     }
                 }
@@ -140,6 +160,11 @@ class RecipeSearchListFragment : Fragment() {
             if (state is LoadState.Error && state.error is PagingSourceException.Response429Exception) {
                 showSnackBar(requireContext().getString(R.string.too_fast))
             }
+        }
+
+        viewModelSearch.isRefreshingProgressBarVisible.observe(viewLifecycleOwner) {
+            binding.swipeToRefreshRecipeSearch.isRefreshing = it
+            viewModelSearch.setProgressBarWhileListEmptyVisibility(false)
         }
 
         viewModelSearch.queryHandler.observe(viewLifecycleOwner) {
@@ -175,10 +200,19 @@ class RecipeSearchListFragment : Fragment() {
         }
     }
 
-    //TODO!!! 22.10 по логике, если запрс пуст, то должна открыться строка поиска и значек смениться на стрелку,
-// в другом месте это не работает
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        LoginUtil.logD(tag = "LiveCycleMethod:", startMsg = "onViewStateRestored (RecipeSearchList) ", parameter = "+")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        LoginUtil.logD(tag = "LiveCycleMethod:", startMsg = "onStart (RecipeSearchList) ", parameter = "+")
+    }
+
     override fun onResume() {
         super.onResume()
+        LoginUtil.logD(tag = "LiveCycleMethod:", startMsg = "onResume (RecipeSearchList) ", parameter = "+")
         setSearchIcon(viewModelToolbarIcon.searchIsOpened.value == true)
     }
 
@@ -377,11 +411,37 @@ class RecipeSearchListFragment : Fragment() {
         mySnackBar.show()
     }
 
+    override fun onPause() {
+        super.onPause()
+        LoginUtil.logD(tag = "LiveCycleMethod:", startMsg = "onPause (RecipeSearchList) ", parameter = "+")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        LoginUtil.logD(tag = "LiveCycleMethod:", startMsg = "onStop (RecipeSearchList) ", parameter = "+")
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        LoginUtil.logD(tag = "LiveCycleMethod:", startMsg = "onSaveInstanceState (RecipeSearchList) ", parameter = "+")
+    }
+
     override fun onDestroyView() {
+        LoginUtil.logD(tag = "LiveCycleMethod:", startMsg = "onDestroyView (RecipeSearchList) ", parameter = "+")
         binding.recyclerRecipe.adapter = null
         _binding = null
 //        dismissSnackBarNoConnection()
         super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LoginUtil.logD(tag = "LiveCycleMethod:", startMsg = "onDestroy (RecipeSearchList) ", parameter = "+")
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        LoginUtil.logD(tag = "LiveCycleMethod:", startMsg = "onDetach (RecipeSearchList) ", parameter = "+")
     }
 
 //TODO 24,10  создавать контракт (в случае если не используется navigation component - findNavController())

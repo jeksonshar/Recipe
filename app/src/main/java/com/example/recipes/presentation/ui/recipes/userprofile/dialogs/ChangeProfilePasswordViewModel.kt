@@ -6,8 +6,11 @@ import androidx.lifecycle.ViewModel
 import com.example.recipes.R
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class ChangeProfilePasswordViewModel : ViewModel() {
+@HiltViewModel
+class ChangeProfilePasswordViewModel @Inject constructor(): ViewModel() {
 
     private val auth = Firebase.auth
 

@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.example.recipes.R
 import com.example.recipes.business.domain.singletons.BackPressedSingleton
 import com.example.recipes.business.domain.singletons.RecipeSingleton
@@ -32,7 +33,6 @@ class RecipesActivity : AppCompatActivity() {
     private val startActivityForShareLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { activityResult ->
-        //TODO 25,10 проверить не было ли отмены пользователем, или все прошло успешно
         if (activityResult.resultCode == RESULT_CANCELED) {
             Toast.makeText(applicationContext, "Пользователь отменил отправку рецепта", Toast.LENGTH_LONG).show()
         }
@@ -52,19 +52,20 @@ class RecipesActivity : AppCompatActivity() {
                 bindingActivity.ivCurrentToolbarIcon.setOnClickListener {
                     viewModelRecipesActivityToolbarIcon.changeSearchIsOpenedValue()
                 }
-                bindingActivity.apply {
-                    bottomNavigation.setOnItemSelectedListener {
-                        when (it.itemId) {
-                            R.id.favoriteListFragment -> {
-                                navController.navigate(R.id.favoriteListFragment)
-                                true
-                            }
-                            R.id.userProfileFragment -> {
-                                navController.navigate(R.id.userProfileFragment)
-                                true
-                            }
-                            else -> true
+//                   TODO 28.10 попробовать этот листенер с обработкой всех переходов по фрагментам в onCreate
+                bindingActivity.bottomNavigation.setOnItemSelectedListener {
+                    when (it.itemId) {
+                        R.id.favoriteListFragment -> {
+//                            navController.navigate(R.id.favoriteListFragment)
+                            navController.navigate(R.id.action_recipeSearchListFragment_to_favoriteListFragment)
+                            true
                         }
+                        R.id.userProfileFragment -> {
+//                            navController.navigate(R.id.userProfileFragment)
+                            navController.navigate(R.id.action_recipeSearchListFragment_to_userProfileFragment)
+                            true
+                        }
+                        else -> true
                     }
                 }
             }
@@ -75,19 +76,17 @@ class RecipesActivity : AppCompatActivity() {
                     setOpenSearchETVisibility(false)
                     setBottomNavigationVisibility(true)
                 }
-                bindingActivity.apply {
-                    bottomNavigation.setOnItemSelectedListener {
-                        when (it.itemId) {
-                            R.id.recipeSearchListFragment -> {
-                                navController.navigate(R.id.recipeSearchListFragment)
-                                true
-                            }
-                            R.id.userProfileFragment -> {
-                                navController.navigate(R.id.userProfileFragment)
-                                true
-                            }
-                            else -> true
+                bindingActivity.bottomNavigation.setOnItemSelectedListener {
+                    when (it.itemId) {
+                        R.id.recipeSearchListFragment -> {
+                            navController.navigate(R.id.recipeSearchListFragment)
+                            true
                         }
+                        R.id.userProfileFragment -> {
+                            navController.navigate(R.id.userProfileFragment)
+                            true
+                        }
+                        else -> true
                     }
                 }
             }
@@ -113,7 +112,6 @@ class RecipesActivity : AppCompatActivity() {
                     }
                 }
             }
-
             R.id.userProfileFragment -> {
                 viewModelRecipesActivity.apply {
                     setBtnBackVisibility(false)
@@ -121,24 +119,23 @@ class RecipesActivity : AppCompatActivity() {
                     setOpenSearchETVisibility(false)
                     setBottomNavigationVisibility(true)
                 }
-                bindingActivity.apply {
-                    bottomNavigation.setOnItemSelectedListener {
-                        when (it.itemId) {
-                            R.id.recipeSearchListFragment -> {
-                                navController.navigate(R.id.recipeSearchListFragment)
-                                true
-                            }
-                            R.id.favoriteListFragment -> {
-                                navController.navigate(R.id.favoriteListFragment)
-                                true
-                            }
-                            else -> true
+                bindingActivity.bottomNavigation.setOnItemSelectedListener {
+                    when (it.itemId) {
+                        R.id.recipeSearchListFragment -> {
+                            navController.navigate(R.id.recipeSearchListFragment)
+                            true
                         }
+                        R.id.favoriteListFragment -> {
+                            navController.navigate(R.id.favoriteListFragment)
+                            true
+                        }
+                        else -> true
                     }
                 }
             }
         }
 
+        // инициализация selectedItem не работает в блоке when выше - эксэпшен в рантайме на эту строку
         when (controller.currentDestination?.id) {
             R.id.recipeSearchListFragment -> {
                 bindingActivity.bottomNavigation.selectedItemId = R.id.recipeSearchListFragment
@@ -149,7 +146,6 @@ class RecipesActivity : AppCompatActivity() {
             R.id.userProfileFragment -> {
                 bindingActivity.bottomNavigation.selectedItemId = R.id.userProfileFragment
             }
-            else -> {}
         }
     }
 
@@ -163,12 +159,32 @@ class RecipesActivity : AppCompatActivity() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragmentRecipesContainer) as NavHostFragment
         navController = navHostFragment.navController
+        bindingActivity.bottomNavigation.setupWithNavController(navController)
 
         setSupportActionBar(bindingActivity.toolbarActivity)
 
         bindingActivity.btnBack.setOnClickListener {
             onBackPressed()
         }
+
+// не работает тут - exception в Runtime, ругается на navController.navigate(R.id.recipeSearchListFragment)
+//        bindingActivity.bottomNavigation.setOnItemSelectedListener {
+//            when (it.itemId) {
+//                R.id.recipeSearchListFragment -> {
+//                    navController.navigate(R.id.recipeSearchListFragment)
+//                    true
+//                }
+//                R.id.favoriteListFragment -> {
+//                    navController.navigate(R.id.favoriteListFragment)
+//                    true
+//                }
+//                R.id.userProfileFragment -> {
+//                    navController.navigate(R.id.userProfileFragment)
+//                    true
+//                }
+//                else -> true
+//            }
+//        }
 
         viewModelRecipesActivityToolbarIcon.searchIsOpened.observe(this) {
             if (it) {

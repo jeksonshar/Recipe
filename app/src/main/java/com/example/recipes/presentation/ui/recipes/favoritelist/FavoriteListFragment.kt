@@ -1,5 +1,6 @@
 package com.example.recipes.presentation.ui.recipes.favoritelist
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import com.example.recipes.R
 import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.databinding.FragmentFavoriteRecipeListBinding
 import com.example.recipes.presentation.ui.recipes.RecipeClickListener
+import com.example.recipes.presentation.utils.LoginUtil
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,52 +43,86 @@ class FavoriteListFragment : Fragment() {
         )
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        LoginUtil.logD(tag = "LiveCycleMethod:", startMsg = "onAttach (FavoriteList) ", parameter = "+")
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        LoginUtil.logD(tag = "LiveCycleMethod:", startMsg = "onCreate (FavoriteList) ", parameter = "+")
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        LoginUtil.logD(tag = "LiveCycleMethod:", startMsg = "onCreateView (FavoriteList) ", parameter = "+")
         _binding = FragmentFavoriteRecipeListBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.vm = viewModelFavorite
 
         viewModelFavorite.getUserFavoriteRecipes()
 
-        binding.apply {
+        binding.recyclerRecipe.adapter = adapter
 
-            recyclerRecipe.adapter = adapter
-
-//            bottomNavigation.selectedItemId = R.id.favoriteListFragment
-//            bottomNavigation.setupWithNavController(findNavController()) // при нажатии назад selectedItem остается на предидущем значении
-//            bottomNavigation.setOnItemSelectedListener {
-//                when (it.itemId) {
-//                    R.id.recipeSearchListFragment -> {
-//                        findNavController().navigate(R.id.action_favoriteListFragment_to_recipeSearchListFragment)
-//                        false
-//                    }
-//                    R.id.userProfileFragment -> {
-//                        findNavController().navigate(R.id.action_favoriteListFragment_to_userProfileFragment)
-//                        false
-//                    }
-//                    else -> false
-//                }
-//            }
-        }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        LoginUtil.logD(tag = "LiveCycleMethod:", startMsg = "onViewCreated (FavoriteList) ", parameter = "+")
         viewModelFavorite.favoriteRecipes.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
     }
 
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        LoginUtil.logD(tag = "LiveCycleMethod:", startMsg = "onViewStateRestored (FavoriteList) ", parameter = "+")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        LoginUtil.logD(tag = "LiveCycleMethod:", startMsg = "onStart (FavoriteList) ", parameter = "+")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        LoginUtil.logD(tag = "LiveCycleMethod:", startMsg = "onResume (FavoriteList) ", parameter = "+")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        LoginUtil.logD(tag = "LiveCycleMethod:", startMsg = "onPause (FavoriteList) ", parameter = "+")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        LoginUtil.logD(tag = "LiveCycleMethod:", startMsg = "onStop (FavoriteList) ", parameter = "+")
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        LoginUtil.logD(tag = "LiveCycleMethod:", startMsg = "onSaveInstanceState (FavoriteList) ", parameter = "+")
+    }
+
     override fun onDestroyView() {
+        LoginUtil.logD(tag = "LiveCycleMethod:", startMsg = "onDestroyView (FavoriteList) ", parameter = "+")
         binding.recyclerRecipe.adapter = null
         _binding = null
         super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LoginUtil.logD(tag = "LiveCycleMethod:", startMsg = "onDestroy (FavoriteList) ", parameter = "+")
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        LoginUtil.logD(tag = "LiveCycleMethod:", startMsg = "onDetach (FavoriteList) ", parameter = "+")
     }
 
 }

@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.recipes.business.domain.singletons.BackPressedSingleton
 import com.example.recipes.business.usecases.GetFavoriteRecipesUseCase
 import com.example.recipes.datasouce.local.datastore.RecipeDataStore
 import com.google.firebase.auth.ktx.auth
@@ -23,11 +22,6 @@ class UserProfileViewModel @Inject constructor(
     private val currentUser = Firebase.auth.currentUser
 
     val email = currentUser?.email ?: "--"
-
-    //TODO!!!! 26,11 без бэкпрессед не обновляется имя профиля после введения его в диалоге смены имени,
-    // обновляется только если выйти и войти в фрагмент профиля
-
-    val onBackPressed = BackPressedSingleton.isBackPressClick
 
     private val _favoriteRecipesCount = MutableLiveData<Int>()
     val favoriteRecipesCount: LiveData<Int> = _favoriteRecipesCount

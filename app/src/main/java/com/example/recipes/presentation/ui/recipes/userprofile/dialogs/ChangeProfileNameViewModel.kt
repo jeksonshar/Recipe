@@ -5,13 +5,14 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.recipes.business.domain.singletons.BackPressedSingleton
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-
-class ChangeProfileNameViewModel : ViewModel() {
+@HiltViewModel
+class ChangeProfileNameViewModel @Inject constructor(): ViewModel() {
 
     private val auth = Firebase.auth
 
@@ -37,7 +38,6 @@ class ChangeProfileNameViewModel : ViewModel() {
                     Log.d("TAG", "submit change name: change name not done!!")
                 }
                 _exitFromDialog.value = true
-                BackPressedSingleton.isBackPressClick.value = true
             }
         } else {
             _exitFromDialog.value = true
