@@ -1,0 +1,220 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "b582e87779e05211c79b9fe4256813f7",
+    "entities": [
+      {
+        "tableName": "recipes",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`calories` REAL NOT NULL, `cautions` TEXT NOT NULL, `cuisineType` TEXT NOT NULL, `dietLabels` TEXT NOT NULL, `dishType` TEXT NOT NULL, `healthLabels` TEXT NOT NULL, `image` TEXT NOT NULL, `ingredientLines` TEXT NOT NULL, `ingredients` TEXT NOT NULL, `label` TEXT NOT NULL, `mealType` TEXT NOT NULL, `shareAs` TEXT NOT NULL, `source` TEXT NOT NULL, `totalTime` REAL NOT NULL, `totalWeight` REAL NOT NULL, `uri` TEXT NOT NULL, `url` TEXT NOT NULL, `yield` REAL NOT NULL, `isFavorite` INTEGER NOT NULL, `userId` TEXT NOT NULL, `large_height` INTEGER NOT NULL, `large_url` TEXT NOT NULL, `large_width` INTEGER NOT NULL, `regular_height` INTEGER NOT NULL, `regular_url` TEXT NOT NULL, `regular_width` INTEGER NOT NULL, `small_height` INTEGER NOT NULL, `small_url` TEXT NOT NULL, `small_width` INTEGER NOT NULL, `thumbnail_height` INTEGER NOT NULL, `thumbnail_url` TEXT NOT NULL, `thumbnail_width` INTEGER NOT NULL, PRIMARY KEY(`uri`))",
+        "fields": [
+          {
+            "fieldPath": "calories",
+            "columnName": "calories",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cautions",
+            "columnName": "cautions",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cuisineType",
+            "columnName": "cuisineType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dietLabels",
+            "columnName": "dietLabels",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dishType",
+            "columnName": "dishType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "healthLabels",
+            "columnName": "healthLabels",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "image",
+            "columnName": "image",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ingredientLines",
+            "columnName": "ingredientLines",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ingredients",
+            "columnName": "ingredients",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "label",
+            "columnName": "label",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mealType",
+            "columnName": "mealType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "shareAs",
+            "columnName": "shareAs",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "source",
+            "columnName": "source",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalTime",
+            "columnName": "totalTime",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalWeight",
+            "columnName": "totalWeight",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "uri",
+            "columnName": "uri",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "url",
+            "columnName": "url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "yield",
+            "columnName": "yield",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isFavorite",
+            "columnName": "isFavorite",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "images.large.height",
+            "columnName": "large_height",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "images.large.url",
+            "columnName": "large_url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "images.large.width",
+            "columnName": "large_width",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "images.regular.height",
+            "columnName": "regular_height",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "images.regular.url",
+            "columnName": "regular_url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "images.regular.width",
+            "columnName": "regular_width",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "images.small.height",
+            "columnName": "small_height",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "images.small.url",
+            "columnName": "small_url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "images.small.width",
+            "columnName": "small_width",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "images.thumbnail.height",
+            "columnName": "thumbnail_height",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "images.thumbnail.url",
+            "columnName": "thumbnail_url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "images.thumbnail.width",
+            "columnName": "thumbnail_width",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "uri"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b582e87779e05211c79b9fe4256813f7')"
+    ]
+  }
+}
