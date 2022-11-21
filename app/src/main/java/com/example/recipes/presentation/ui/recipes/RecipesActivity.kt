@@ -10,8 +10,8 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.recipes.R
-import com.example.recipes.business.domain.singletons.BackPressedSingleton
 import com.example.recipes.business.domain.singletons.RecipeSingleton
+import com.example.recipes.business.domain.singletons.SearchEnteredSingleton
 import com.example.recipes.databinding.ActivityRecipesBinding
 import com.example.recipes.presentation.utils.NewIntentUtil
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,6 +33,7 @@ class RecipesActivity : AppCompatActivity() {
     private val startActivityForShareLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { activityResult ->
+//после удачной отправки рецепта,придумать вариант как поймать отправку или CANSEL, но только в случае если пользователь отказался
         if (activityResult.resultCode == RESULT_CANCELED) {
             Toast.makeText(applicationContext, "Пользователь отменил отправку рецепта", Toast.LENGTH_LONG).show()
         }
@@ -52,16 +53,18 @@ class RecipesActivity : AppCompatActivity() {
                 bindingActivity.ivCurrentToolbarIcon.setOnClickListener {
                     viewModelRecipesActivityToolbarIcon.changeSearchIsOpenedValue()
                 }
-//                   TODO 28.10 попробовать этот листенер с обработкой всех переходов по фрагментам в onCreate
+
+//TODO 3 вынести эти листенеры с обработкой всех переходов по фрагментам, чтоб не образовывалось несколько листенеров как сейчас,
+// а все содержалось в одном листенере (не работает dв onCreate, onStart, тут(в листенере)- exception в Runtime, ругается на navController.navigate(R.id....),
+// навконтроллеру нужно понимать из какого итема происходит переход и при переходе из разных итемов например в файворит, у каждого будет свой экшен)
+
                 bindingActivity.bottomNavigation.setOnItemSelectedListener {
                     when (it.itemId) {
                         R.id.favoriteListFragment -> {
-//                            navController.navigate(R.id.favoriteListFragment)
                             navController.navigate(R.id.action_recipeSearchListFragment_to_favoriteListFragment)
                             true
                         }
                         R.id.userProfileFragment -> {
-//                            navController.navigate(R.id.userProfileFragment)
                             navController.navigate(R.id.action_recipeSearchListFragment_to_userProfileFragment)
                             true
                         }
@@ -79,11 +82,12 @@ class RecipesActivity : AppCompatActivity() {
                 bindingActivity.bottomNavigation.setOnItemSelectedListener {
                     when (it.itemId) {
                         R.id.recipeSearchListFragment -> {
-                            navController.navigate(R.id.recipeSearchListFragment)
+//                            navController.navigate(R.id.action_favoriteListFragment_to_recipeSearchListFragment)
+                            navController.navigateUp()
                             true
                         }
                         R.id.userProfileFragment -> {
-                            navController.navigate(R.id.userProfileFragment)
+                            navController.navigate(R.id.action_favoriteListFragment_to_userProfileFragment)
                             true
                         }
                         else -> true
@@ -103,7 +107,8 @@ class RecipesActivity : AppCompatActivity() {
                         } else {
                             RecipeSingleton.recipe?.let { recipe ->
                                 val shareIntent = NewIntentUtil.createNewShareIntent(recipe)
-//TODO 25,10 разобраться почему неработает launch (закоммент)
+
+//TODO 3 разобраться как отловить Cancel (закомментировано ввердху) и после этого использовать launch
 
 //                             startActivityForShareLauncher.launch(shareIntent)
                                 startActivity(shareIntent)
@@ -122,11 +127,12 @@ class RecipesActivity : AppCompatActivity() {
                 bindingActivity.bottomNavigation.setOnItemSelectedListener {
                     when (it.itemId) {
                         R.id.recipeSearchListFragment -> {
-                            navController.navigate(R.id.recipeSearchListFragment)
+//                            navController.navigate(R.id.action_userProfileFragment_to_recipeSearchListFragment)
+                            navController.navigateUp()
                             true
                         }
                         R.id.favoriteListFragment -> {
-                            navController.navigate(R.id.favoriteListFragment)
+                            navController.navigate(R.id.action_userProfileFragment_to_favoriteListFragment)
                             true
                         }
                         else -> true
@@ -164,10 +170,10 @@ class RecipesActivity : AppCompatActivity() {
         setSupportActionBar(bindingActivity.toolbarActivity)
 
         bindingActivity.btnBack.setOnClickListener {
-            onBackPressed()
+            navController.navigateUp()
         }
 
-// не работает тут - exception в Runtime, ругается на navController.navigate(R.id.recipeSearchListFragment)
+// не работает тут - exception в Runtime, ругается на navController.navigate(...) см ТУДУ выше
 //        bindingActivity.bottomNavigation.setOnItemSelectedListener {
 //            when (it.itemId) {
 //                R.id.recipeSearchListFragment -> {
@@ -187,10 +193,12 @@ class RecipesActivity : AppCompatActivity() {
 //        }
 
         viewModelRecipesActivityToolbarIcon.searchIsOpened.observe(this) {
-            if (it) {
-                viewModelRecipesActivity.setCurrentIcon(R.drawable.arrow_up)
-            } else {
-                viewModelRecipesActivity.setCurrentIcon(R.drawable.search)
+            if (viewModelRecipesActivity.currentIconResource.value != R.drawable.ic_share_icon) {
+                if (it) {
+                    viewModelRecipesActivity.setCurrentIcon(R.drawable.arrow_up)
+                } else {
+                    viewModelRecipesActivity.setCurrentIcon(R.drawable.search)
+                }
             }
         }
 
@@ -224,8 +232,11 @@ class RecipesActivity : AppCompatActivity() {
         Toast.makeText(this, getText(R.string.turn_on_net_connection_and_repeat), Toast.LENGTH_LONG).show()
     }
 
-    override fun onBackPressed() {
-        BackPressedSingleton.isBackPressClick.value = true
-        super.onBackPressed()
+    override fun onDestroy() {
+        _bindingActivity = null
+        RecipeSingleton.clear()
+        SearchEnteredSingleton.clear()
+        super.onDestroy()
     }
+
 }

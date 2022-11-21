@@ -19,12 +19,12 @@ class DeleteFavoriteRecipeUseCaseImpl @Inject constructor(
         userId: String,
         favoriteFirebaseRecipesRef: DatabaseReference
     ) {
-        val userIdList: MutableSet<String> = arraySetOf()
+        val userIdSet: MutableSet<String> = arraySetOf()
         dataBase?.recipesDao()?.getFavoriteRecipeByUri(recipe.uri)?.userIdList?.forEach {
-            userIdList.add(it)
+            userIdSet.add(it)
         }
-        userIdList.remove(userId)
-        val changedRecipe = changeRecipeUserIdList(recipe, userIdList)
+        userIdSet.remove(userId)
+        val changedRecipe = changeRecipeUserIdList(recipe, userIdSet.toList())
         // clear firebase database
         favoriteFirebaseRecipesRef.child(changedRecipe.label).removeValue()
         if (changedRecipe.userIdList.isNotEmpty()) {

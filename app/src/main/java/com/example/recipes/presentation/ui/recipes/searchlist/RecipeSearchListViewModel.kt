@@ -1,13 +1,12 @@
 package com.example.recipes.presentation.ui.recipes.searchlist
 
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.*
 import androidx.paging.*
 import com.example.recipes.R
 import com.example.recipes.business.domain.models.Recipe
-import com.example.recipes.business.domain.singletons.BackPressedSingleton
 import com.example.recipes.business.domain.singletons.RecipeSingleton
+import com.example.recipes.business.domain.singletons.SearchEnteredSingleton
 import com.example.recipes.business.usecases.CheckConnectionUseCaseImpl
 import com.example.recipes.business.usecases.SaveInFileCacheLoadRecipesUseCaseImpl
 import com.example.recipes.business.usecases.SendEventToAnalyticsUseCaseImpl
@@ -18,6 +17,7 @@ import com.example.recipes.presentation.ui.recipes.searchlist.enums.Diet
 import com.example.recipes.presentation.ui.recipes.searchlist.enums.Health
 import com.example.recipes.presentation.ui.recipes.searchlist.enums.MealTypes
 import com.example.recipes.presentation.ui.recipes.searchlist.paging.RecipesPagingSource
+import com.example.recipes.presentation.utils.LoginUtil
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.GsonBuilder
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -56,18 +56,17 @@ class RecipeSearchListViewModel @Inject constructor(
     val filterIsOpened: LiveData<Boolean> = _filterIsOpened
 
     private val fileName = MutableLiveData<String>()
-
     private val filtersDiet = arrayListOf<String>()
     private val filtersHealth = arrayListOf<String>()
     private val filtersCuisineType = arrayListOf<String>()
     private val filtersMealType = arrayListOf<String>()
 
-    fun loadRecipes(query: String?): Flow<PagingData<Recipe>> {
-        setQueryToDatastore(query)
-        return newPager().flow.cachedIn(viewModelScope)
+
+    fun loadRecipes(query: String): Flow<PagingData<Recipe>> {
+        return newPager(query).flow.cachedIn(viewModelScope)
     }
 
-    private fun newPager(): Pager<String, Recipe> {
+    private fun newPager(query: String): Pager<String, Recipe> {
         val pagingConfig = PagingConfig(
             pageSize = 10,
             enablePlaceholders = true,
@@ -83,7 +82,7 @@ class RecipeSearchListViewModel @Inject constructor(
                     filtersHealth,
                     filtersCuisineType,
                     filtersMealType,
-                    fetchQuery = { queryHandler.value ?: "" }
+                    fetchQuery = { query }
                 )
             }
         )
@@ -110,7 +109,6 @@ class RecipeSearchListViewModel @Inject constructor(
     }
 
     fun changeFilterVisibility() {
-        Log.d("TAG", "changeFilterVisibility: 1111111111111")
         _filterIsOpened.value = filterIsOpened.value != true
     }
 
@@ -193,14 +191,22 @@ class RecipeSearchListViewModel @Inject constructor(
         }
     }
 
-    fun setQueryToDatastore(query: String?) {
+    fun setQueryToDatastore(query: String) {
         viewModelScope.launch {
-            recipeDataStore.setLastQuery(query ?: "")
+            recipeDataStore.setLastQuery(query)
         }
     }
 
     fun setRecipeToSingleton(recipe: Recipe) {
         RecipeSingleton.recipe = recipe
+    }
+
+    fun setSearchEntered() {
+        SearchEnteredSingleton.isSearchEntered = true
+    }
+
+    fun clearSearchEntered() {
+        SearchEnteredSingleton.isSearchEntered = false
     }
 
     fun getFromFileCacheOfLoadRecipes(fileName: String): List<Recipe> {
@@ -210,7 +216,7 @@ class RecipeSearchListViewModel @Inject constructor(
         } else {
             emptyList()
         }
-        Log.d("TAG", "getFromFileCacheOfLoadRecipes: $recipeList")
+        LoginUtil.logD("TAG", "getFromFileCacheOfLoadRecipes: ", recipeList.toString())
         return recipeList
     }
 
@@ -223,11 +229,6 @@ class RecipeSearchListViewModel @Inject constructor(
         bundle.putString(REQUEST_NAME_ANALYTICS_PARAMETER, query)
 
         sendEventToAnalyticsUseCase.sendEventToAnalytics(SEARCH_EVENT_NAME, bundle)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        BackPressedSingleton.clear()
     }
 
     companion object {

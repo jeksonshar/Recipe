@@ -4,7 +4,7 @@ import com.example.recipes.business.domain.models.Recipe
 
 object ChangeRecipeUserIdListUtil {
 
-        fun changeRecipeUserIdList(recipe: Recipe, userIdList: Set<String>): Recipe {
+        fun changeRecipeUserIdList(recipe: Recipe, userIdList: List<String>): Recipe {
         return Recipe(
             calories = recipe.calories,
             cautions = recipe.cautions,
@@ -26,7 +26,7 @@ object ChangeRecipeUserIdListUtil {
             url = recipe.url,
             yield = recipe.yield,
             isFavorite = recipe.isFavorite,
-            userIdList = userIdList.toList()
+            userIdList = userIdList
         )
     }
 }

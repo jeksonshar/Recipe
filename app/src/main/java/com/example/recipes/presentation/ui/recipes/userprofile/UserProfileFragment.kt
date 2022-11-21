@@ -4,16 +4,14 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.recipes.R
 import com.example.recipes.databinding.FragmentUserProfileBinding
+import com.example.recipes.presentation.base.BaseFragment
 import com.example.recipes.presentation.ui.auth.AuthActivity
 import com.example.recipes.presentation.ui.recipes.userprofile.dialogs.ChangeProfileNameDialog
 import com.example.recipes.presentation.ui.recipes.userprofile.dialogs.UserProfileDelegate
@@ -23,11 +21,7 @@ import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class UserProfileFragment : Fragment() {
-
-    private var _binding: FragmentUserProfileBinding? = null
-    val binding: FragmentUserProfileBinding
-        get() = _binding!!
+class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>(R.layout.fragment_user_profile) {
 
     private val viewModelProfile: UserProfileViewModel by viewModels()
 
@@ -43,14 +37,9 @@ class UserProfileFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        _binding = FragmentUserProfileBinding.inflate(inflater, container, false)
-        binding.lifecycleOwner = this
         binding.vm = viewModelProfile
 
         viewModelProfile.getFavoriteRecipes()
@@ -58,7 +47,6 @@ class UserProfileFragment : Fragment() {
         binding.apply {
 
             tvChangeUserName.setOnClickListener {
-//                findNavController().navigate(R.id.changeProfileNameDialog)
 
                 ChangeProfileNameDialog.newInstance(
                     userProfileDelegate = object : UserProfileDelegate {
@@ -86,19 +74,12 @@ class UserProfileFragment : Fragment() {
                 showAskAlertDialog(DELETE)
             }
         }
-
-        return binding.root
     }
 
     override fun onStart() {
         super.onStart()
         viewModelProfile.getName()
         viewModelProfile.getPhoto()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun signOutUser() {

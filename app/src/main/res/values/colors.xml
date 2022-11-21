@@ -29,6 +29,7 @@
     <color name="full_transparent">#00000000</color>
     <color name="cream">#FFF2DDC1</color>
     <color name="background_list">#EEF2FF</color>
+    <color name="background_list_77_transparent">#CCEEF2FF</color>
     <color name="background_snack_attention">#EC7272</color>
     <color name="recipe_list_item_text">#6e1e05</color>
 

@@ -11,17 +11,22 @@
         <action
             android:id="@+id/action_recipeSearchListFragment_to_recipeDetailsFragment"
             app:destination="@id/recipeDetailsFragment"
-            app:popUpTo="@id/recipeSearchListFragment" />
+            app:popUpTo="@id/recipeSearchListFragment"
+            app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_recipeSearchListFragment_to_noConnectionDialogFragment"
             app:destination="@id/noConnectionDialogFragment"
             app:popUpTo="@id/recipeSearchListFragment" />
         <action
             android:id="@+id/action_recipeSearchListFragment_to_favoriteListFragment"
-            app:destination="@id/favoriteListFragment" />
+            app:destination="@id/favoriteListFragment"
+            app:popUpTo="@id/recipeSearchListFragment"
+            app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_recipeSearchListFragment_to_userProfileFragment"
-            app:destination="@id/userProfileFragment" />
+            app:destination="@id/userProfileFragment"
+            app:popUpTo="@id/recipeSearchListFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/recipeDetailsFragment"
@@ -45,14 +50,18 @@
         <action
             android:id="@+id/action_favoriteListFragment_to_recipeSearchListFragment"
             app:destination="@id/recipeSearchListFragment"
-            app:popUpTo="@id/nav_graph" />
+            app:popUpTo="@id/recipeSearchListFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_favoriteListFragment_to_recipeDetailsFragment"
             app:destination="@id/recipeDetailsFragment"
-            app:popUpTo="@id/favoriteListFragment" />
+            app:popUpTo="@id/favoriteListFragment"
+            app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_favoriteListFragment_to_userProfileFragment"
-            app:destination="@id/userProfileFragment" />
+            app:destination="@id/userProfileFragment"
+            app:popUpTo="@id/favoriteListFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/userProfileFragment"
@@ -64,10 +73,14 @@
             app:destination="@id/changeProfileNameDialog" />
         <action
             android:id="@+id/action_userProfileFragment_to_recipeSearchListFragment"
-            app:destination="@id/recipeSearchListFragment" />
+            app:destination="@id/recipeSearchListFragment"
+            app:popUpTo="@id/recipeSearchListFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_userProfileFragment_to_favoriteListFragment"
-            app:destination="@id/favoriteListFragment" />
+            app:destination="@id/favoriteListFragment"
+            app:popUpTo="@id/userProfileFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_userProfileFragment_to_changeProfilePasswordDialog"
             app:destination="@id/changeProfilePasswordDialog" />

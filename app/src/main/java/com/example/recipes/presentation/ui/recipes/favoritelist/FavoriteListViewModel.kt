@@ -1,15 +1,14 @@
 package com.example.recipes.presentation.ui.recipes.favoritelist
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.recipes.business.domain.models.Recipe
-import com.example.recipes.business.domain.singletons.BackPressedSingleton
 import com.example.recipes.business.domain.singletons.RecipeSingleton
 import com.example.recipes.business.usecases.GetFavoriteRecipesUseCase
 import com.example.recipes.business.usecases.SynchronizeFavoriteRecipesUseCase
+import com.example.recipes.presentation.utils.LoginUtil
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -39,18 +38,19 @@ class FavoriteListViewModel @Inject constructor(
 
     private fun synchronizeFavoriteRecipesWithFirebase() {
         var favoriteRecipesFirebase: MutableList<Recipe>
-        val favoriteFirebaseRecipesRef = Firebase.database
+        val favoriteFirebaseRecipesRef = Firebase.database                          //TODO не утекает? проверить!
             .getReference("favorite").child("favorite_recipes")
         val gson = GsonBuilder()/*.disableHtmlEscaping()*/.create()
         favoriteFirebaseRecipesRef.get().addOnCompleteListener {
             if (it.isSuccessful && it.result.value != null) {
                 favoriteRecipesFirebase = arrayListOf()
                 val result: HashMap<String, String> = it.result.value as HashMap<String, String>
-                    result.forEach { (_, recipeString) ->
-                        val recipe = gson.fromJson(recipeString, Recipe::class.java)
-                        favoriteRecipesFirebase.add(recipe)
-                    }
-                Log.d("TAG111", "favorites 5 всего перед синхронизаией: ${favoriteRecipesFirebase.size}")
+
+                result.forEach { (_, recipeString) ->
+                    val recipe = gson.fromJson(recipeString, Recipe::class.java)
+                    favoriteRecipesFirebase.add(recipe)
+                }
+                LoginUtil.logD("TAG111", "favorites 5 всего перед синхронизаией: ", favoriteRecipesFirebase.size.toString())
                 viewModelScope.launch {
                     val favoriteRecipesSynchronized = synchronizedFavoriteRecipesUseCase
                         .synchronizeFavoriteRecipesWithFirebase(favoriteRecipesFirebase, userId)
@@ -65,7 +65,7 @@ class FavoriteListViewModel @Inject constructor(
                         newRecipeList.add(recipe.label)
                     }
 
-                    if ( favoriteRecipesSynchronized.isNotEmpty() && oldRecipeList != newRecipeList ) {
+                    if (favoriteRecipesSynchronized.isNotEmpty() && oldRecipeList != newRecipeList) {
                         _favoriteRecipes.value = favoriteRecipesSynchronized
                     }
                 }
@@ -77,8 +77,4 @@ class FavoriteListViewModel @Inject constructor(
         RecipeSingleton.recipe = recipe
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        BackPressedSingleton.clear()
-    }
 }

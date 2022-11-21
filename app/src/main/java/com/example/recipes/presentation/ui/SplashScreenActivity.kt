@@ -14,8 +14,8 @@ import com.example.recipes.presentation.ui.viewpager.ViewPagerActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @SuppressLint("CustomSplashScreen")
@@ -35,10 +35,10 @@ class SplashScreenActivity: ComponentActivity() {
             !isNotFirstLaunch -> {
                 startActivity(newIntent(this, ViewPagerActivity()))
             }
-            isNotFirstLaunch && currentUser == null -> {
+            currentUser == null -> {
                 startActivity(newIntent(this, AuthActivity()))
             }
-            isNotFirstLaunch && currentUser != null -> {
+            else -> {
                 startActivity(newIntent(this, RecipesActivity()))
             }
         }

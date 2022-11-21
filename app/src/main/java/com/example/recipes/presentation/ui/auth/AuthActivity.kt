@@ -3,7 +3,6 @@ package com.example.recipes.presentation.ui.auth
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -12,6 +11,7 @@ import com.example.recipes.R
 import com.example.recipes.databinding.ActivityAuthBinding
 import com.example.recipes.presentation.ui.auth.dialogs.ConfirmationDialogFragment
 import com.example.recipes.presentation.ui.recipes.RecipesActivity
+import com.example.recipes.presentation.utils.LoginUtil
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
@@ -25,7 +25,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class AuthActivity : AppCompatActivity(), ConfirmationListener {
 
-    //TODO 22,10 не забудь занулить биндинг во всех активити, если надо
     private var _binding: ActivityAuthBinding? = null
     private val binding: ActivityAuthBinding
         get() = _binding!!
@@ -113,21 +112,21 @@ class AuthActivity : AppCompatActivity(), ConfirmationListener {
             .setAvailableProviders(providers)
             .build()
 
-        Log.d("TAG", "signInWithSocial: $signInIntent")
+        LoginUtil.logD("TAG", "signInWithSocial: ", signInIntent.toString())
 
         signInLauncher.launch(signInIntent)
     }
 
     private fun onSignInWithSocialResult(result: FirebaseAuthUIAuthenticationResult) {
         val response = result.idpResponse
-        Log.d("TAG", "onSignInWithSocialResult: ${result.resultCode}")
+        LoginUtil.logD("TAG", "onSignInWithSocialResult: ", result.resultCode.toString())
         if (result.resultCode == RESULT_OK) {
             moveToRecipeActivity()
         } else {
             if (response == null) {
                 showSnackBar(applicationContext.getString(R.string.cancel_user_registration))
             } else {
-                catchError(response)
+                catchError(response, result.resultCode.toString())
             }
         }
     }
@@ -150,22 +149,23 @@ class AuthActivity : AppCompatActivity(), ConfirmationListener {
         mySnackBar.show()
     }
 
-    private fun catchError(response: IdpResponse) {                                     // перенести
+    private fun catchError(response: IdpResponse, resultCode: String) {                                     // перенести
         when (response.error?.errorCode) {
             ErrorCodes.NO_NETWORK -> {
-                showSnackBar("Sign in failed due to lack of network connection.")
+                showSnackBar("Sign in failed due to lack of network connection. Result code = $resultCode")
             }
             ErrorCodes.PLAY_SERVICES_UPDATE_CANCELLED -> {
-                showSnackBar("A required update to Play Services was cancelled by the user.")
+                showSnackBar("A required update to Play Services was cancelled by the user. Result code = $resultCode")
             }
             ErrorCodes.DEVELOPER_ERROR -> {
-                showSnackBar("A sign-in operation couldn't be completed due to a developer error.")
+                showSnackBar("A sign-in operation couldn't be completed due to a developer error. Result code = $resultCode")
             }
             ErrorCodes.PROVIDER_ERROR -> {
-                showSnackBar("An external sign-in provider error occurred.")
+                showSnackBar("An external sign-in provider error occurred. Result code = $resultCode")
             }
             else -> {
                 response.error?.localizedMessage?.let {
+                    LoginUtil.logD(startMsg = "catch error when else: ", parameter = it)
                     showSnackBar(it)
                 }
             }
@@ -190,6 +190,11 @@ class AuthActivity : AppCompatActivity(), ConfirmationListener {
         if (this::snackBarNoConnection.isInitialized) {
             snackBarNoConnection.dismiss()
         }
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
     }
 
 

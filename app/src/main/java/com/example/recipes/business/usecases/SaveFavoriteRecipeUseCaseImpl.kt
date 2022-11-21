@@ -1,6 +1,5 @@
 package com.example.recipes.business.usecases
 
-import android.util.Log
 import androidx.collection.arraySetOf
 import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.business.usecases.interfaces.SaveFavoriteRecipeUseCase
@@ -10,6 +9,7 @@ import com.example.recipes.datasouce.local.room.RecipeDataBase
 import com.example.recipes.datasouce.network.NetWorkEntitiesMappers
 import com.example.recipes.datasouce.network.RecipesApiService
 import com.example.recipes.datasouce.network.entities.HitEntity
+import com.example.recipes.presentation.utils.LoginUtil
 import com.google.firebase.database.DatabaseReference
 import com.google.gson.GsonBuilder
 import retrofit2.Response
@@ -25,11 +25,11 @@ class SaveFavoriteRecipeUseCaseImpl @Inject constructor(
         userId: String,
         favoriteFirebaseRecipesRef: DatabaseReference
     ) {
-        val userIdList: MutableSet<String> = arraySetOf()
+        val userIdSet: MutableSet<String> = arraySetOf()
         dataBase?.recipesDao()?.getFavoriteRecipeByUri(recipe.uri)?.userIdList?.forEach {
-            userIdList.add(it)
+            userIdSet.add(it)
         }
-        userIdList.add(userId)
+        userIdSet.add(userId)
 
         val recipeToSave: Response<HitEntity>
         var newRecipe: Recipe
@@ -39,11 +39,11 @@ class SaveFavoriteRecipeUseCaseImpl @Inject constructor(
                 NetWorkEntitiesMappers.mapToRecipe(recipeToSave.body()?.recipeEntity)
             } else recipe
         } catch (e: Throwable) {
-            Log.d("TAG", "saveFavoriteRecipe: ${e.message}")
+            e.message?.let { LoginUtil.logD("TAG", "saveFavoriteRecipe: ", it) }
             newRecipe = recipe
         }
 
-        val newRecipeWithUserId = changeRecipeUserIdList(newRecipe, userIdList)
+        val newRecipeWithUserId = changeRecipeUserIdList(newRecipe, userIdSet.toList())
         dataBase?.recipesDao()?.insertFavoriteRecipes(
             DataBaseEntitiesMappers.mapToRecipeEntityLocal(newRecipeWithUserId)
         )

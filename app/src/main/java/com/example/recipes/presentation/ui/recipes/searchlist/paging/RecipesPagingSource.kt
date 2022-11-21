@@ -1,6 +1,5 @@
 package com.example.recipes.presentation.ui.recipes.searchlist.paging
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.recipes.business.domain.models.Recipe
@@ -9,6 +8,7 @@ import com.example.recipes.datasouce.network.NetWorkEntitiesMappers
 import com.example.recipes.datasouce.network.RecipesApiService
 import com.example.recipes.datasouce.network.entities.RecipeSearchEntity
 import com.example.recipes.presentation.ui.recipes.searchlist.PagingSourceException
+import com.example.recipes.presentation.utils.LoginUtil
 import retrofit2.HttpException
 import retrofit2.Response
 
@@ -41,7 +41,7 @@ class RecipesPagingSource(
             .substringAfter("_cont=")
             .substringBefore("&")
 
-        Log.d("TAG", "load: ${params.key}")
+        LoginUtil.logD("TAG", "load: ", params.key.toString())
         val href = params.key
         val response: Response<RecipeSearchEntity>
         try {
@@ -55,12 +55,15 @@ class RecipesPagingSource(
             )
 
         } catch (e: Throwable) {
-            Log.d("TAG", "ERROR: response didn't completed + ${e.message}")
+            e.message?.let {
+                LoginUtil.logD("TAG", "ERROR: response didn't completed + ", it)
+            }
             return LoadResult.Error(e)
         }
 
         return if (response.isSuccessful) {
             if (response.body()?.hits?.isEmpty() == true) {
+                cachingFirstLoadRecipes(emptyList())
                 LoadResult.Error(PagingSourceException.EmptyListException())
             } else {
                 val loadingData = NetWorkEntitiesMappers.mapToRecipes(response.body() ?: RecipeSearchEntity())

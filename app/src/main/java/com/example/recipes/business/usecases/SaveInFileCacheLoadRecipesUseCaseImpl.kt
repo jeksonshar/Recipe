@@ -1,8 +1,8 @@
 package com.example.recipes.business.usecases
 
-import android.util.Log
 import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.business.usecases.interfaces.SaveInFileCacheLoadRecipesUseCase
+import com.example.recipes.presentation.utils.LoginUtil
 import com.google.gson.GsonBuilder
 import java.io.File
 import javax.inject.Inject
@@ -14,7 +14,7 @@ class SaveInFileCacheLoadRecipesUseCaseImpl @Inject constructor(): SaveInFileCac
         }
         val gson = GsonBuilder().disableHtmlEscaping().create()
         val cachedRecipeListString = gson.toJson(data)
-        Log.d("TAG", "saveInFileCacheOfLoadRecipes: $cachedRecipeListString")
+        LoginUtil.logD("TAG", "saveInFileCacheOfLoadRecipes: ", cachedRecipeListString)
 
         File(fileName).writeText(cachedRecipeListString)
     }

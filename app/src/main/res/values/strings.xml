@@ -84,6 +84,7 @@
     <string name="turn_on_net_connection_and_make_search">Turn on net connection and make search</string>
     <string name="turn_on_net_connection_and_make_login">Turn on net connection and make login</string>
     <string name="retry_it">Retry</string>
+    <string name="search_failed">Search failed</string>
 
     <!-- Filter gropes name -->
     <string name="filters">Filters</string>

@@ -1,6 +1,7 @@
 package com.example.recipes.business.usecases
 
 import com.example.recipes.business.domain.models.Recipe
+import com.example.recipes.business.utils.ChangeRecipeUserIdListUtil
 import com.example.recipes.datasouce.local.room.DataBaseEntitiesMappers
 import com.example.recipes.datasouce.local.room.RecipeDataBase
 import javax.inject.Inject
@@ -29,7 +30,7 @@ class SynchronizeFavoriteRecipesUseCase @Inject constructor(
                 if (recipe.userIdList.contains(userId)) {
                     val listUserId: MutableList<String> = recipe.userIdList as MutableList<String>
                     listUserId.add(userId)
-                    val newRecipe = changeRecipeUserIdList(recipe, listUserId)
+                    val newRecipe = ChangeRecipeUserIdListUtil.changeRecipeUserIdList(recipe, listUserId)
                     dataBase?.recipesDao()?.insertFavoriteRecipes(
                         DataBaseEntitiesMappers.mapToRecipeEntityLocal(newRecipe)
                     )
@@ -38,32 +39,5 @@ class SynchronizeFavoriteRecipesUseCase @Inject constructor(
             }
         }
         return recipes
-    }
-
-    // TODO заменить на ChangeRecipeUserIdListUtil, там нужны изменения в модели List на Set
-    private fun changeRecipeUserIdList(recipe: Recipe, userIdList: List<String>): Recipe {
-        return Recipe(
-            calories = recipe.calories,
-            cautions = recipe.cautions,
-            cuisineType = recipe.cuisineType,
-            dietLabels = recipe.dietLabels,
-            dishType = recipe.dishType,
-            healthLabels = recipe.healthLabels,
-            image = recipe.image,
-            images = recipe.images,
-            ingredientLines = recipe.ingredientLines,
-            ingredients = recipe.ingredients,
-            label = recipe.label,
-            mealType = recipe.mealType,
-            shareAs = recipe.shareAs,
-            source = recipe.source,
-            totalTime = recipe.totalTime,
-            totalWeight = recipe.totalWeight,
-            uri = recipe.uri,
-            url = recipe.url,
-            yield = recipe.yield,
-            isFavorite = recipe.isFavorite,
-            userIdList = userIdList
-        )
     }
 }

@@ -3,24 +3,18 @@ package com.example.recipes.presentation.ui.recipes.details
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.recipes.R
 import com.example.recipes.databinding.FragmentDetailRecipeBinding
+import com.example.recipes.presentation.base.BaseFragment
 import com.example.recipes.presentation.utils.ImagesUtil
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class RecipeDetailsFragment : Fragment() {
-
-    private var _binding: FragmentDetailRecipeBinding? = null
-    private val binding: FragmentDetailRecipeBinding
-        get() = _binding!!
+class RecipeDetailsFragment : BaseFragment<FragmentDetailRecipeBinding>(R.layout.fragment_detail_recipe) {
 
     private val viewModel: RecipeDetailsViewModel by viewModels()
 
@@ -36,18 +30,13 @@ class RecipeDetailsFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         viewModel.moveToRecipe(args.recipeLink)
-        // TODO разобраться: как запросить у пользователя добавить домен на устройстве выше 11, закоменчено ниже
+        // TODO 5 разобраться: как запросить у пользователя добавить домен на устройстве выше 11, закоменчено ниже
 //        checkDomainVerification()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        _binding = FragmentDetailRecipeBinding.inflate(inflater, container, false)
-        binding.lifecycleOwner = this
         binding.vm = viewModel
 
         binding.apply {
@@ -64,11 +53,6 @@ class RecipeDetailsFragment : Fragment() {
                 }
             }
         }
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         viewModel.currentRecipe.observe(viewLifecycleOwner) { recipe ->
             if (recipe != null) {
@@ -120,7 +104,6 @@ class RecipeDetailsFragment : Fragment() {
 
     override fun onDestroyView() {
         binding.rvIngredients.adapter = null
-        _binding = null
         super.onDestroyView()
     }
 

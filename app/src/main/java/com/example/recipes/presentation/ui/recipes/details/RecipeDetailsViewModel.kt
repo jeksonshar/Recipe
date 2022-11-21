@@ -5,10 +5,10 @@ import androidx.lifecycle.*
 import com.example.recipes.business.domain.models.Ingredient
 import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.business.domain.singletons.RecipeSingleton
-import com.example.recipes.business.domain.singletons.BackPressedSingleton
 import com.example.recipes.business.usecases.*
 import com.example.recipes.business.utils.StatesManageFavoriteRecipes
 import com.example.recipes.datasouce.network.NetWorkEntitiesMappers
+import com.example.recipes.presentation.utils.LoginUtil
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -49,13 +49,17 @@ class RecipeDetailsViewModel @Inject constructor(
 
     fun moveToRecipe(recipeLink: String?) {
         val recipe = RecipeSingleton.recipe
+        LoginUtil.logD(startMsg = "Current recipe: : ", parameter = recipe?.shareAs ?: "recipe = null")
+        LoginUtil.logD(startMsg = "Current recipe: recipeLinc: ", parameter = recipeLink ?: "recipeLink = null")
         if (recipe == null && !recipeLink.isNullOrBlank()) {
             val recipeId = recipeLink
                 .substringAfter("http://www.edamam.com/recipe/")
                 .substringBefore("/")
                 .substringAfterLast("-")
             getRecipe(recipeId)
+            LoginUtil.logD(startMsg = "Current recipe: if - true ", parameter = recipeId)
         } else {
+            LoginUtil.logD(startMsg = "Current recipe: else ", parameter = RecipeSingleton.recipe?.label ?: "recipe = null")
             _currentRecipe.value = RecipeSingleton.recipe
             _currentRecipeIngredients.value = recipe?.ingredients
         }
@@ -74,6 +78,7 @@ class RecipeDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             val recipeEntity = getRecipeUseCase.getRecipe(recipeId)
             val recipe = NetWorkEntitiesMappers.mapToRecipe(recipeEntity.data)
+            RecipeSingleton.recipe = recipe
             _currentRecipe.value = recipe
             _currentRecipeIngredients.value = recipe.ingredients
         }
@@ -121,9 +126,8 @@ class RecipeDetailsViewModel @Inject constructor(
     }
 
     override fun onCleared() {
-        super.onCleared()
         RecipeSingleton.clear()
-        BackPressedSingleton.clear()
+        super.onCleared()
     }
 
     companion object {

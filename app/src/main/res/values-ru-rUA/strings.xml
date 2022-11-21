@@ -21,8 +21,8 @@
     <string name="reload">Перезагрузить</string>
     <string name="turn_on_the_internet_connection_and_reload">Включите интернет-соединение и reload</string>
     <string name="image_view">image view</string>
-    <string name="favorite">Favorite</string>
-    <string name="list">List</string>
+    <string name="favorite">Любимые</string>
+    <string name="list">Список</string>
     <string name="first_slide">First slide</string>
     <string name="second_slide">Second slide</string>
     <string name="third_slide">Third slide</string>
@@ -85,6 +85,7 @@
     <string name="turn_on_net_connection_and_make_search">Включите сетевое соединение и выполните поиск</string>
     <string name="turn_on_net_connection_and_make_login">Включите сетевое соединение и авторизируйтесь</string>
     <string name="retry_it">Повторить попытку</string>
+    <string name="search_failed">Поиск не выполнен</string>
 
     <!-- Filter gropes name -->
     <string name="filters">Фильтры</string>

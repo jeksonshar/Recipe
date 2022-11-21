@@ -58,7 +58,7 @@
                     android:layout_margin="8dp"
                     android:text="@{context.getString(vm.titleOfListText)}"
                     android:textColor="@color/gray_dark"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/_14sdp"
                     android:textStyle="italic" />
 
                 <androidx.appcompat.widget.LinearLayoutCompat

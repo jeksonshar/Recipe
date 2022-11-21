@@ -21,7 +21,7 @@ class UserProfileViewModel @Inject constructor(
 
     private val currentUser = Firebase.auth.currentUser
 
-    val email = currentUser?.email ?: "--"
+    val email = currentUser?.email ?: if(currentUser == null) "currentUser == null" else "email == null"
 
     private val _favoriteRecipesCount = MutableLiveData<Int>()
     val favoriteRecipesCount: LiveData<Int> = _favoriteRecipesCount
@@ -44,7 +44,7 @@ class UserProfileViewModel @Inject constructor(
     }
 
     fun getName() {
-        _userName.value = currentUser?.displayName ?: "--"
+        _userName.value = currentUser?.displayName ?: "when get name - currentUser == null"
     }
 
     fun getPhoto() {

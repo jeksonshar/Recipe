@@ -1,6 +1,6 @@
 package com.example.recipes.datasouce.network
 
-import android.util.Log
+import com.example.recipes.presentation.utils.LoginUtil
 import okhttp3.Interceptor
 import okhttp3.Response
 
@@ -15,7 +15,7 @@ class ApiKeyInterceptor : Interceptor {
             .addQueryParameter(API_ID_HEADER, apiID)
             .addQueryParameter(API_KEY_HEADER, apiKey)
             .build()
-        Log.d("TAG", "intercept request URL: $url")
+        LoginUtil.logD("TAG", "intercept request URL: ", parameter = url.toString())
         val requestBuilder = originalRequest.newBuilder().url(url)
         val request = requestBuilder.build()
 

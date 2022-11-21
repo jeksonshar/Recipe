@@ -68,7 +68,7 @@
                 android:padding="8dp"
                 android:text="@{recipe.label}"
                 android:textColor="@color/recipe_list_item_text"
-                android:textSize="16sp"
+                android:textSize="@dimen/_13sdp"
                 android:textStyle="bold|italic"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

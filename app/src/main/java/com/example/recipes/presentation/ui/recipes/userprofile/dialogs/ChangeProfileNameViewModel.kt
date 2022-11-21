@@ -1,10 +1,10 @@
 package com.example.recipes.presentation.ui.recipes.userprofile.dialogs
 
 import android.text.Editable
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.recipes.presentation.utils.LoginUtil
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
@@ -35,7 +35,7 @@ class ChangeProfileNameViewModel @Inject constructor(): ViewModel() {
                 displayName = newName.value
             })?.addOnCompleteListener {
                 if (!it.isSuccessful) {
-                    Log.d("TAG", "submit change name: change name not done!!")
+                    LoginUtil.logD("TAG", "submit change name: change name not done!!")
                 }
                 _exitFromDialog.value = true
             }

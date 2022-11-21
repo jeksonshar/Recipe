@@ -38,6 +38,10 @@
         <item name="cornerSize">8dp</item>
     </style>
 
+    <style name="DetailTheme" parent="Theme.AppCompat">
+        <item name="android:textColor">@color/gray_dark</item>
+    </style>
+
     <!-- Theme Splash Android <12-->
     <style name="SplashTheme" parent="Theme.SplashScreen">
 
