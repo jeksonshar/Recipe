@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.example.recipes.R
 import com.example.recipes.business.domain.singletons.FirebaseUserSingleton
-import com.example.recipes.business.usecases.CheckConnectionUseCaseImpl
+import com.example.recipes.business.usecases.interfaces.CheckConnectionUseCase
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    checkConnectionUseCase: CheckConnectionUseCaseImpl,
+    checkConnectionUseCase: CheckConnectionUseCase,
 ) : ViewModel() {
 
     val isNetConnected = checkConnectionUseCase.isConnected().asLiveData()

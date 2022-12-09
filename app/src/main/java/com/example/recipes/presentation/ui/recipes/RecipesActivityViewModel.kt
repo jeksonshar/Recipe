@@ -5,13 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import com.example.recipes.business.usecases.CheckConnectionUseCaseImpl
+import com.example.recipes.business.usecases.interfaces.CheckConnectionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class RecipesActivityViewModel @Inject constructor(
-    checkConnectionUseCase: CheckConnectionUseCaseImpl,
+    checkConnectionUseCase: CheckConnectionUseCase,
 ) : ViewModel() {
 
     val isNetConnectedLiveData = checkConnectionUseCase.isConnected().asLiveData()

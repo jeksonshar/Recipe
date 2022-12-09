@@ -1,6 +1,6 @@
 package com.example.recipes.presentation.ui.recipes.searchlist.enums
 
-enum class CuisineTypes(val value: String) {
+enum class CuisineTypes(private val value: String) : FiltersGroups{
     AMERICAN("american"),
     ASIAN("asian"),
     BRITISH("british"),
@@ -10,5 +10,9 @@ enum class CuisineTypes(val value: String) {
     INDIAN("indian"),
     ITALIAN("italian"),
     KOREAN("korean"),
-    MEXICAN("mexican")
+    MEXICAN("mexican");
+
+    override fun getValue(): String {
+        return value
+    }
 }

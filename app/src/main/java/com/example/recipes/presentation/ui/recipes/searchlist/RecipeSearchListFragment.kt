@@ -92,8 +92,6 @@ class RecipeSearchListFragment : BaseFragment<FragmentRecipeListBinding>(R.layou
             }
         }
 
-        setFiltersListener()
-
         pagingAdapter.addLoadStateListener { loadState ->
 
             when (val stateRefresh = loadState.source.refresh) {
@@ -187,124 +185,6 @@ class RecipeSearchListFragment : BaseFragment<FragmentRecipeListBinding>(R.layou
             Toast.makeText(requireContext(), requireContext().getString(R.string.search_failed), Toast.LENGTH_LONG).show()
         }
         requireContext().hideKeyboard(view)
-    }
-
-    private fun setFiltersListener() {
-        binding.apply {
-            filterDietGroup.setOnCheckedStateChangeListener { _, _ ->
-                chipBalanced.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateDietFilter(compoundButton.id, b)
-                }
-                chipHighFiber.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateDietFilter(compoundButton.id, b)
-                }
-                chipHighProtein.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateDietFilter(compoundButton.id, b)
-                }
-                chipLowCarb.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateDietFilter(compoundButton.id, b)
-                }
-                chipLowFat.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateDietFilter(compoundButton.id, b)
-                }
-                chipLowSodium.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateDietFilter(compoundButton.id, b)
-                }
-            }
-            filterHealthGroup.setOnCheckedStateChangeListener { _, _ ->
-                chipAlcoholCocktail.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateHealthFilter(compoundButton.id, b)
-                }
-                chipAlcoholFree.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateHealthFilter(compoundButton.id, b)
-                }
-                chipCeleryFree.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateHealthFilter(compoundButton.id, b)
-                }
-                chipCrustceanFree.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateHealthFilter(compoundButton.id, b)
-                }
-                chipDairyFree.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateHealthFilter(compoundButton.id, b)
-                }
-                chipEggFree.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateHealthFilter(compoundButton.id, b)
-                }
-                chipFishFree.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateHealthFilter(compoundButton.id, b)
-                }
-                chipGlutenFree.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateHealthFilter(compoundButton.id, b)
-                }
-                chipImmunoSupportive.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateHealthFilter(compoundButton.id, b)
-                }
-                chipKosher.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateHealthFilter(compoundButton.id, b)
-                }
-                chipLowSugar.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateHealthFilter(compoundButton.id, b)
-                }
-                chipMolluskFree.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateHealthFilter(compoundButton.id, b)
-                }
-                chipVegetarian.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateHealthFilter(compoundButton.id, b)
-                }
-            }
-            filterCuisineTypesGroup.setOnCheckedStateChangeListener { _, _ ->
-                chipAmerican.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateCuisineTypeFilter(compoundButton.id, b)
-                }
-                chipAsian.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateCuisineTypeFilter(compoundButton.id, b)
-                }
-                chipBritish.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateCuisineTypeFilter(compoundButton.id, b)
-                }
-                chipChinese.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateCuisineTypeFilter(compoundButton.id, b)
-                }
-                chipFrench.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateCuisineTypeFilter(compoundButton.id, b)
-                }
-                chipGreek.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateCuisineTypeFilter(compoundButton.id, b)
-                }
-                chipIndian.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateCuisineTypeFilter(compoundButton.id, b)
-                }
-                chipItalian.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateCuisineTypeFilter(compoundButton.id, b)
-                }
-                chipKorean.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateCuisineTypeFilter(compoundButton.id, b)
-                }
-                chipMexican.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateCuisineTypeFilter(compoundButton.id, b)
-                }
-            }
-            filterMealTypeGroup.setOnCheckedStateChangeListener { _, _ ->
-                chipBreakfast.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateMealTypeFilter(compoundButton.id, b)
-                }
-                chipBrunch.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateMealTypeFilter(compoundButton.id, b)
-                }
-                chipLunch.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateMealTypeFilter(compoundButton.id, b)
-                }
-                chipDinner.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateMealTypeFilter(compoundButton.id, b)
-                }
-                chipSnack.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateMealTypeFilter(compoundButton.id, b)
-                }
-                chipTeatime.setOnCheckedChangeListener { compoundButton, b ->
-                    viewModelSearch.changeCheckedStateMealTypeFilter(compoundButton.id, b)
-                }
-            }
-        }
     }
 
     private fun loadRecipes(query: String?) {

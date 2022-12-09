@@ -1,6 +1,6 @@
 package com.example.recipes.presentation.ui.recipes.searchlist.enums
 
-enum class Health(val value: String) {
+enum class Health(private val value: String) : FiltersGroups {
     ALCOHOL_COCKTAIL("alcohol-cocktail"),
     ALCOHOL_FREE("alcohol-free"),
     CELERY_FREE("celery-free"),
@@ -13,5 +13,9 @@ enum class Health(val value: String) {
     KOSHER("kosher"),
     LOW_SUGAR("low-sugar"),
     MOLLUSK_FREE("mollusk-free"),
-    VEGETARIAN("vegetarian")
+    VEGETARIAN("vegetarian");
+
+    override fun getValue(): String {
+        return value
+    }
 }

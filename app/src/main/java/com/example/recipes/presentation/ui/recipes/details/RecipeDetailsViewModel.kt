@@ -6,6 +6,7 @@ import com.example.recipes.business.domain.models.Ingredient
 import com.example.recipes.business.domain.models.Recipe
 import com.example.recipes.business.domain.singletons.RecipeSingleton
 import com.example.recipes.business.usecases.*
+import com.example.recipes.business.usecases.interfaces.CheckConnectionUseCase
 import com.example.recipes.business.utils.StatesManageFavoriteRecipes
 import com.example.recipes.datasouce.network.NetWorkEntitiesMappers
 import com.example.recipes.presentation.utils.LoginUtil
@@ -23,7 +24,7 @@ class RecipeDetailsViewModel @Inject constructor(
     private val saveFavoriteRecipeUseCase: SaveFavoriteRecipeUseCaseImpl,
     private val deleteFavoriteRecipeUseCase: DeleteFavoriteRecipeUseCaseImpl,
     private val getRecipeUseCase: GetRecipeUseCase,
-    checkConnectionUseCase: CheckConnectionUseCaseImpl,
+    checkConnectionUseCase: CheckConnectionUseCase,
     private val sendEventToAnalyticsUseCase: SendEventToAnalyticsUseCaseImpl
 //    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
